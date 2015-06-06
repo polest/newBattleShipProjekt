@@ -1,2 +1,0 @@
-# newBattleShipProjekt
-newBattleShipProjekt
