@@ -2,25 +2,37 @@
 !/KI_Project
 /KI_Project/*
 !/KI_Project/src
+/KI_Project/src/.DS_Store
+/KI_Project/src/*/.DS_Store
 !/KI_Project/Resources
+/KI_Project/Resources/.DS_Store
 !/KI_Project/*.create
 
 !/GUI_Project
 /GUI_Project/*
 !/GUI_Project/src
+/GUI_Project/src/.DS_Store
+/GUI_Project/src/*/.DS_Store
 !/GUI_Project/Resources
+/GUI_Project/Resources/.DS_Store
 !/GUI_Project/*.create
 
 !/Main_Project
 /Main_Project/*
 !/Main_Project/src
+/Main_Project/src/.DS_Store
+/Main_Project/src/*/.DS_Store
 !/Main_Project/Resources
+/Main_Project/Resources/.DS_Store
 !/Main_Project/*.create
 
 !/Network_Project
 /Network_Project/*
 !/Network_Project/src
+/Network_Project/src/.DS_Store
+/Network_Project/src/*/.DS_Store
 !/Network_Project/Resources
+/Network_Project/Resources/.DS_Store
 !/Network_Project/*.create
 
 !/Sonstiges
