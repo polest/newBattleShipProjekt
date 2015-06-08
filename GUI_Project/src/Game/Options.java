@@ -89,6 +89,7 @@ public class Options implements Serializable{
 		}
 	}
 	
+	
 	private void setShips(JComboBox cmbbox){
 		if(cmbbox.getActionCommand() == "destroyer"){
 			this.destroyer = Integer.parseInt( cmbbox.getSelectedItem().toString() );
