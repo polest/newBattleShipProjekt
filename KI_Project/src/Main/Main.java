@@ -25,7 +25,5 @@ public class Main {
 		}
 		InitGame spielen = new InitGame(start);
 		
-		//TODO PImmelkopf
-		
 	}
 }
