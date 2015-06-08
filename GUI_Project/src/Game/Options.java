@@ -66,6 +66,9 @@ public class Options implements Serializable{
 		return this.optionsView.getPanel();
 	}
 
+	public boolean getPlayerKi(int index){
+		return this.playerIsKi[index];
+	}
 
 	/**
 	 * Einstellungen der Spieleranzahl
