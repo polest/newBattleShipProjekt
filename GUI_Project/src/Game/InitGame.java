@@ -31,6 +31,7 @@ public class InitGame implements Serializable{
 	public InitGame(boolean start, int width, int height){
 		if(start){
 			this.gameOptions = new Options(width, height);
+			addOkListener();
 			//Round rounds = new Round(this.player, this.fieldSize);
 			//rounds.play();
 		}else{

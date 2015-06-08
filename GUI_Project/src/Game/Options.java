@@ -85,7 +85,7 @@ public class Options implements Serializable{
 		optionsView.setKi(chkbx);
 		playerIsKi = new boolean[this.player];
 		
-		for(int i = 0; i < this.optionsView.getKiBox().length ; i++){
+		for(int i = 0; i < this.playerIsKi.length; i++){
 			this.playerIsKi[i] = this.optionsView.getKiBox()[i].isSelected();
 		}
 	}
@@ -157,7 +157,7 @@ public class Options implements Serializable{
 		this.optionsView.setKiSelectionListener(new SetKiListener());
 		this.optionsView.setShipsSelectionListener(new SetShipsListener() );
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
-	}
+		}
 
 	/**
 	 * Inneren Listener Klassen implementieren das Interface ActionListener
