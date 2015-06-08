@@ -3,25 +3,25 @@
 /KI_Project/*
 !/KI_Project/src
 !/KI_Project/Resources
-!/KI_Project/*.txt
+!/KI_Project/*.create
 
 !/GUI_Project
 /GUI_Project/*
 !/GUI_Project/src
 !/GUI_Project/Resources
-!/GUI_Project/*.txt
+!/GUI_Project/*.create
 
 !/Main_Project
 /Main_Project/*
 !/Main_Project/src
 !/Main_Project/Resources
-!/Main_Project/*.txt
+!/Main_Project/*.create
 
 !/Network_Project
 /Network_Project/*
 !/Network_Project/src
 !/Network_Project/Resources
-!/Network_Project/*.txt
+!/Network_Project/*.create
 
 !/Sonstiges
 
