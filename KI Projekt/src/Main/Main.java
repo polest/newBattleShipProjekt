@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args){
 		boolean start = true;
 		int eingabe;
-		System.out.println("Willkommen bei BATTLESHIP special LARS edition!\n"
+		System.out.println("Willkommen bei BATTLESHIP special Lars edition!\n"
 				+ "um das Spiel zu beginnen, wählen sie bitte die (1). Um ein zuvor\ngespeichertes Spiel zu "
 				+ "laden drücken sie bitte die (2)");
 		
