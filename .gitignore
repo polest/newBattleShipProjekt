@@ -2,17 +2,20 @@
 !/KI Projekt
 /KI Projekt/*
 !/KI Projekt/src
+!/KI Projekt/*.txt
 
 !/GUI Projekt
 /GUI Projekt/*
 !/GUI Projekt/src
+!/GUI Projekt/*.txt
 
 !/Main Project
 /Main Project/*
 !/Main Project/src
+!/Main Project/*.txt
 
 !/Network Projekt
 /Network Projekt/*
-!/Network Projekt
-
+!/Network Projekt/src
+!/Network Projekt/*.txt
 
