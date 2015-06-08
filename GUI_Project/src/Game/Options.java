@@ -70,6 +70,9 @@ public class Options implements Serializable{
 		return this.playerIsKi[index];
 	}
 
+	public Options_View getView(){
+		return this.optionsView;
+	}
 	/**
 	 * Einstellungen der Spieleranzahl
 	 */

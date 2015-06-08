@@ -175,7 +175,7 @@ public class Options_View {
 		    else if(s == 2){
 		    	this.ships[s].setActionCommand("corvette");
 		    }
-		    else if(s == 1){
+		    else if(s == 3){
 		    	this.ships[s].setActionCommand("submarine");
 		    }
 		    

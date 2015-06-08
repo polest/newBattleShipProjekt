@@ -60,7 +60,7 @@ public class InitGame implements Serializable{
 
 
 		for(int i = 0; i < player.length; i++){
-			BattleField battlefield = new BattleField(fieldSize);
+			BattleField battlefield = new BattleField(this.fieldSize);
 			
 			if(i == 0){
 				player[i] = new Player(true, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
@@ -303,7 +303,7 @@ public class InitGame implements Serializable{
 	}
 
 	private void addOkListener(){
-		this.gameOptionsView.setOkSelectionListener(new SetOkListener() );
+		this.gameOptions.getView().setOkSelectionListener(new SetOkListener() );
 	}
 
 	private class SetOkListener implements ActionListener{
