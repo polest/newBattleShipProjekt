@@ -77,6 +77,7 @@ public class Options implements Serializable{
 	private void setPlayer(String number){
 		int count = Integer.parseInt(number); 
 		this.player = count;
+		this.playerIsKi = new boolean[count-1];
 		this.optionsView.setPlayerToggle(count);
 	}
 	
