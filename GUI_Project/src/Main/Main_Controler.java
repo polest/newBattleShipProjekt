@@ -53,7 +53,6 @@ public class Main_Controler {
         	main_view.addPanel(gameOptions.getPanel(), "optionsPanel");
         	addOptionsListener();
         	main_view.changeShownPan("optionsPanel");
-        	
          }
     }
     
@@ -87,6 +86,7 @@ public class Main_Controler {
     private class SetOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			initGame = new InitGame(gameOptionsView, gameOptions);
+			//TODO Fenster des Spielbeginns hinzufügen
 		}
 	}
 }

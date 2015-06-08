@@ -45,6 +45,9 @@ public class Options_View {
 		return this.optionsView;
 	}
 	
+	public JTextField[] getNamesFields(){
+		return this.playerNames;
+	}
 	
 	public void setPlayerToggle(int count){
 		for(int i = 2; i <= ( this.player.length + 1 ); i++){
@@ -72,7 +75,6 @@ public class Options_View {
 				this.kiBox[k].setEnabled(false);
 			}
 		}
-			
 	}
 	
 	public void setKi(JCheckBox chkbx){
@@ -103,6 +105,7 @@ public class Options_View {
 		
 		this.optionsView.repaint();
 	}
+
 
 	private void initOptions(){
 
@@ -138,6 +141,7 @@ public class Options_View {
 			
 			this.playerNames[n] = new JTextField("Spieler " + namesIndex);
 			this.playerNames[n].setBounds(190 ,( 110+ (45*n) ), 120, 35);
+			this.playerNames[n].setActionCommand("Spieler"+n);
 			this.optionsView.add(this.playerNames[n]);
 
 			if(n > 0){
@@ -233,6 +237,11 @@ public class Options_View {
 	
 	public void setSizeSelectionListener(ActionListener m){
 		this.size.addActionListener(m);
+	}
+	public void setNameSelectionListener(ActionListener n){
+		for(int j = 0; j < this.playerNames.length; j++){
+		this.playerNames[j].addActionListener(n);
+		}
 	}
 	
 	public void setOkSelectionListener(ActionListener o){

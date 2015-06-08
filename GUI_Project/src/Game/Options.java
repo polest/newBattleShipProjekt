@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import Main.Main_View;
 
@@ -28,6 +29,10 @@ public class Options implements Serializable{
 
 	public Options(int width,int height){
 		this.totalShips = 0;
+		this.playerNames = new String[6];
+		for(int i = 0; i < this.playerNames.length; i++){
+			this.playerNames[i] = new String("Spieler "+ i);
+		}
 		this.optionsView =  new Options_View(width, height);
 		addListener();
 	}
@@ -126,6 +131,15 @@ public class Options implements Serializable{
 			this.battlefieldSize = preferredSize;
 		}
 	}
+	
+	private void setName(JTextField name){
+		JTextField[] textFields = this.optionsView.getNamesFields();
+		for(int i = 0; i < textFields.length; i++){
+			if(name == textFields[i]){
+				this.playerNames[i] = name.getText();
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -160,6 +174,7 @@ public class Options implements Serializable{
 		this.optionsView.setKiSelectionListener(new SetKiListener());
 		this.optionsView.setShipsSelectionListener(new SetShipsListener() );
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
+		this.optionsView.setNameSelectionListener(new SetNameListener() );
 		this.optionsView.setBackSelectionListener(new BackListener());
 		}
 
@@ -189,6 +204,13 @@ public class Options implements Serializable{
 			JComboBox sizeBox =  (JComboBox)e.getSource();
 			int size = Integer.parseInt( sizeBox.getSelectedItem().toString() );
 			setSize(size);
+		}
+	}
+	
+	private class SetNameListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JTextField name =  (JTextField)e.getSource();
+			setName(name);
 		}
 	}
 	
