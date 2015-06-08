@@ -123,8 +123,6 @@ public class Options implements Serializable{
 			this.optionsView.setSize(preferredSize);
 			this.battlefieldSize = preferredSize;
 		}
-		
-		
 	}
 
 	/**

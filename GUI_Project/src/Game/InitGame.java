@@ -28,13 +28,16 @@ public class InitGame implements Serializable{
 	private int fieldSize;
 
 
-	public InitGame(boolean start, int width, int height){
-		if(start){
-			this.gameOptions = new Options(width, height);
-			addOkListener();
+	public InitGame(Options_View optionsView, Options gameOptions){
+		this.gameOptionsView = optionsView;
+		this.gameOptions = gameOptions;
+		this.configureGame();
+		//if(start){
+			//this.gameOptions = new Options(width, height);
+			//addOkListener();
 			//Round rounds = new Round(this.player, this.fieldSize);
 			//rounds.play();
-		}else{
+		/*}else{
 			System.out.println("Bitte geben sie den Namen von ihrem Spiel ein, welches sie laden möchten.");
 			String eingabe = IO.readString();
 			load.loadGame(eingabe);
@@ -42,6 +45,7 @@ public class InitGame implements Serializable{
 			this.fieldSize = player[0].getPrivateField().getSize();
 			Round rounds = new Round(this.player,this.fieldSize);
 		}
+		*/
 
 	}
 
@@ -54,7 +58,7 @@ public class InitGame implements Serializable{
 		return player;
 	}
 
-	private void configureGame(){
+	public void configureGame(){
 		this.player = new Player[this.gameOptions.getPlayer()];
 		this.fieldSize = this.gameOptions.getBattlefieldSize();
 
@@ -302,7 +306,7 @@ public class InitGame implements Serializable{
 		return null;
 	}
 
-	private void addOkListener(){
+	/*private void addOkListener(){
 		this.gameOptions.getView().setOkSelectionListener(new SetOkListener() );
 	}
 
@@ -311,5 +315,6 @@ public class InitGame implements Serializable{
 			configureGame();
 		}
 	}
+	*/
 
 }

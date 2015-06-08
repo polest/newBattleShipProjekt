@@ -8,12 +8,17 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Game.InitGame;
+import Game.Options;
+import Game.Options_View;
 
 public class Main_Controler {
 
 	private Main_View main_view;
 	private int width;
 	private int height;
+	private InitGame initGame;
+	private Options gameOptions;
+	private Options_View gameOptionsView;
 	
 	public Main_Controler(){
 		
@@ -21,7 +26,7 @@ public class Main_Controler {
 		this.height = 600;
 		
 		this.main_view = new Main_View(this.width, this.height);
-		addListener();
+		addMainViewListener();
 	}
 	
 	/**
@@ -29,21 +34,27 @@ public class Main_Controler {
      * werden der View bekannt gemacht, sodass diese mit
      * uns (dem Controller) kommunizieren kann
      */
-    private void addListener(){
+    private void addMainViewListener(){
         this.main_view.setNewGameSelectionListener(new StartNewGameListener());
         this.main_view.setLoadSelectionListener(new LoadGameListener());
         this.main_view.setInstructionsSelectionListener(new InstructionsListener());
      }
+
+    private void addOptionsListener(){
+		this.gameOptions.getView().setOkSelectionListener(new SetOkListener() );
+	}
 
 	 /**
      * Inneren Listener Klassen implementieren das Interface ActionListener
      */
     private class StartNewGameListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-        	InitGame initGame = new InitGame(true, width, height);
-        	main_view.addPanel(initGame.getOptionsPanel(), "optionsPanel");
+        	gameOptions = new Options(width, height);
+        	main_view.addPanel(gameOptions.getPanel(), "optionsPanel");
+        	addOptionsListener();
         	main_view.changeShownPan("optionsPanel");
-        }
+        	
+         }
     }
     
     private class LoadGameListener implements ActionListener{
@@ -73,4 +84,9 @@ public class Main_Controler {
     	
     }
     
+    private class SetOkListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			initGame = new InitGame(gameOptionsView, gameOptions);
+		}
+	}
 }

@@ -95,7 +95,7 @@ public class Options_View {
 			}
 		}
 	}
-	
+	 
 	public void setSize(int minSize){
 		
 		

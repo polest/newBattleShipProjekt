@@ -16,7 +16,6 @@ public class Main_View extends JFrame{
 	private JLabel welcome_text;
 	private JButton newGame;
 	private JButton loadGame;
-	private JButton instructions;
 	private int width;
 	private int height;
 	private int selection = 0;
@@ -110,19 +109,9 @@ public class Main_View extends JFrame{
 		this.loadGame.setBorderPainted(false);
 		this.loadGame.setVisible(true);
 
-		
-		
-		this.instructions = new JButton();
-		this.instructions.setIcon(new ImageIcon("Resources/instructions.png"));
-		this.instructions.setBounds((this.width-buttonWidth)/2,350,buttonWidth,100);
-		this.instructions.setOpaque(false);
-		this.instructions.setContentAreaFilled(false);
-		this.instructions.setBorderPainted(false);
-		this.instructions.setVisible(true);
-		
 		this.welcomePan.add(this.newGame);
 		this.welcomePan.add(this.loadGame);
-		this.welcomePan.add(this.instructions);
+
 	}
 
 	private void doStartAnim(){
@@ -175,11 +164,9 @@ public class Main_View extends JFrame{
 	public void setLoadSelectionListener(ActionListener l){
 		this.loadGame.addActionListener(l);
 	}
-	
+
 	public void setInstructionsSelectionListener(ActionListener l){
-		this.instructions.addActionListener(l);
+		
 	}
-
-
 
 }
