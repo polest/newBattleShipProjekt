@@ -27,12 +27,13 @@ public class Main_Controler {
     private void addListener(){
         this.main_view.setNewGameSelectionListener(new StartNewGameListener());
         this.main_view.setLoadSelectionListener(new LoadGameListener());
+        this.main_view.setInstructionsSelectionListener(new InstructionsListener());
      }
 
 	 /**
      * Inneren Listener Klassen implementieren das Interface ActionListener
      */
-    class StartNewGameListener implements ActionListener{
+    private class StartNewGameListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
         	InitGame initGame = new InitGame(true, width, height);
         	main_view.addPanel(initGame.getOptionsPanel(), "optionsPanel");
@@ -40,10 +41,20 @@ public class Main_Controler {
         }
     }
     
-    class LoadGameListener implements ActionListener{
+    private class LoadGameListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
         	InitGame spielen = new InitGame(false, width, height);
         }
+    }
+    
+    private class InstructionsListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Instructions ins = new Instructions();
+		}
+    	
     }
     
 }
