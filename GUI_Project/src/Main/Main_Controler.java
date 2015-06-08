@@ -2,6 +2,11 @@ package Main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import Game.InitGame;
 
 public class Main_Controler {
@@ -43,7 +48,18 @@ public class Main_Controler {
     
     private class LoadGameListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-        	InitGame spielen = new InitGame(false, width, height);
+        	JFileChooser jfc = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Speicherstand", "save");
+			File f = new File(System.getProperty("user.dir", "save"));
+			jfc.setCurrentDirectory(f);
+			jfc.setFileFilter(filter);
+			int returnVal = jfc.showOpenDialog(null);
+			File file = jfc.getSelectedFile();
+			if(returnVal == JFileChooser.APPROVE_OPTION){
+				System.out.println(file.getPath());
+			}else if(returnVal == JFileChooser.CANCEL_OPTION){
+				System.out.println("Es wurde keine Datei ausgewählt.");
+			}
         }
     }
     
