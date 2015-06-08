@@ -238,4 +238,8 @@ public class Options_View {
 	public void setOkSelectionListener(ActionListener o){
 		this.ok.addActionListener(o);
 	}
+	
+	public void setBackSelectionListener(ActionListener b){
+		this.back.addActionListener(b);
+	}
 }

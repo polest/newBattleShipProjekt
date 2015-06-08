@@ -7,6 +7,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import Main.Main_View;
+
 
 public class Options implements Serializable{
 	/**
@@ -158,6 +160,7 @@ public class Options implements Serializable{
 		this.optionsView.setKiSelectionListener(new SetKiListener());
 		this.optionsView.setShipsSelectionListener(new SetShipsListener() );
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
+		this.optionsView.setBackSelectionListener(new BackListener());
 		}
 
 	/**
@@ -187,5 +190,14 @@ public class Options implements Serializable{
 			int size = Integer.parseInt( sizeBox.getSelectedItem().toString() );
 			setSize(size);
 		}
+	}
+	
+	private class BackListener implements ActionListener{
+
+		public void actionPerformed(ActionEvent e) {
+			
+			
+		}
+		
 	}
 }

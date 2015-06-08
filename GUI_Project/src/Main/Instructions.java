@@ -1,8 +1,10 @@
 package Main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Label;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -15,14 +17,7 @@ import javax.swing.JPanel;
 	public class Instructions {
 		
 		private JFrame frame;
-		private JPanel panel;
 		private Label instructions;
-		private JLabel bild;
-		private Icon background;
-		
-		
-		private int width = 400;
-		private int heigth = 600;
 		
 		
 		public Instructions(){
@@ -32,8 +27,12 @@ import javax.swing.JPanel;
 		}
 		
 		private void initFrame(){
+			Dimension screenWidth = Toolkit.getDefaultToolkit().getScreenSize();
+			double width = screenWidth.getWidth() - 400;
+			
+			
 			this.frame = new JFrame("Instructions");
-			this.frame.setLocation(0, 0);
+			this.frame.setLocation((int) width, 0);
 			String currentDirectory = System.getProperty("user.dir");
 			try{
 				this.frame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File(currentDirectory + "/Resources/Panel.png")))));
