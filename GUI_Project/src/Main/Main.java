@@ -1,12 +1,5 @@
 package Main;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import Game.InitGame;
-import Tools.EShipType;
-import Tools.IO;
-import Tools.ColoredPrint.EPrintColor;
 
 public class Main {
 	

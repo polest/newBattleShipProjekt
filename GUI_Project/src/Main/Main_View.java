@@ -33,7 +33,7 @@ public class Main_View extends JFrame{
 		this.initStartPanel();
 		this.welcomeTextIcon = "Resources/welcomeText.png";
 		changeShownPan("welcomePan");
-		doStartAnim();
+		//doStartAnim();
 	}
 
 	public ImagePanel getWelcomePan() {
@@ -86,8 +86,13 @@ public class Main_View extends JFrame{
 		//this.welcome_text.setFont(new Font(this.welcome_text.getFont().getName(), Font.BOLD, 2));
 		this.welcome_text.setIcon(new ImageIcon(""+welcomeTextIcon));
 		int labelWidth = 800;
+		//		ImageIcon img = new ImageIcon(""+welcomeTextIcon);
+		//        Image newimg = img.getImage().getScaledInstance(800, 100, java.awt.Image.SCALE_SMOOTH);  
+		//        ImageIcon icon = new ImageIcon(newimg);
+		//        this.welcome_text.setIcon(icon);
 		this.welcome_text.setBounds((this.width-labelWidth)/2, 100, labelWidth, 100);
 		this.welcome_text.setVisible(true);
+		repaint();
 		this.welcomePan.add(welcome_text);
 	}
 
@@ -117,7 +122,7 @@ public class Main_View extends JFrame{
 
 		this.loadGame.setBorderPainted(false);
 		this.loadGame.setVisible(true);
-		
+
 		this.instructions = new JButton();
 		this.instructions.setIcon(new ImageIcon("Resources/instructions.png"));
 		this.instructions.setBounds((this.width-buttonWidth)/2, 350, buttonWidth, 100);
@@ -125,9 +130,9 @@ public class Main_View extends JFrame{
 		this.instructions.setContentAreaFilled(false);
 		this.instructions.setBorderPainted(false);
 		this.instructions.setVisible(true);
-		
-		
-		
+
+
+
 
 		this.welcomePan.add(this.newGame);
 		this.welcomePan.add(this.loadGame);
@@ -142,33 +147,33 @@ public class Main_View extends JFrame{
 			sizeX += 4;
 			//this.welcome_text.setSize();
 			ImageIcon img = new ImageIcon(""+welcomeTextIcon);
-            Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
-            ImageIcon icon = new ImageIcon(newimg);
-            this.welcome_text.setIcon(icon);
-            repaint();
+			Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
+			ImageIcon icon = new ImageIcon(newimg);
+			this.welcome_text.setIcon(icon);
+			repaint();
 
-//			//sleep for a bit
-//			try {
-//				Thread.sleep(10);
-//			} catch (InterruptedException e) {
-//
-//				e.printStackTrace();
-//			}
+			//			//sleep for a bit
+			//			try {
+			//				Thread.sleep(10);
+			//			} catch (InterruptedException e) {
+			//
+			//				e.printStackTrace();
+			//			}
 		}
 		while(sizeX >= 700) {
 			sizeX -= 3;
 			ImageIcon img = new ImageIcon(""+welcomeTextIcon);
-            Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
-            ImageIcon icon = new ImageIcon(newimg);
-            this.welcome_text.setIcon(icon); 
-            
+			Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
+			ImageIcon icon = new ImageIcon(newimg);
+			this.welcome_text.setIcon(icon); 
+
 			repaint();
 		}
 
 
 	}
-	
-	
+
+
 
 	/**
 	 * Funktionen bereitstellen, mit denen man später aus

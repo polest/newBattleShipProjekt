@@ -1,11 +1,11 @@
 package Game;
 import java.io.Serializable;
 
-import Tools.EShipType;
+import Ships.Ship;
 import Tools.MatrixTools;
 
 
-
+ 
 	public class BattleField implements Serializable{
 
 		/**
@@ -101,7 +101,7 @@ import Tools.MatrixTools;
 		 * @param orientation - Ausrichtung v oder h
 		 * @return gibt zurück ob das Schiff platziert werden konnte
 		 */
-		public boolean setShips(EShipType ship, int iPos, int jPos, char orientation){
+		public boolean setShips(Ship ship, int iPos, int jPos, char orientation){
 			boolean isFree = true;
 			if( (isFree = matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship)) == true){
 				field = matrixTools.addMatrix(iPos, jPos, orientation, field, ship);
@@ -110,7 +110,7 @@ import Tools.MatrixTools;
 
 		}
 
-		public void setAttack(EShipType ship, int[] coordinates, char orientation, Player player){
+		public void setAttack(Ship ship, int[] coordinates, char orientation, Player player){
 			matrixTools.attackField(ship, coordinates, orientation, player);
 
 		}

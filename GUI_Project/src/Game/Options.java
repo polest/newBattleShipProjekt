@@ -13,7 +13,8 @@ import Main.Main_View;
 
 public class Options implements Serializable{
 	/**
-	 * 
+	 * * @author ML
+	 * @version 21.03.15
 	 */
 	private static final long serialVersionUID = 6599149630474669593L;
 	private int player;
@@ -31,7 +32,7 @@ public class Options implements Serializable{
 		this.totalShips = 0;
 		this.playerNames = new String[6];
 		for(int i = 0; i < this.playerNames.length; i++){
-			this.playerNames[i] = new String("Spieler "+ i);
+			this.playerNames[i] = new String("Spieler "+ (i+1));
 		}
 		this.optionsView =  new Options_View(width, height);
 		addListener();
@@ -90,17 +91,17 @@ public class Options implements Serializable{
 		this.playerIsKi = new boolean[count-1];
 		this.optionsView.setPlayerToggle(count);
 	}
-	
+
 	private void setKi(JCheckBox chkbx){
 		optionsView.setKi(chkbx);
 		playerIsKi = new boolean[this.player];
-		
+
 		for(int i = 0; i < this.playerIsKi.length; i++){
 			this.playerIsKi[i] = this.optionsView.getKiBox()[i].isSelected();
 		}
 	}
-	
-	
+
+
 	private void setShips(JComboBox cmbbox){
 		if(cmbbox.getActionCommand() == "destroyer"){
 			this.destroyer = Integer.parseInt( cmbbox.getSelectedItem().toString() );
@@ -114,7 +115,7 @@ public class Options implements Serializable{
 		else if(cmbbox.getActionCommand() == "submarine"){
 			this.submarine = Integer.parseInt( cmbbox.getSelectedItem().toString() );
 		}
-		
+
 		int minSize = setBattleFieldSize();
 		this.battlefieldSize = minSize;
 		this.optionsView.setSize(minSize);
@@ -131,12 +132,13 @@ public class Options implements Serializable{
 			this.battlefieldSize = preferredSize;
 		}
 	}
-	
+
 	private void setName(JTextField name){
 		JTextField[] textFields = this.optionsView.getNamesFields();
 		for(int i = 0; i < textFields.length; i++){
 			if(name == textFields[i]){
 				this.playerNames[i] = name.getText();
+				System.out.println(""+name.getText());
 			}
 		}
 	}
@@ -157,7 +159,7 @@ public class Options implements Serializable{
 		int totalShipSize;
 
 		totalShipSize = (this.destroyer*destroyerSize)+(this.corvette*corvetteSize)+(this.frigate*frigateSize)+(this.submarine*submarineSize);
-
+		this.totalShips = this.destroyer + this.corvette + this.frigate + this.submarine;
 		while((zahl * zahl) < totalShipSize){
 			zahl++;
 		}
@@ -176,7 +178,7 @@ public class Options implements Serializable{
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
 		this.optionsView.setNameSelectionListener(new SetNameListener() );
 		this.optionsView.setBackSelectionListener(new BackListener());
-		}
+	}
 
 	/**
 	 * Inneren Listener Klassen implementieren das Interface ActionListener
@@ -192,13 +194,13 @@ public class Options implements Serializable{
 			setKi((JCheckBox) e.getSource());
 		}
 	}
-	
+
 	private class SetShipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			setShips((JComboBox) e.getSource());
 		}
 	}
-	
+
 	private class SetSizeListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JComboBox sizeBox =  (JComboBox)e.getSource();
@@ -206,20 +208,20 @@ public class Options implements Serializable{
 			setSize(size);
 		}
 	}
-	
+
 	private class SetNameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JTextField name =  (JTextField)e.getSource();
 			setName(name);
 		}
 	}
-	
+
 	private class BackListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent e) {
-			
-			
+
+
 		}
-		
+
 	}
 }

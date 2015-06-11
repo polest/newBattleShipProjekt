@@ -238,9 +238,10 @@ public class Options_View {
 	public void setSizeSelectionListener(ActionListener m){
 		this.size.addActionListener(m);
 	}
+	
 	public void setNameSelectionListener(ActionListener n){
 		for(int j = 0; j < this.playerNames.length; j++){
-		this.playerNames[j].addActionListener(n);
+			this.playerNames[j].addActionListener(n);
 		}
 	}
 	
