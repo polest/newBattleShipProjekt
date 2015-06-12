@@ -6,6 +6,7 @@ package Game;
 import java.io.File;
 import java.util.Random;
 
+import AI.ArtificialIntelligence;
 import SaveGame.Save;
 import Tools.ColoredPrint;
 import Tools.EShipType;
@@ -23,6 +24,8 @@ public class Round{
 	private Save save;
 	private int fieldSize;
 	Random rn = new Random();
+
+	ArtificialIntelligence ai = new ArtificialIntelligence();
 
 	public Round(Player[] player, int fieldSize, int aiPlayer){
 		this.player = player;
@@ -116,21 +119,25 @@ public class Round{
 
 							if(player[i].getDestroyer().length > 0){
 								if(player[i].checkIfShipIsReady("D")){
+									ai.setDestroyerRdy(true);
 									System.out.println("Zerstörer\t (1)");
 								}
 							}
 							if(player[i].getFrigate().length > 0){
 								if(player[i].checkIfShipIsReady("F")){
+									ai.setFrigateRdy(true);
 									System.out.println("Frigatte\t (2)");
 								}
 							}
 							if(player[i].getCorvette().length > 0){
 								if(player[i].checkIfShipIsReady("C")){
+									ai.setCorvetteRdy(true);
 									System.out.println("Korvette\t (3)");
 								}
 							}
 							if(player[i].getSubmarine().length > 0){
 								if(player[i].checkIfShipIsReady("S")){
+									ai.setSubmarineRdy(true);
 									System.out.println("U-Boot\t\t (4)");	
 								}
 							}
@@ -138,22 +145,13 @@ public class Round{
 
 							boolean go = false;
 							while(!go){
-								// Start Änderung für AI
+								
+								// Aufruf für AI
 								if(player[i].isBot()){
-									if(player[i].checkIfShipIsReady("D")){
-										schiff = 1;
-									} else if(player[i].checkIfShipIsReady("F")){
-										schiff = 2;
-									} else if(player[i].checkIfShipIsReady("C")){
-										schiff = 3;
-									} else if(player[i].checkIfShipIsReady("S")){
-										schiff = 4;
-									}
+									schiff = ai.chooseShipToShoot();
 								} else {
 									schiff = IO.readShipInt();
 								}
-								
-								// Ende Änderung für AI
 								
 								if(schiff == 1){
 									go = player[i].checkIfShipIsReady("D");
@@ -175,188 +173,12 @@ public class Round{
 							player[gegner-1].printPublicField();
 
 						
-							// Start - Änderung für AI
+							// Variablen für den Bot
 							
 							int[][] gegnerPublicField = player[gegner-1].getPublicField().getField();
 							int[][] gegnerPrivateField = player[gegner-1].getPrivateField().getField();
-							int xCoordinateForShooting = 0;
-							int yCoordinateForShooting = 0;
-							boolean goContinue = true;
-							char botOrientation;
-							String curShipString;
 							
-							// wenn spieler ein bot ist
-							if(player[i].isBot()){
-								
-								// geht die matrix durch
-								for(int y = 0; y < gegnerPublicField[0].length; y++){
-									for(int x = 0; x < gegnerPublicField[0].length; x++){
-										
-										// guckt ob das aktuelle feld ein schiffstreffer ist
-										if(gegnerPublicField[y][x] == 2){
-											System.out.println("Ein hitted Field!");
-											
-											int curShip = gegnerPrivateField[y][x];
-											
-											
-											switch(curShip){
-											case 1:
-												curShipString = "D";
-												break;
-											case 2:
-												curShipString = "F";
-												break; 
-											case 3:
-												curShipString = "C";
-												break;
-											case 4:
-												curShipString = "S";
-												break;
-											default:
-												curShipString = "0";
-												break;
-											}
-											
-												System.out.println("das Feld ist ein " + curShipString);
-												
-												// prüft ob das schiff gesunken ist, wenn nicht dann führt er den code aus
-												if(player[gegner-1].checkIfSunk(curShipString, false) == false){
-													
-													
-													System.out.println("schiff lebt noch");
-													
-													// methode schuss für bot
-													
-													// prüfe ob drum herum ein schiff getroffen ist
-													if(gegnerPublicField[y-1][x] == 2 || gegnerPublicField[y+1][x] == 2 || gegnerPublicField[y][x-1] == 2 || gegnerPublicField[y][x+1] == 2){
-														
-														// wenn ja dann gucke wo schon getroffen wurde und prüfe ob die gegenseite frei ist, wenn ja dann schieße auf die gegenseite
-														// 1
-														if(gegnerPublicField[y-1][x] == 2){
-															// prüfe ob gegenseite nur wasser ist
-															if(gegnerPublicField[y+1][x] == 0){
-																// wenn ja, dann schieße dort hin!
-																xCoordinateForShooting = x;
-																yCoordinateForShooting = y+1;
-																goContinue = false;
-															} 
-														
-														} else if(goContinue){
-															//###
-															// 2
-															if(gegnerPublicField[y+1][x] == 2){
-																// prüfe ob gegenseite nur wasser ist
-																if(gegnerPublicField[y-1][x] == 0){
-																	// wenn ja, dann schieße dort hin!
-																	xCoordinateForShooting = x;
-																	yCoordinateForShooting = y-1;
-																	goContinue = false;
-																} 
-															} else if (goContinue){
-																// 3
-																if(gegnerPublicField[y][x-1] == 2){
-																	// prüfe ob gegenseite nur wasser ist
-																	if(gegnerPublicField[y][x+1] == 0){
-																		// wenn ja, dann schieße dort hin!
-																		xCoordinateForShooting = x+1;
-																		yCoordinateForShooting = y;
-																		goContinue = false;
-																	} 
-																} else if (goContinue){
-																	
-																	// 4
-																	if(gegnerPublicField[y][x+1] == 2){
-																		// prüfe ob gegenseite nur wasser ist
-																		if(gegnerPublicField[y][x-1] == 0){
-																			// wenn ja, dann schieße dort hin!
-																			xCoordinateForShooting = x-1;
-																			yCoordinateForShooting = y;
-																			goContinue = false;
-																		} 
-																	}	
-																}
-															}
-														}
-														
-														
-														
-													} else {
-														
-														// prüfe jede seite ob wasser getroffen wurde, wenn nicht dann schieß darauf
-														// 1
-														if(goContinue){
-															// prüfe ob hier wasser ist, wenn ja dann schieß drauf
-															if(gegnerPublicField[y-1][x] == 0){
-																xCoordinateForShooting = x;
-																yCoordinateForShooting = y-1;
-																goContinue = false;
-															} else if(goContinue){
-																
-																if(gegnerPublicField[y+1][x] == 0){
-																	xCoordinateForShooting = x;
-																	yCoordinateForShooting = y+1;
-																	goContinue = false;
-																} else if (goContinue){
-																	if(gegnerPublicField[y][x-1] == 0){
-																		xCoordinateForShooting = x-1;
-																		yCoordinateForShooting = y;
-																		goContinue = false;
-																	} else if(goContinue){
-																		if(gegnerPublicField[y][x+1] == 0){
-																			xCoordinateForShooting = x+1;
-																			yCoordinateForShooting = y;
-																			goContinue = false;
-																		}
-																	}
-																}
-															}
-														}
-														
-													}
-													
-													
-												} else {
-													System.out.println("schiff is gesunken");
-												}
-										
-											
-											
-										}
-										
-										
-										
-										
-									}
-								}
-								
-								
-								if(xCoordinateForShooting == 0 && yCoordinateForShooting == 0){
-									
-									//zufällig, auf ein freies Feld, koordinaten
-									int randomX;
-									int randomY;
-									
-									randomX = rn.nextInt(max - 1 + 1) + 1;
-									randomY = rn.nextInt(max - 1 + 1) + 1;
-									
-									while(!(gegnerPublicField[randomY][randomX] == 0)){
-										randomX = rn.nextInt(max - 1 + 1) + 1;
-										randomY = rn.nextInt(max - 1 + 1) + 1;
-									}
-									
-									System.out.println("frei x -> " + randomX);
-									System.out.println("frei y -> " + randomY);
-									
-									
-									xCoordinateForShooting = randomX;
-									yCoordinateForShooting = randomY;
-									
-									
-								}
-							
-							}
-							// Ende - Änderung für AI
-							
+							Player gegnerMinusEins = player[gegner-1];
 							
 
 							
@@ -368,7 +190,9 @@ public class Round{
 							String pos;
 							
 							if(player[i].isBot()){
-								pos = ""+xCoordinateForShooting+","+yCoordinateForShooting+"";
+								pos = ai.chooseWhereToShoot(gegnerMinusEins, gegnerPublicField, gegnerPrivateField, max);
+								System.out.println("getget" + ai.getBotOrientation());
+								
 								System.out.println(pos);
 							} else {
 								pos = IO.readString();
@@ -380,15 +204,7 @@ public class Round{
 							while(koordinaten == null){
 								System.out.println("Bitte geben sie die X,Y Koordinaten ein, auf die sie schießen möchten.");
 								
-								if(player[i].isBot()){
-									int randomX = rn.nextInt(max - 1 + 1) + 1;
-									int randomY = rn.nextInt(max - 1 + 1) + 1;
-									pos = ""+randomX+","+randomY+"";
-									System.out.println(pos);
-								} else {
-									pos = IO.readString();
-								}
-								
+								pos = IO.readString();
 								koordinaten = checkPos(pos);
 							}
 
@@ -397,12 +213,8 @@ public class Round{
 								System.out.println("Horizontal (h) oder Vertikal(v)?");
 								
 								if(player[i].isBot()){
-									int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-									if(randomInt == 1){
-										orientation = 'h';
-									} else {
-										orientation = 'v';
-									}
+									orientation = ai.chooseBotOrientation();
+									System.out.println("BotOrien -> " + orientation);
 								} else {
 									orientation = IO.readChar();
 								}
@@ -410,16 +222,7 @@ public class Round{
 								while(orientation != 'h' && orientation != 'v'){
 									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
 									
-									if(player[i].isBot()){
-										int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-										if(randomInt == 1){
-											orientation = 'h';
-										} else {
-											orientation = 'v';
-										}
-									} else {
-										orientation = IO.readChar();
-									}
+									orientation = IO.readChar();
 								}
 
 								System.out.println(orientation);
@@ -431,12 +234,7 @@ public class Round{
 								System.out.println("Horizontal (h) oder Vertikal(v)?");
 								
 								if(player[i].isBot()){
-									int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-									if(randomInt == 1){
-										orientation = 'h';
-									} else {
-										orientation = 'v';
-									}
+									orientation = ai.chooseBotOrientation();
 								} else {
 									orientation = IO.readChar();
 								}
@@ -444,16 +242,7 @@ public class Round{
 								while(orientation != 'h' && orientation != 'v'){
 									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
 
-									if(player[i].isBot()){
-										int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-										if(randomInt == 1){
-											orientation = 'h';
-										} else {
-											orientation = 'v';
-										}
-									} else {
-										orientation = IO.readChar();
-									}
+									orientation = IO.readChar();
 								}
 
 								System.out.println(orientation);
