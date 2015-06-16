@@ -21,6 +21,7 @@ public class Ship implements Serializable{
 	private int shootArea;
 	private int reloadTimeLeft;
 	private int[][] coordinates;
+	private int[] startCoordsAndOrientation;
 	private int isHit = 0;
 
 
@@ -147,6 +148,14 @@ public class Ship implements Serializable{
 		this.shipSize = shipSize;
 	}
 
+	public void setStartCoordsAndOrientation(int[] coords){
+		this.startCoordsAndOrientation = coords;
+	}
+
+	public int[] getStartCoordsAndOrientation(){
+		return this.startCoordsAndOrientation;
+	}
+
 	/**
 	 * Getter für die Schiffkoordinaten
 	 * @return
@@ -169,17 +178,20 @@ public class Ship implements Serializable{
 	 * Methode setzt die Koordinaten eines Schiffs auf 0,0 wenn es getroffen wurde.
 	 * @param x
 	 * @param y
+	 * Gibt zurück ob das Schiff noch schwimmt, oder nicht
 	 */
 
-	public void setCoordinatesIfHitted(int x, int y) {
-	for(int i = 0; i < this.coordinates[0].length; i++){
-		if(this.coordinates[1][i] == y && this.coordinates[0][i] == x){
+	public boolean setCoordinatesIfHitted(int x, int y) {
+
+		for(int i = 0; i < this.coordinates[0].length; i++){
+			if(this.coordinates[1][i] == y && this.coordinates[0][i] == x){
+
 				coordinates[0][i] = 0;
 				coordinates[1][i] = 0;
 				isHit++;
-				return;
 			}
 		}
+		return checkIfIsSwimming();
 	}
 
 	/**

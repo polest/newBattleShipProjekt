@@ -4,6 +4,7 @@ import java.io.Serializable;
 import Ships.Corvette;
 import Ships.Destroyer;
 import Ships.Frigate;
+import Ships.Ship;
 import Ships.Submarine;
 import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
@@ -231,23 +232,15 @@ public class Player implements Serializable{
 	}
 
 	/**
-	 * setzt den Zerstörer auf isReady = false und setzt die NachladeZeit.
+	 * setzt das Schiff auf isReady = false und setzt die NachladeZeit.
 	 */
 
-	public void setDestroyerIsntReady(){
-		int counter = 0;
-		for(int i = 0; i < this.destroyer.length; i++){
-			if(counter == 0){
-				if(destroyer[i].isReady() == true){
-					destroyer[i].setReady(false);
-					destroyer[i].setReloadTimeLeft(destroyer[i].getReloadTime());
-					counter++;
-				}
-			}
-
+	public void setShipIsntReady(Ship ship){
+		if(ship.isReady() == true){
+			ship.setReady(false);
+			ship.setReloadTimeLeft(ship.getReloadTime());
 		}
 	}
-
 
 	/**
 	 * Zählt die NachladeZeit herunter
@@ -286,58 +279,46 @@ public class Player implements Serializable{
 
 
 	/**
-	 * setzt die Frigatte auf isReady = false und setzt die NachladeZeit.
+	 * überprüft, ob ein Schiff verfügbar ist.
+	 * @param whichShip
+	 * @return true wenn whichShip isReady
 	 */
-
-	public void setFrigateIsntReady(){
-		int counter = 0;
-		for(int i = 0; i < this.frigate.length; i++){
-			if(counter == 0){
-				if(frigate[i].isReady() == true){
-					frigate[i].setReady(false);
-					frigate[i].setReloadTimeLeft(frigate[i].getReloadTime());
-					counter++;
-				}
+	public Destroyer getAvailableDestroyer(){
+		for(int i = 0; i < destroyer.length; i++){
+			if(destroyer[i].isReady()){
+				return destroyer[i];
 			}
 		}
+		return null;
 	}
 
-	/**
-	 * Setzt die Corvette auf inn´t ready
-	 * und setzt die Nachladezeit
-	 */
-
-	public void setCorvetteIsntReady(){
-		int counter = 0;
-		for(int i = 0; i < this.corvette.length; i++){
-			if(counter == 0){
-				if(corvette[i].isReady() == true){
-					corvette[i].setReady(false);
-					corvette[i].setReloadTimeLeft(corvette[i].getReloadTime());
-					counter++;
-				}
+	public Frigate getAvailableFrigate(){
+		for(int i = 0; i < frigate.length; i++){
+			if(frigate[i].isReady()){
+				return frigate[i];
 			}
-
 		}
+		return null;
 	}
 
-	/**
-	 * setzt das U-Boot auf nicht ready
-	 * und setzt die Nachladezeit
-	 */
 
-	public void setSubmarineIsntReady(){
-		int counter = 0;
-		for(int i = 0; i < this.submarine.length; i++){
-			if(counter == 0){
-				if(submarine[i].isReady() == true){
-					submarine[i].setReady(false);
-					submarine[i].setReloadTimeLeft(submarine[i].getReloadTime());
-					counter++;
-				}
+	public Corvette getAvailableCorvette(){
+		for(int i = 0; i < corvette.length; i++){
+			if(corvette[i].isReady()){
+				return corvette[i];
 			}
-
 		}
+		return null;
+	}
+
+
+	public Submarine getAvailableSubmarine(){
+		for(int i = 0; i < submarine.length; i++){
+			if(submarine[i].isReady()){
+				return submarine[i];
+			}
+		}
+		return null;
 	}
 
 
@@ -387,22 +368,17 @@ public class Player implements Serializable{
 	 */
 
 
-	public void saveShipCoordinatesH(int x, int y, int length, int shipNumber){
+	public void saveShipCoordinatesH(int x, int y, Ship ship){
+		int length = ship.getShipSize();
 		int[][] coordinates = new int[2][length];
+		int[] startCoordsAndOrientation = new int[]{x, y, 0};
+
 		for(int i = 0; i < length; i++){
 			coordinates[0][i] = x+i;
 			coordinates[1][i] = y;
 		}
-		if(length == 5){
-			destroyer[shipNumber].setCoordinates(coordinates);
-		}else if(length == 4){
-			frigate[shipNumber].setCoordinates(coordinates);
-		}else if(length == 3){
-			corvette[shipNumber].setCoordinates(coordinates);
-		}else if(length == 2){
-			submarine[shipNumber].setCoordinates(coordinates);
-		}
-
+		ship.setCoordinates(coordinates);
+		ship.setStartCoordsAndOrientation(startCoordsAndOrientation);
 	}
 
 	/**
@@ -413,21 +389,17 @@ public class Player implements Serializable{
 	 * @param shipNumber
 	 */
 
-	public void saveShipCoordinatesV(int x, int y, int length, int shipNumber){
+	public void saveShipCoordinatesV(int x, int y, Ship ship){
+		int length = ship.getShipSize();
 		int[][] coordinates = new int[2][length];
+		int[] startCoordsAndOrientation = new int[]{x, y, 1};
+
 		for(int i = 0; i < length; i++){
-			coordinates[0][i] = y+i;
-			coordinates[1][i] = x;
+			coordinates[0][i] = x;
+			coordinates[1][i] = y+i;
 		}
-		if(length == 5){
-			destroyer[shipNumber].setCoordinates(coordinates);
-		}else if(length == 4){
-			frigate[shipNumber].setCoordinates(coordinates);
-		}else if(length == 3){
-			corvette[shipNumber].setCoordinates(coordinates);
-		}else if(length == 2){
-			submarine[shipNumber].setCoordinates(coordinates);
-		}
+		ship.setCoordinates(coordinates);
+		ship.setStartCoordsAndOrientation(startCoordsAndOrientation);
 	}
 
 	/**
@@ -489,23 +461,23 @@ public class Player implements Serializable{
 	 */
 
 	public boolean checkIfAnyShipIsReady(){
-		for(int i = 0; i < destroyer.length; i++){
-			if(destroyer[i].isReady()){
+		for(int i = 0; i < this.destroyer.length; i++){
+			if(this.destroyer[i].isReady()){
 				return true;
 			}
 		}
-		for(int i = 0; i < frigate.length; i++){
-			if(frigate[i].isReady()){
+		for(int i = 0; i < this.frigate.length; i++){
+			if(this.frigate[i].isReady()){
 				return true;
 			}
 		}
-		for(int i = 0; i < corvette.length; i++){
-			if(corvette[i].isReady()){
+		for(int i = 0; i < this.corvette.length; i++){
+			if(this.corvette[i].isReady()){
 				return true;
 			}
 		}
-		for(int i = 0; i < submarine.length; i++){
-			if(submarine[i].isReady()){
+		for(int i = 0; i < this.submarine.length; i++){
+			if(this.submarine[i].isReady()){
 				return true;
 			}
 		}
@@ -525,29 +497,37 @@ public class Player implements Serializable{
 		switch(shipSymbol){
 		case "D":
 			for(int i = 0; i < destroyer.length; i++){
-				if(destroyer[i].isReady()){
-					return true;
+				if(destroyer[i].checkIfIsSwimming()){
+					if(destroyer[i].isReady()){
+						return true;
+					}
 				}
 			}
 			break;
 		case "F":
 			for(int i = 0; i < frigate.length; i++){
-				if(frigate[i].isReady()){
-					return true;
+				if(frigate[i].checkIfIsSwimming()){
+					if(frigate[i].isReady()){
+						return true;
+					}
 				}
 			}
 			break;
 		case "C":
 			for(int i = 0; i < corvette.length; i++){
-				if(corvette[i].isReady()){
-					return true;
+				if(corvette[i].checkIfIsSwimming()){
+					if(corvette[i].isReady()){
+						return true;
+					}
 				}
 			}
 			break;
 		case "S":
 			for(int i = 0; i < submarine.length; i++){
-				if(submarine[i].isReady()){
-					return true;
+				if(submarine[i].checkIfIsSwimming()){
+					if(submarine[i].isReady()){
+						return true;
+					}
 				}
 			}
 			break;
