@@ -10,8 +10,9 @@ public class ArtificialIntelligence {
 	private boolean isFrigateRdy;
 	private boolean isCorvetteRdy;
 	private boolean isSubmarineRdy;
-	char botOrientation = ' ';
-	Random rn = new Random();
+	private char botOrientation = ' ';
+	private Random rn = new Random();
+	private int aliveEnemy = 0;
 	
 	
 	public boolean isDestroyerRdy() {
@@ -54,6 +55,30 @@ public class ArtificialIntelligence {
 		this.botOrientation = botOrientation;
 	}
 
+	public int getAliveEnemy() {
+		return aliveEnemy;
+	}
+
+	public void setAliveEnemy(int aliveEnemy) {
+		this.aliveEnemy = aliveEnemy;
+	}
+
+	
+	public String setShip(int max){
+		int randomX = rn.nextInt(max - 1 + 1) + 1;
+		int randomY = rn.nextInt(max - 1 + 1) + 1;
+		return ""+randomX+","+randomY+"";
+	}
+	
+	public char setShipOrientation(){
+		int randomInt = rn.nextInt(2 - 1 + 1) + 1;
+		if(randomInt == 1){
+			return 'h';
+		} else {
+			return 'v';
+		}
+	}
+	
 	public String chooseWhereToShoot(Player gegnerMinusEins, int[][] gegnerPublicField, int[][] gegnerPrivateField, int max){
 
 		int xCoordinateForShooting = 0;

@@ -19,17 +19,14 @@ public class Round{
 	 * 
 	 */
 	private Player[] player;
-	private int aiPlayer;
 	private ColoredPrint colorPrint;
 	private Save save;
 	private int fieldSize;
 	Random rn = new Random();
-
 	ArtificialIntelligence ai = new ArtificialIntelligence();
 
-	public Round(Player[] player, int fieldSize, int aiPlayer){
+	public Round(Player[] player, int fieldSize){
 		this.player = player;
-		this.aiPlayer = aiPlayer;
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.save = new Save();
@@ -69,6 +66,7 @@ public class Round{
 								counter = j+1;
 								if(j != i){
 									if(player[j].getIsAlive()){
+										ai.setAliveEnemy(counter);
 										System.out.println(player[j].getPlayerName() + "\t Spieler: " + counter);
 										player[j].printPublicField();
 									}else{
@@ -82,13 +80,11 @@ public class Round{
 							// Start Änderung für AI
 							
 							
-							if(player.length - this.aiPlayer <= i){
-								if(player[i].getEnemyNumber() == 0){
-									gegner = rn.nextInt(player.length - 1 + 1) + 1;
-								} else {
-									//if(){
+							if(player[i].isBot()){
+								if(player[player[i].getEnemyNumber()].getIsAlive()){
 									gegner = player[i].getEnemyNumber();
-									//}
+								} else {
+									gegner = ai.getAliveEnemy();
 								}
 							} else {
 								gegner = IO.readEnemyInt();
@@ -98,11 +94,8 @@ public class Round{
 							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
 								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
 								
-								if(player.length - this.aiPlayer <= i){
-									gegner = rn.nextInt(player.length - 1 + 1) + 1;
-								} else {
-									gegner = IO.readEnemyInt();
-								}
+								gegner = IO.readEnemyInt();
+								
 							}
 							
 							player[i].setEnemyNumber(gegner);

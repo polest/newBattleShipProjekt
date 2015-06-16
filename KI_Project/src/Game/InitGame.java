@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Random;
 
+import AI.ArtificialIntelligence;
 import SaveGame.Load;
 import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
@@ -24,6 +25,7 @@ public class InitGame implements Serializable{
 	private ColoredPrint colorPrint = new ColoredPrint();
 	private int fieldSize;
 	String[] listFileNames;
+	private ArtificialIntelligence ai = new ArtificialIntelligence(); 
 
 
 	public InitGame(boolean start){
@@ -41,7 +43,7 @@ public class InitGame implements Serializable{
 
 			this.gameOptions = new Options();
 			this.configureGame();
-			Round rounds = new Round(this.player, this.fieldSize, this.aiPlayer);
+			Round rounds = new Round(this.player, this.fieldSize);
 		}else{
 			boolean go = false;
 			while(!go){
@@ -97,7 +99,7 @@ public class InitGame implements Serializable{
 			}
 			this.player = load.getPlayer();
 			this.fieldSize = player[0].getPrivateField().getSize();
-			Round rounds = new Round(this.player,this.fieldSize, this.aiPlayer);
+			Round rounds = new Round(this.player,this.fieldSize);
 		}
 
 	}
@@ -152,9 +154,6 @@ public class InitGame implements Serializable{
 			
 			int max = this.fieldSize;
 			Random rn = new Random();
-			
-			//if(player.length - this.aiPlayer <= i){
-			
 				
 			/*
 			 * Das Spielfeld des Spieler wird auf der Konsole ausgedruckt
@@ -186,10 +185,8 @@ public class InitGame implements Serializable{
 					// Start Änderung für AI
 					String pos;
 					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
+					if(player[i].isBot()){
+						pos = ai.setShip(this.fieldSize);
 						System.out.println(pos);
 					} else {
 						pos = IO.readString();
@@ -207,13 +204,8 @@ public class InitGame implements Serializable{
 						// Start Änderung für AI
 						char orientation;
 						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
+						if(player[i].isBot()){
+							orientation = ai.setShipOrientation();
 						} else {
 							orientation = IO.readChar();
 						}
@@ -255,10 +247,8 @@ public class InitGame implements Serializable{
 					// Start Änderung für AI
 					String pos;
 					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
+					if(player[i].isBot()){
+						pos = ai.setShip(this.fieldSize);
 						System.out.println(pos);
 					} else {
 						pos = IO.readString();
@@ -276,13 +266,8 @@ public class InitGame implements Serializable{
 						// Start Änderung für AI
 						char orientation;
 						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
+						if(player[i].isBot()){
+							orientation = ai.setShipOrientation();
 						} else {
 							orientation = IO.readChar();
 						}
@@ -321,10 +306,8 @@ public class InitGame implements Serializable{
 					// Start Änderung für AI
 					String pos;
 					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
+					if(player[i].isBot()){
+						pos = ai.setShip(this.fieldSize);
 						System.out.println(pos);
 					} else {
 						pos = IO.readString();
@@ -342,13 +325,8 @@ public class InitGame implements Serializable{
 						// Start Änderung für AI
 						char orientation;
 						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
+						if(player[i].isBot()){
+							orientation = ai.setShipOrientation();
 						} else {
 							orientation = IO.readChar();
 						}
@@ -388,10 +366,8 @@ public class InitGame implements Serializable{
 					// Start Änderung für AI
 					String pos;
 					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
+					if(player[i].isBot()){
+						pos = ai.setShip(this.fieldSize);
 						System.out.println(pos);
 					} else {
 						pos = IO.readString();
@@ -409,13 +385,8 @@ public class InitGame implements Serializable{
 						// Start Änderung für AI
 						char orientation;
 						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
+						if(player[i].isBot()){
+							orientation = ai.setShipOrientation();
 						} else {
 							orientation = IO.readChar();
 						}
