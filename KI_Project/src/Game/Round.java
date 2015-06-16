@@ -8,6 +8,7 @@ import java.util.Random;
 
 import AI.ArtificialIntelligence;
 import SaveGame.Save;
+import Ships.Ship;
 import Tools.ColoredPrint;
 import Tools.EShipType;
 import Tools.IO;
@@ -16,7 +17,8 @@ import Tools.ColoredPrint.EPrintColor;
 public class Round{
 
 	/**
-	 * 
+	 * * @author ML, JL
+	 * @version 25.03.15
 	 */
 	private Player[] player;
 	private int aiPlayer;
@@ -45,13 +47,13 @@ public class Round{
 	}
 
 	public void play(){
-		char orientation;
+		char orientation = 'h';
 		String eingabe;
 		int gegner = 0;
 		int schiff = 0;
 		int counter = 1;
 		int max = this.fieldSize;
-		
+
 		while(ende() > 1){
 
 			for(int i = 0; i < player.length; i++){
@@ -78,10 +80,10 @@ public class Round{
 							}
 
 							System.out.println("Geben sie nun die Zahl ihres Wunschgegners ein.");
-							
+
 							// Start Änderung für AI
-							
-							
+
+
 							if(player.length - this.aiPlayer <= i){
 								if(player[i].getEnemyNumber() == 0){
 									gegner = rn.nextInt(player.length - 1 + 1) + 1;
@@ -93,23 +95,23 @@ public class Round{
 							} else {
 								gegner = IO.readEnemyInt();
 							}
-			
-							
+
+
 							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
 								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
-								
+
 								if(player.length - this.aiPlayer <= i){
 									gegner = rn.nextInt(player.length - 1 + 1) + 1;
 								} else {
 									gegner = IO.readEnemyInt();
 								}
 							}
-							
+
 							player[i].setEnemyNumber(gegner);
 							System.out.println(gegner);
-							
+
 							// Ende Änderung für AI
-							
+
 							//Schiff zum angreifen wählen
 							System.out.println("Sie spielen nun gegen "+ player[gegner-1].getPlayerName());
 
@@ -145,14 +147,14 @@ public class Round{
 
 							boolean go = false;
 							while(!go){
-								
+
 								// Aufruf für AI
 								if(player[i].isBot()){
 									schiff = ai.chooseShipToShoot();
 								} else {
 									schiff = IO.readShipInt();
 								}
-								
+
 								if(schiff == 1){
 									go = player[i].checkIfShipIsReady("D");
 								} else if(schiff == 2){
@@ -168,50 +170,50 @@ public class Round{
 								}
 
 							}
-							
+
 							System.out.println(schiff);
 							player[gegner-1].printPublicField();
 
-						
+
 							// Variablen für den Bot
-							
+
 							int[][] gegnerPublicField = player[gegner-1].getPublicField().getField();
 							int[][] gegnerPrivateField = player[gegner-1].getPrivateField().getField();
-							
-							Player gegnerMinusEins = player[gegner-1];
-							
 
-							
+							Player gegnerMinusEins = player[gegner-1];
+
+
+
 							//Koordinaten wählen und schießen
 
 							System.out.println("Geben sie nun die Koordinaten ein, auf die sie schießen möchten. (X,Y)");
-							
+
 							// test
 							String pos;
-							
+
 							if(player[i].isBot()){
 								pos = ai.chooseWhereToShoot(gegnerMinusEins, gegnerPublicField, gegnerPrivateField, max);
 								System.out.println("getget" + ai.getBotOrientation());
-								
+
 								System.out.println(pos);
 							} else {
 								pos = IO.readString();
 							}
 							// ---
-							
+
 							int[] koordinaten = checkPos(pos);
 
 							while(koordinaten == null){
 								System.out.println("Bitte geben sie die X,Y Koordinaten ein, auf die sie schießen möchten.");
-								
+
 								pos = IO.readString();
 								koordinaten = checkPos(pos);
 							}
-
+							Ship ship = null;
 
 							if(schiff == 1){
 								System.out.println("Horizontal (h) oder Vertikal(v)?");
-								
+
 								if(player[i].isBot()){
 									orientation = ai.chooseBotOrientation();
 									System.out.println("BotOrien -> " + orientation);
@@ -221,18 +223,16 @@ public class Round{
 
 								while(orientation != 'h' && orientation != 'v'){
 									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-									
+
 									orientation = IO.readChar();
 								}
+								ship = player[i].getAvailableDestroyer();
 
 								System.out.println(orientation);
-								
-								player[gegner-1].getPrivateField().setAttack(EShipType.DESTROYER, koordinaten,orientation, player[gegner-1]);
-								player[i].setDestroyerIsntReady();
-								player[gegner-1].checkIfSunk("D", true);
+
 							} else if(schiff == 2){
 								System.out.println("Horizontal (h) oder Vertikal(v)?");
-								
+
 								if(player[i].isBot()){
 									orientation = ai.chooseBotOrientation();
 								} else {
@@ -245,22 +245,24 @@ public class Round{
 									orientation = IO.readChar();
 								}
 
+								ship = player[i].getAvailableFrigate();
+
 								System.out.println(orientation);
-								
-								player[gegner-1].getPrivateField().setAttack(EShipType.FRIGATE,koordinaten,orientation,player[gegner-1]);
-								player[gegner-1].checkIfSunk("F", true);
-								player[i].setFrigateIsntReady();
+
+
 							} else if(schiff == 3){
 								orientation = 'h';
-								player[gegner-1].getPrivateField().setAttack(EShipType.CORVETTE,koordinaten,orientation,player[gegner-1]);
-								player[gegner-1].checkIfSunk("C", true);
-								player[i].setCorvetteIsntReady();
+								ship = player[i].getAvailableCorvette();
 							} else if(schiff == 4){
 								orientation = 'h';
-								player[gegner-1].getPrivateField().setAttack(EShipType.SUBMARINE,koordinaten,orientation,player[gegner-1]);
-								player[gegner-1].checkIfSunk("S", true);
-								player[i].setSubmarineIsntReady();
+								ship = player[i].getAvailableSubmarine();
 							}
+
+							if(ship != null){
+								player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
+								player[i].setShipIsntReady(ship);
+							}
+
 
 							//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
 

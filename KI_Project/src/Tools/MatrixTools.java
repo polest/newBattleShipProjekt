@@ -2,12 +2,17 @@ package Tools;
 import java.io.*;
 
 import Game.Player;
+import Ships.Corvette;
+import Ships.Destroyer;
+import Ships.Frigate;
+import Ships.Ship;
+import Ships.Submarine;
 
 /**
  * Write a description of class MatrixTools here.
  * 
  * @author ML
- * @version 09.12.14
+ * @version 22.03.15
  */
 public class MatrixTools implements Serializable{
 	/**
@@ -74,14 +79,13 @@ public class MatrixTools implements Serializable{
 					}
 				}
 				else{
-
 					if(matrix[y][x] == 0){
 						System.out.format(leftAlignFormat, " " + wave);
 					}
 					else{
 						System.out.format(leftAlignFormat, " " + black);
-
 					}
+
 				}
 
 			}
@@ -130,35 +134,27 @@ public class MatrixTools implements Serializable{
 	 * @param ship - ausgewählte Schiff
 	 * @return Gibt das mit dem ausgewähltem Schiff positionierte Spielfeld zurück 
 	 */
-	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, EShipType ship ){	
-	
+	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, Ship ship ){	
+
 		int shipSymbol = 0;
-		int length = 0;
+		int length = ship.getShipSize();
 
 		/*Je nach ausgewähltem Schiffstyp 
 		 *ein Kennzeichnungssymbol sowie die Schiffslänge setze
 		 */
-		switch(ship){
-		case DESTROYER:
+		if(ship instanceof Destroyer){
 			shipSymbol = 1;
-			length = 5;
-			break;
-
-		case FRIGATE:
-			shipSymbol = 2;
-			length = 4;
-			break;
-
-		case CORVETTE:
-			shipSymbol = 3;
-			length = 3;
-			break;
-
-		case SUBMARINE:
-			shipSymbol = 4;
-			length = 2;
-			break;
 		}
+		else if(ship instanceof Frigate){
+			shipSymbol = 2;
+		}
+		else if(ship instanceof Corvette){
+			shipSymbol = 3;
+		}
+		else if(ship instanceof Submarine){
+			shipSymbol = 4;
+		}
+
 
 		//Bei vertikaler Ausrichtung des Schiffes
 		if(orientation == 'h'){
@@ -188,27 +184,8 @@ public class MatrixTools implements Serializable{
 	 * @return Ein boolschen Wert, ob das Schiff an der ausgewählten Position und Ausrichtung
 	 * basierend auf den Spielregeln positioniert werden kann oder nicht
 	 */
-	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, EShipType ship){
-		int length = 0;
-
-		//Schifflänge anhand des Ausgewählten Schiffes
-		switch(ship){
-		case DESTROYER:
-			length = 5;
-			break;
-
-		case FRIGATE:
-			length = 4;
-			break;
-
-		case CORVETTE:
-			length = 3;
-			break;
-
-		case SUBMARINE:
-			length = 2;
-			break;
-		}
+	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, Ship ship){
+		int length = ship.getShipSize();
 
 		int yIndex = yVal;
 		int xIndex = xVal;
@@ -315,34 +292,16 @@ public class MatrixTools implements Serializable{
 
 	}
 
-	public void attackField(EShipType ship, int[] coordinates, char orientation, Player player){
+	public void attackField(Ship ship, int[] coordinates, char orientation, Player player){
 		int[][] publicField = player.getPublicField().getField();
 		int[][] privateField = player.getPrivateField().getField();
 
 
-		int shootLength = 0;
-
-		switch(ship){
-		case CORVETTE:
-			shootLength = 1;
-			break;
-		case DESTROYER:
-			shootLength = 3;
-			break;
-		case FRIGATE:
-			shootLength = 2;
-			break;
-		case SUBMARINE:
-			shootLength = 1;
-			break;
-		default:
-			break;
-
-		}
+		int shootLength = ship.getShootArea();
 
 		int x = coordinates[0];
 		int y = coordinates[1];
-		
+		boolean shipIsSwimming = true;
 		int hitWater = 0;
 		int hitShip = 0;
 
@@ -363,7 +322,9 @@ public class MatrixTools implements Serializable{
 					 * eine 1 für getroffenes Wasser (wird dann als X ausgedruckt)
 					 */
 					if(privateField[y][z] == 0){
-						publicField[y][z] = 1;
+						if(publicField[y][z] != 3){
+							publicField[y][z] = 1;
+						}
 						hitWater++;
 					}
 					/*Ansonsten setze eine 2 für ein getroffenes Schiff
@@ -376,13 +337,14 @@ public class MatrixTools implements Serializable{
 					 * öffentliches Feld:
 					 * 2 egal um welches Schiff es sich handelt		
 					 */
-					
+
 					else if(privateField[y][z] == 1){
 						publicField[y][z] = 2;
 
 						for(int i = 0; i < player.getDestroyer().length; i++){
-							player.getDestroyer()[i].setCoordinatesIfHitted(z, y);
+							checkShipIsSunk(player,  player.getDestroyer()[i], z, y);
 						}
+						player.checkIfSunk("D", true);
 						hitShip++;
 
 					}
@@ -390,24 +352,27 @@ public class MatrixTools implements Serializable{
 						publicField[y][z] = 2;
 
 						for(int i = 0; i < player.getFrigate().length; i++){
-							player.getFrigate()[i].setCoordinatesIfHitted(z, y);
+							checkShipIsSunk(player,  player.getFrigate()[i], z, y);
 						}
+						player.checkIfSunk("F", true);
 						hitShip++;
 					}
 					else if(privateField[y][z] == 3){
 						publicField[y][z] = 2;
 
 						for(int i = 0; i < player.getCorvette().length; i++){
-							player.getCorvette()[i].setCoordinatesIfHitted(z, y);
+							checkShipIsSunk(player,  player.getCorvette()[i], z, y);
 						}
+						player.checkIfSunk("C", true);
 						hitShip++;
 					}
 					else if(privateField[y][z] == 4){
 						publicField[y][z] = 2;
 
 						for(int i = 0; i < player.getSubmarine().length; i++){
-							player.getSubmarine()[i].setCoordinatesIfHitted(z, y);
+							checkShipIsSunk(player,  player.getSubmarine()[i], z, y);
 						}
+						player.checkIfSunk("S", true);
 						hitShip++;
 					}
 				}
@@ -427,7 +392,9 @@ public class MatrixTools implements Serializable{
 					 * eine 1 für getroffenes Wasser (wird dann als X ausgedruckt)
 					 */
 					if(privateField[q][x] == 0){
-						publicField[q][x] = 1;
+						if(publicField[q][x] != 3){
+							publicField[q][x] = 1;
+						}
 
 						hitWater++;
 					}
@@ -441,38 +408,42 @@ public class MatrixTools implements Serializable{
 					 * öffentliches Feld:
 					 * 2 egal um welches Schiff es sich handelt		
 					 */else if(privateField[q][x] == 1){
-						publicField[q][x] = 2;
+						 publicField[q][x] = 2;
 
-						for(int i = 0; i < player.getDestroyer().length; i++){
-							player.getDestroyer()[i].setCoordinatesIfHitted(q, x);
-						}
+						 for(int i = 0; i < player.getDestroyer().length; i++){
+							 checkShipIsSunk(player,  player.getDestroyer()[i], x, q);
+						 }
+						 player.checkIfSunk("D", true);
 
-						hitShip++;
-					}
-					else if(privateField[y][x] == 2){
-						publicField[q][x] = 2;
+						 hitShip++;
+					 }
+					 else if(privateField[y][x] == 2){
+						 publicField[q][x] = 2;
 
-						for(int i = 0; i < player.getFrigate().length; i++){
-							player.getFrigate()[i].setCoordinatesIfHitted(q, x);
-						}
-						hitShip++;
-					}
-					else if(privateField[q][x] == 3){
-						publicField[q][x] = 2;
+						 for(int i = 0; i < player.getFrigate().length; i++){
+							 checkShipIsSunk(player, player.getFrigate()[i], x, q);
+						 }
+						 player.checkIfSunk("F", true);
+						 hitShip++;
+					 }
+					 else if(privateField[q][x] == 3){
+						 publicField[q][x] = 2;
 
-						for(int i = 0; i < player.getCorvette().length; i++){
-							player.getCorvette()[i].setCoordinatesIfHitted(q, x);
-						}
-						hitShip++;
-					}
-					else if(privateField[q][x] == 4){
-						publicField[q][x] = 2;
+						 for(int i = 0; i < player.getCorvette().length; i++){
+							 checkShipIsSunk(player,  player.getCorvette()[i], x, q);
+						 }
+						 player.checkIfSunk("C", true);
+						 hitShip++;
+					 }
+					 else if(privateField[q][x] == 4){
+						 publicField[q][x] = 2;
 
-						for(int i = 0; i < player.getSubmarine().length; i++){
-							player.getSubmarine()[i].setCoordinatesIfHitted(q, x);
-						}
-						hitShip++;
-					}
+						 for(int i = 0; i < player.getSubmarine().length; i++){
+							 checkShipIsSunk(player,  player.getSubmarine()[i], x, q);
+						 }
+						 player.checkIfSunk("S", true);
+						 hitShip++;
+					 }
 
 				}
 			}
@@ -483,10 +454,144 @@ public class MatrixTools implements Serializable{
 		System.out.println(hitShip + "x Schiff getroffen\n" + hitWater + "x Wasser getroffen\n");
 	}
 
+	private void checkShipIsSunk(Player player, Ship ship, int x, int y){
+		boolean shipIsSwimming = ship.setCoordinatesIfHitted(x, y);
+
+		if(shipIsSwimming == false){
+			int[] coordsSunkenShip = ship.getStartCoordsAndOrientation();
+			setPublicFieldSunkenShip(player, ship);
+		}
+	}
+
+	private void setPublicFieldSunkenShip(Player player, Ship ship){
+		int[][] publicField = player.getPublicField().getField();
+
+		int shipLength = ship.getShipSize();
+		// [x][y] koordinate
+		int sunkenKoords[][] = new int[shipLength][2];
+
+		//[0] = x, [1] = y, [2] = bei 0 ist es horizontal und bei 1 ist es verikal
+		int[] shipStartCoordsAndOrientation = ship.getStartCoordsAndOrientation();
+
+		int xStart = shipStartCoordsAndOrientation[0];
+		int yStart = shipStartCoordsAndOrientation[1];
+		int orientation = shipStartCoordsAndOrientation[2];
+
+		//Wenn das Schiff horizontal positioniert ist...
+		if(orientation == 0){
+			//Setze eine 4 für ein gesunkenes Schiff
+			for(int i = xStart; i < (xStart + shipLength ); i++){
+				publicField[yStart][i] = 4;
+				//Setze drumherum eine 3 für umliegendes Wasser eines gesunkenen Schiffes
+				//Oberhalb des Schiffes
+				if(yStart > 1){
+					publicField[ (yStart-1)][i] = 3;
+				}
+				//unterhalb des Schiffes
+				if(yStart+1 < publicField.length){
+					publicField[(yStart+1)][i] = 3;
+				}
+			}
+			//links vom Schiff
+			if(xStart > 1){
+				int leftStart = yStart;
+				int leftEnd = yStart;
+
+				//wenn es nicht oben links in der Ecke ist
+				if(yStart > 1){
+					leftStart -= 1;
+				}
+
+				//wenn es nicht unten links in der Ecke ist
+				if( (yStart + 1) < publicField.length){
+					leftEnd += 1;
+				}
+				for(int j = leftStart; j <= leftEnd; j++){
+					publicField[j][xStart-1] = 3;
+				}
+			}
+			//rechts vom Schiff
+			if( (xStart + ship.getShipSize()) < publicField.length){
+
+				int rightStart = yStart;
+				int rightEnd = yStart;
+
+				//wenn es nicht oben links in der Ecke ist
+				if(yStart > 1){
+					rightStart -= 1;
+				}
+
+				//wenn es nicht unten links in der Ecke ist
+				if( (yStart) < (publicField.length-1) ){
+					rightEnd += 1;
+				}
+
+				for(int j = rightStart; j <= rightEnd; j++){
+					publicField[j][xStart+ship.getShipSize()] = 3;
+				}
+			}
+		}
+		else{
+			//Setze eine 4 für ein gesunkenes Schiff
+			for(int i = yStart; i < (yStart + shipLength); i++){
+				publicField[i][xStart] = 4;
+				//Setze drumherum eine 3 für umliegendes Wasser eines gesunkenen Schiffes
+				//Links vom Schiff
+				if(xStart > 1){
+					publicField[ (i)][xStart-1] = 3;
+				}
+				//rechts vom Schiff
+				if(xStart < publicField.length-1){
+					publicField[i][(xStart+1)] = 3;
+				}
+			}
+			//obenerhalb vom Schiff
+			if(yStart > 1){
+				int leftStart = xStart;
+				int leftEnd = xStart;
+
+				//wenn es nicht links aussen ist
+				if(xStart > 1){
+					leftStart -= 1;
+				}
+
+				//wenn es nicht rechts aussen ist
+				if(( xStart+1) < publicField.length-1){
+					leftEnd += 1;
+				}
+
+				for(int j = leftStart; j <= leftEnd; j++){
+					publicField[yStart-1][j] = 3;
+				}
+			}
+			//unterhalb vom Schiff
+			if((yStart + ship.getShipSize()) < publicField.length){
+
+				int rightStart = xStart;
+				int rightEnd = xStart;
+
+				//wenn es links am Rand ist
+				if(xStart > 1){
+					rightStart -= 1;
+				}
+
+				//wenn es unten rechts am Rand ist
+				if( (xStart + 1) < publicField.length){
+					rightEnd += 1;
+				}
+
+				for(int j = rightStart; j <= rightEnd; j++){
+					publicField[yStart+ship.getShipSize()][j] = 3;
+				}
+			}
+		}
+	}
+
+
 	public void printPublicField(int[][] publicField, String name){
 
 		int[][] printMatrix = new int[publicField.length][publicField.length];
-		
+
 		System.out.println("Spielfeld von \"" + name + "\"");
 
 		for(int y = 0; y < printMatrix.length; y++){
@@ -542,8 +647,14 @@ public class MatrixTools implements Serializable{
 					else if(publicField[y][x] == 1){
 						System.out.format(leftAlignFormat, " X" );
 					}
-					else{
+					else if(publicField[y][x] == 2){
 						System.out.format(leftAlignFormat, " " + black);
+					}
+					else if(publicField[y][x] == 3){
+						System.out.format(leftAlignFormat, "s" + black );
+					}
+					else{
+						System.out.format(leftAlignFormat, "XX");
 					}
 
 				}

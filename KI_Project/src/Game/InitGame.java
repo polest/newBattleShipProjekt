@@ -5,9 +5,13 @@ import java.io.Serializable;
 import java.util.Random;
 
 import SaveGame.Load;
+import Ships.Corvette;
+import Ships.Destroyer;
+import Ships.Frigate;
+import Ships.Ship;
+import Ships.Submarine;
 import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
-import Tools.EShipType;
 import Tools.IO;
 
 public class InitGame implements Serializable{
@@ -46,51 +50,51 @@ public class InitGame implements Serializable{
 			boolean go = false;
 			while(!go){
 				System.out.println("Bitte geben sie die Zahl von ihrem Spiel ein, welches sie laden möchten.");
-				
+
 				File f = new File(System.getProperty("user.dir") + "/data");
 				File[] l = f.listFiles(); 
-				
+
 				listFileNames = new String[0];
-				
+
 				for (int x = 0; x < l.length; x++) 
 				{
 					try{
-						
+
 						String fileName = l[x].getName();
 						String[] fileArray = fileName.split("\\.");
-						
+
 						if(fileArray[1].equals("save")){
-							
+
 							String[] newArray = new String[listFileNames.length + 1];
-							
+
 							for(int i = 0; i < listFileNames.length; i++){
 								newArray[i] = listFileNames[i];
 							}
-							
+
 							newArray[newArray.length-1] = fileArray[0];
-							
+
 							listFileNames = newArray;
-							
+
 							System.out.println("("+ newArray.length +") " + fileArray[0]);
 						}
 					} catch (ArrayIndexOutOfBoundsException e){
 						e.getStackTrace();
 					}
 				}
-				
+
 				if(listFileNames.length == 0){
 					this.colorPrint.println(EPrintColor.RED, "Keine Datei zum laden gefunden.");
 					System.exit(0);
 				}
-				
+
 				int eingabe = IO.readInt();
-				
+
 				while(eingabe < 1 || eingabe > listFileNames.length){
 					this.colorPrint.println(EPrintColor.RED, "Falsche Eingabe");
 					System.out.println("Bitte geben sie die Zahl von ihrem Spiel ein, welches sie laden möchten.");
 					eingabe = IO.readInt();
 				}
-				
+
 				if(load.loadGame(listFileNames[eingabe-1])){
 					go = true;
 				}
@@ -112,10 +116,10 @@ public class InitGame implements Serializable{
 
 		int allPlayer = this.gameOptions.getPlayer();
 		this.aiPlayer = this.gameOptions.getAiPlayer();
-		
+
 		for(int i = 0; i < player.length; i++){
 			BattleField battlefield = new BattleField(fieldSize);
-			
+
 			if(allPlayer - aiPlayer <= i){
 				if(i == 0){
 					player[i] = new Player(true, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
@@ -133,7 +137,7 @@ public class InitGame implements Serializable{
 							this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, false);
 				}
 			}
-			
+
 		}
 
 		this.setShipsToField();
@@ -149,23 +153,24 @@ public class InitGame implements Serializable{
 		IO.println("Der Reihe nach platziert jeder sein/e Schiff/e!\n");
 
 		for(int i = 0; i < player.length; i++){
-			
+
 			int max = this.fieldSize;
 			Random rn = new Random();
-			
+
 			//if(player.length - this.aiPlayer <= i){
-			
-				
+
+
 			/*
 			 * Das Spielfeld des Spieler wird auf der Konsole ausgedruckt
 			 * und seine Schiffe vorbereitet
 			 */
 			//IO.println(player[i].getPlayerName() + " : ");
 			player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
-			int destroyer = player[i].getDestroyer().length;
-			int frigate = player[i].getFrigate().length;
-			int corvette = player[i].getCorvette().length;
-			int submarine = player[i].getSubmarine().length;
+
+			Destroyer destroyer[] = player[i].getDestroyer();
+			Frigate frigate[] = player[i].getFrigate();
+			Corvette corvette[] = player[i].getCorvette();
+			Submarine submarine[] = player[i].getSubmarine();
 
 			IO.println("Spieler \"" + player[i].getPlayerName() + "\" ist an der Reihe. \n Bitte geben sie die Koordinaten ein (X,Y)");
 
@@ -176,271 +181,34 @@ public class InitGame implements Serializable{
 			 */
 
 			//ZERSTÖRER
-			for(int d = 0; d < destroyer; d++){
+			for(int d = 0; d < destroyer.length; d++){
 				int id = d+1;
 				IO.println("Zerstörer (" + id + ")");
-				boolean checked = false;
-
-				while(checked == false){
-					
-					// Start Änderung für AI
-					String pos;
-					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
-						System.out.println(pos);
-					} else {
-						pos = IO.readString();
-					}
-					// Ende Änderung für AI
-					
-					int[] koordinaten = checkPos(pos);
-
-					if(koordinaten == null){
-						this.colorPrint.println(EPrintColor.RED, "Fehler in der Eingabe! (X, Y)");
-					} else {
-						IO.println("Horizontal h \nVertikal v");
-						
-						
-						// Start Änderung für AI
-						char orientation;
-						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
-						} else {
-							orientation = IO.readChar();
-						}
-						// Ende Änderung für AI
-						
-						while(orientation != 'h' && orientation != 'v'){
-							this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							orientation = IO.readChar();
-						}
-						
-						System.out.println(orientation);
-						
-						if(orientation == 'h'){
-							this.player[i].saveShipCoordinatesH(koordinaten[0], koordinaten[1], 5, d);
-						}
-						else{
-							this.player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], 5, d);
-						}
-
-						if(player[i].getPrivateField().setShips(EShipType.DESTROYER, koordinaten[0], koordinaten[1], orientation) == true){
-							player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
-							checked = true;
-						}
-						else{
-							this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-						}
-					}
-				}
+				setShipToField(destroyer[d], i);
 			}
 
 			//FREGATTE
-			for(int f = 0; f < frigate; f++){
+			for(int f = 0; f < frigate.length; f++){
 				int id = f+1;
 				IO.println("Fregatte (" + id + ")");
-				boolean checked = false;
-
-				while(checked == false){
-
-					// Start Änderung für AI
-					String pos;
-					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
-						System.out.println(pos);
-					} else {
-						pos = IO.readString();
-					}
-					// Ende Änderung für AI
-					
-					int[] koordinaten = checkPos(pos);
-
-					if(koordinaten == null){
-						this.colorPrint.println(EPrintColor.RED, "Fehler in der Eingabe! (X, Y)");
-					}
-					else{
-						IO.println("Horizontal h \nVertikal v");
-
-						// Start Änderung für AI
-						char orientation;
-						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
-						} else {
-							orientation = IO.readChar();
-						}
-						// Ende Änderung für AI
-
-						while(orientation != 'h' && orientation != 'v'){
-							this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							orientation = IO.readChar();
-						}
-						if(orientation == 'h'){
-							this.player[i].saveShipCoordinatesH(koordinaten[0], koordinaten[1], 4, f);
-						}
-						else{
-							this.player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], 4, f);
-						}
-						if(player[i].getPrivateField().setShips(EShipType.FRIGATE, koordinaten[0], koordinaten[1], orientation) == true){
-							player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
-							checked = true;
-						}
-						else{
-							this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-						}
-					}
+				setShipToField(frigate[f], i);
 				}
-
-			}
 
 			//KORVETTE
-			for(int k = 0; k < corvette; k++){
+			for(int k = 0; k < corvette.length; k++){
 				int id = k+1;
 				IO.println("Korvette (" + id + ")");
-				boolean checked = false;
-
-				while(checked == false){
-
-					// Start Änderung für AI
-					String pos;
-					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
-						System.out.println(pos);
-					} else {
-						pos = IO.readString();
-					}
-					// Ende Änderung für AI
-					
-					int[] koordinaten = checkPos(pos);
-
-					if(koordinaten == null){
-						this.colorPrint.println(EPrintColor.RED,"Fehler in der Eingabe! (X, Y)");
-					}
-					else{
-						IO.println("Horizontal h \nVertikal v");
-
-						// Start Änderung für AI
-						char orientation;
-						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
-						} else {
-							orientation = IO.readChar();
-						}
-						// Ende Änderung für AI
-						
-						while(orientation != 'h' && orientation != 'v'){
-							this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							orientation = IO.readChar();
-						}
-						
-						if(orientation == 'h'){
-							this.player[i].saveShipCoordinatesH(koordinaten[0], koordinaten[1], 3, k);
-						}
-						else{
-							this.player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], 3, k);
-						}
-						if(player[i].getPrivateField().setShips(EShipType.CORVETTE, koordinaten[0], koordinaten[1], orientation) == true){
-							player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
-							checked = true;
-						}
-						else{
-							this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-						}
-					}
-				}
-
+				setShipToField(corvette[k], i);
 			}
 
 			//UBOOT
-			for(int s = 0; s < submarine; s++){
+			for(int s = 0; s < submarine.length; s++){
 				int id = s+1;
 				IO.println("UBoot (" + id + ")");
-				boolean checked = false;
-
-				while(checked == false){
-
-					// Start Änderung für AI
-					String pos;
-					
-					if(player.length - this.aiPlayer <= i){
-						int randomX = rn.nextInt(max - 1 + 1) + 1;
-						int randomY = rn.nextInt(max - 1 + 1) + 1;
-						pos = ""+randomX+","+randomY+"";
-						System.out.println(pos);
-					} else {
-						pos = IO.readString();
-					}
-					// Ende Änderung für AI
-					
-					int[] koordinaten = checkPos(pos);
-
-					if(koordinaten == null){
-						this.colorPrint.println(EPrintColor.RED,"Fehler in der Eingabe! (X, Y)");
-					}
-					else{
-						IO.println("Horizontal h \nVertikal v");
-
-						// Start Änderung für AI
-						char orientation;
-						
-						if(player.length - this.aiPlayer <= i){
-							int randomInt = rn.nextInt(2 - 1 + 1) + 1;
-							if(randomInt == 1){
-								orientation = 'h';
-							} else {
-								orientation = 'v';
-							}
-						} else {
-							orientation = IO.readChar();
-						}
-						// Ende Änderung für AI
-
-						while(orientation != 'h' && orientation != 'v'){
-							this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							orientation = IO.readChar();
-						}
-						if(orientation == 'h'){
-							this.player[i].saveShipCoordinatesH(koordinaten[0], koordinaten[1], 2, s);
-						}
-						else{
-							this.player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], 2, s);
-						}
-						if(player[i].getPrivateField().setShips(EShipType.SUBMARINE, koordinaten[0], koordinaten[1], orientation) == true){
-							player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
-							checked = true;
-						}
-						else{
-							this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-						}
-					}
+				setShipToField(submarine[s], i);
 				}
-			}
+			
+			
 			if(i+1 < player.length){
 				System.out.println("Drücken sie (n) damit der nächste Spieler an der Reihe ist.");
 			}else{
@@ -459,7 +227,72 @@ public class InitGame implements Serializable{
 				}
 
 			}
+
+		}
+	}
+
+
+	private void setShipToField(Ship ship, int i ) {
+		boolean checked = false;
+		int max = this.fieldSize;
+		Random rn = new Random();
+		
+		while(checked == false){
+			// Start Ãnderung fÃ¼r AI
+			String pos;
 			
+			if(this.player.length - this.aiPlayer <= i){
+				int randomX = rn.nextInt(max - 1 + 1) + 1;
+				int randomY = rn.nextInt(max - 1 + 1) + 1;
+				pos = ""+randomX+","+randomY+"";
+				System.out.println(pos);
+			} else {
+				pos = IO.readString();
+			}
+			// Ende Ãnderung fÃ¼r AI
+			
+			int[] koordinaten = checkPos(pos);
+
+			if(koordinaten == null){
+				this.colorPrint.println(EPrintColor.RED, "Fehler in der Eingabe! (X, Y)");
+			}
+			else{
+				IO.println("Horizontal h \nVertikal v");
+				// Start Ãnderung fÃ¼r AI
+				char orientation;
+				
+				if(player.length - this.aiPlayer <= i){
+					int randomInt = rn.nextInt(2 - 1 + 1) + 1;
+					if(randomInt == 1){
+						orientation = 'h';
+					} else {
+						orientation = 'v';
+					}
+				} else {
+					orientation = IO.readChar();
+				}
+				// Ende Ãnderung fÃ¼r AI
+
+				while(orientation != 'h' && orientation != 'v'){
+					this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
+					orientation = IO.readChar();
+				}
+
+				if(orientation == 'h'){
+					this.player[i].saveShipCoordinatesH(koordinaten[0], koordinaten[1], ship);
+				}
+				else{
+					this.player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], ship);
+				}
+
+				if(this.player[i].getPrivateField().setShips(ship, koordinaten[0], koordinaten[1], orientation) == true){
+					this.player[i].getPrivateField().printPrivateField(this.player[i].getPlayerName());
+					checked = true;
+				}
+				else{
+					this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
+				}
+			}
 		}
 	}
 
@@ -491,6 +324,8 @@ public class InitGame implements Serializable{
 			return iKoordinaten;
 		}
 		catch(Exception e){
+			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
+
 		}
 		return null;
 	}
