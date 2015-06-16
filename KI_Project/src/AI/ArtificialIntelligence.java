@@ -79,13 +79,11 @@ public class ArtificialIntelligence {
 		}
 	}
 	
-	public String chooseWhereToShoot(Player gegnerMinusEins, int[][] gegnerPublicField, int[][] gegnerPrivateField, int max){
+	public String chooseWhereToShoot(Player gegnerMinusEins, int[][] gegnerPublicField, int max){
 
 		int xCoordinateForShooting = 0;
 		int yCoordinateForShooting = 0;
 		boolean goContinue = true;
-		
-		String curShipString;
 		
 		// geht die matrix durch
 		for(int y = 0; y < gegnerPublicField[0].length; y++){
@@ -93,137 +91,105 @@ public class ArtificialIntelligence {
 				
 				// guckt ob das aktuelle feld ein schiffstreffer ist
 				if(gegnerPublicField[y][x] == 2){
-					System.out.println("Ein hitted Field!");
 					
-					int curShip = gegnerPrivateField[y][x];
+					// methode schuss für bot
 					
-					
-					switch(curShip){
-					case 1:
-						curShipString = "D";
-						break;
-					case 2:
-						curShipString = "F";
-						break; 
-					case 3:
-						curShipString = "C";
-						break;
-					case 4:
-						curShipString = "S";
-						break;
-					default:
-						curShipString = "0";
-						break;
-					}
-					
-						System.out.println("das Feld ist ein " + curShipString);
+					// prüfe ob drum herum ein schiff getroffen ist
+					if(gegnerPublicField[y-1][x] == 2 || gegnerPublicField[y+1][x] == 2 || gegnerPublicField[y][x-1] == 2 || gegnerPublicField[y][x+1] == 2){
 						
-						// prüft ob das schiff gesunken ist, wenn nicht dann führt er den code aus
-						if(gegnerMinusEins.checkIfSunk(curShipString, false) == false){
-							
-							
-							System.out.println("schiff lebt noch");
-							
-							// methode schuss für bot
-							
-							// prüfe ob drum herum ein schiff getroffen ist
-							if(gegnerPublicField[y-1][x] == 2 || gegnerPublicField[y+1][x] == 2 || gegnerPublicField[y][x-1] == 2 || gegnerPublicField[y][x+1] == 2){
-								
-								// wenn ja dann gucke wo schon getroffen wurde und prüfe ob die gegenseite frei ist, wenn ja dann schieße auf die gegenseite
-								// 1
-								if(gegnerPublicField[y-1][x] == 2){
+						// wenn ja dann gucke wo schon getroffen wurde und prüfe ob die gegenseite frei ist, wenn ja dann schieße auf die gegenseite
+						// 1
+						if(gegnerPublicField[y-1][x] == 2){
+							// prüfe ob gegenseite nur wasser ist
+							if(gegnerPublicField[y+1][x] == 0){
+								// wenn ja, dann schieße dort hin!
+								xCoordinateForShooting = x;
+								yCoordinateForShooting = y+1;
+								goContinue = false;
+								this.setBotOrientation('v');
+							} 
+						
+						} else if(goContinue){
+							//###
+							// 2
+							if(gegnerPublicField[y+1][x] == 2){
+								// prüfe ob gegenseite nur wasser ist
+								if(gegnerPublicField[y-1][x] == 0){
+									// wenn ja, dann schieße dort hin!
+									xCoordinateForShooting = x;
+									yCoordinateForShooting = y-1;
+									goContinue = false;
+									this.setBotOrientation('v');
+								} 
+							} else if (goContinue){
+								// 3
+								if(gegnerPublicField[y][x-1] == 2){
 									// prüfe ob gegenseite nur wasser ist
-									if(gegnerPublicField[y+1][x] == 0){
+									if(gegnerPublicField[y][x+1] == 0){
 										// wenn ja, dann schieße dort hin!
-										xCoordinateForShooting = x;
-										yCoordinateForShooting = y+1;
+										xCoordinateForShooting = x+1;
+										yCoordinateForShooting = y;
 										goContinue = false;
-										this.setBotOrientation('v');
+										this.setBotOrientation('h');
 									} 
-								
-								} else if(goContinue){
-									//###
-									// 2
-									if(gegnerPublicField[y+1][x] == 2){
+								} else if (goContinue){
+									
+									// 4
+									if(gegnerPublicField[y][x+1] == 2){
 										// prüfe ob gegenseite nur wasser ist
-										if(gegnerPublicField[y-1][x] == 0){
+										if(gegnerPublicField[y][x-1] == 0){
 											// wenn ja, dann schieße dort hin!
-											xCoordinateForShooting = x;
-											yCoordinateForShooting = y-1;
+											xCoordinateForShooting = x-1;
+											yCoordinateForShooting = y;
 											goContinue = false;
-											this.setBotOrientation('v');
+											this.setBotOrientation('h');
 										} 
-									} else if (goContinue){
-										// 3
-										if(gegnerPublicField[y][x-1] == 2){
-											// prüfe ob gegenseite nur wasser ist
-											if(gegnerPublicField[y][x+1] == 0){
-												// wenn ja, dann schieße dort hin!
-												xCoordinateForShooting = x+1;
-												yCoordinateForShooting = y;
-												goContinue = false;
-												this.setBotOrientation('h');
-											} 
-										} else if (goContinue){
-											
-											// 4
-											if(gegnerPublicField[y][x+1] == 2){
-												// prüfe ob gegenseite nur wasser ist
-												if(gegnerPublicField[y][x-1] == 0){
-													// wenn ja, dann schieße dort hin!
-													xCoordinateForShooting = x-1;
-													yCoordinateForShooting = y;
-													goContinue = false;
-													this.setBotOrientation('h');
-												} 
-											}	
-										}
-									}
+									}	
 								}
+							}
+						}
+						
+						
+						
+					} else {
+						
+						// prüfe jede seite ob wasser getroffen wurde, wenn nicht dann schieß darauf
+						// 1
+						if(goContinue){
+							// prüfe ob hier wasser ist, wenn ja dann schieß drauf
+							if(gegnerPublicField[y-1][x] == 0){
+								xCoordinateForShooting = x;
+								yCoordinateForShooting = y-1;
+								goContinue = false;
+							} else if(goContinue){
 								
-								
-								
-							} else {
-								
-								// prüfe jede seite ob wasser getroffen wurde, wenn nicht dann schieß darauf
-								// 1
-								if(goContinue){
-									// prüfe ob hier wasser ist, wenn ja dann schieß drauf
-									if(gegnerPublicField[y-1][x] == 0){
-										xCoordinateForShooting = x;
-										yCoordinateForShooting = y-1;
+								if(gegnerPublicField[y+1][x] == 0){
+									xCoordinateForShooting = x;
+									yCoordinateForShooting = y+1;
+									goContinue = false;
+								} else if (goContinue){
+									if(gegnerPublicField[y][x-1] == 0){
+										xCoordinateForShooting = x-1;
+										yCoordinateForShooting = y;
 										goContinue = false;
 									} else if(goContinue){
-										
-										if(gegnerPublicField[y+1][x] == 0){
-											xCoordinateForShooting = x;
-											yCoordinateForShooting = y+1;
+										if(gegnerPublicField[y][x+1] == 0){
+											xCoordinateForShooting = x+1;
+											yCoordinateForShooting = y;
 											goContinue = false;
-										} else if (goContinue){
-											if(gegnerPublicField[y][x-1] == 0){
-												xCoordinateForShooting = x-1;
-												yCoordinateForShooting = y;
-												goContinue = false;
-											} else if(goContinue){
-												if(gegnerPublicField[y][x+1] == 0){
-													xCoordinateForShooting = x+1;
-													yCoordinateForShooting = y;
-													goContinue = false;
-												}
-											}
 										}
 									}
 								}
-								
 							}
-							
-							
-						} else {
-							System.out.println("schiff is gesunken");
 						}
-				}		
-			}
-		}
+						
+					}
+					
+				}	// Ende if
+				
+				
+			} // for2
+		} // for1
 		
 		
 		if(xCoordinateForShooting == 0 && yCoordinateForShooting == 0){

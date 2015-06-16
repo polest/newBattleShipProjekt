@@ -81,11 +81,9 @@ public class Round{
 
 							// Start Änderung für AI
 
-							
-							
 							if(player[i].isBot()){
-								if(player[player[i].getEnemyNumber()].getIsAlive()){
-									gegner = player[i].getEnemyNumber();
+								if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()].getIsAlive()){								
+									gegner = player[i].getEnemyNumber();																	
 								} else {
 									gegner = ai.getAliveEnemy();
 								}
@@ -172,7 +170,6 @@ public class Round{
 							// Variablen für den Bot
 
 							int[][] gegnerPublicField = player[gegner-1].getPublicField().getField();
-							int[][] gegnerPrivateField = player[gegner-1].getPrivateField().getField();
 
 							Player gegnerMinusEins = player[gegner-1];
 
@@ -186,7 +183,7 @@ public class Round{
 							String pos;
 
 							if(player[i].isBot()){
-								pos = ai.chooseWhereToShoot(gegnerMinusEins, gegnerPublicField, gegnerPrivateField, max);
+								pos = ai.chooseWhereToShoot(gegnerMinusEins, gegnerPublicField, max);
 								System.out.println("getget" + ai.getBotOrientation());
 
 								System.out.println(pos);
