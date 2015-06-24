@@ -1,6 +1,9 @@
 package Game;
 import java.io.Serializable;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
 import Ships.Ship;
 import Tools.MatrixTools;
 
@@ -16,8 +19,9 @@ import Tools.MatrixTools;
 		private int size;
 		private boolean isBlocked;
 		private boolean isFree;
-		private MatrixTools matrixTools = new MatrixTools();
+		private MatrixTools matrixTools;
 		private String fieldId;
+		private BattleField_View battlefieldView;
 
 		/**
 		 * Konstruktor eins Spielfeldes
@@ -26,9 +30,13 @@ import Tools.MatrixTools;
 		public BattleField(int size) {
 			this.size = size;
 			this.field = new int[this.size+1][this.size+1];
+			this.matrixTools = new MatrixTools();
 			initField();
+			
+			
 		}
-
+		
+		
 		/**
 		 * Initialisiert Matrix in ausgewälter größe und platziert 
 		 * Tilden als Startwerte (Leeres Spielfeld)
@@ -75,8 +83,9 @@ import Tools.MatrixTools;
 		/**
 		 * Druckt das Spielfeld auf der Konsole aus
 		 */
-		public void printPrivateField(String name){
-			matrixTools.printPrivateField(this.field, name);
+		public void printPrivateField(JButton[][] field, String name){
+			matrixTools.printPrivateField(this.field, field, name);
+			
 		}
 
 		/**
@@ -114,7 +123,5 @@ import Tools.MatrixTools;
 			matrixTools.attackField(ship, coordinates, orientation, player);
 
 		}
-
-
 	}
 

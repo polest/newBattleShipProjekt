@@ -1,12 +1,18 @@
 package Game;
 
 import java.io.File;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.Serializable;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import SaveGame.Load;
 import Ships.Corvette;
@@ -28,17 +34,36 @@ public class InitGame implements Serializable{
 
 	private Options gameOptions;
 	private Options_View gameOptionsView;
+	private InitGame_View initGameView;
 	private Load load = new Load();
 	private Player[] player;
 	private ColoredPrint colorPrint = new ColoredPrint();
 	private int fieldSize;
 	String[] listFileNames;
 	private Round rounds;
+	private int playerId;
+	private Ship choosenShip;
+	private Destroyer[] destroyer;
+	private Frigate[] frigate;
+	private Corvette[] corvette;
+	private Submarine[] submarine;
+	//private boolean placingShip = false;
+
+	private int destroyerCount;
+	private int frigateCount;
+	private int corvetteCount;
+	private int submarineCount;
+	private char orientation;
+	private boolean isPressed;
 
 
-	public InitGame(Options_View optionsView, Options gameOptions){
+
+	public InitGame(Options_View optionsView, Options gameOptions, InitGame_View initGameView){
 		this.gameOptionsView = optionsView;
 		this.gameOptions = gameOptions;
+		this.initGameView = initGameView;
+		this.playerId = 0;
+		this.isPressed  = false;
 		this.configureGame();
 		//if(start){
 		//this.gameOptions = new Options(width, height);
@@ -128,7 +153,7 @@ public class InitGame implements Serializable{
 	public void configureGame(){
 		this.player = new Player[this.gameOptions.getPlayer()];
 		this.fieldSize = this.gameOptions.getBattlefieldSize();
-
+		this.initGameView.setFieldSize(this.fieldSize);
 
 		for(int i = 0; i < player.length; i++){
 			BattleField battlefield = new BattleField(this.fieldSize);
@@ -140,11 +165,9 @@ public class InitGame implements Serializable{
 				player[i] = new Player(false, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
 						this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, this.gameOptions.getPlayerKi(i-1));
 			}
-
 		}
 
 		this.setShipsToField();
-
 	}
 
 
@@ -153,119 +176,58 @@ public class InitGame implements Serializable{
 	 *  Positionierung der Schiffe von jedem Spieler (nacheinander)
 	 */
 	private void setShipsToField(){
-		IO.println("Der Reihe nach platziert jeder sein/e Schiff/e!\n");
+		this.destroyer = player[playerId].getDestroyer();
+		this.frigate = player[playerId].getFrigate();
+		this.corvette = player[playerId].getCorvette();
+		this.submarine = player[playerId].getSubmarine();
 
-		for(int i = 0; i < player.length; i++){
+		this.destroyerCount = 0;
+		this.frigateCount = 0;
+		this.corvetteCount = 0;
+		this.submarineCount = 0;
 
-			/*
-			 * Das Spielfeld des Spieler wird auf der Konsole ausgedruckt
-			 * und seine Schiffe vorbereitet
-			 */
-			//IO.println(player[i].getPlayerName() + " : ");
-			player[i].getPrivateField().printPrivateField(player[i].getPlayerName());
+		String name = player[playerId].getPlayerName();
+		this.initGameView.setPlayerName(name);
 
-			Destroyer destroyer[] = player[i].getDestroyer();
-			Frigate frigate[] = player[i].getFrigate();
-			Corvette corvette[] = player[i].getCorvette();
-			Submarine submarine[] = player[i].getSubmarine();
+		this.initGameView.setDestroyer( player[playerId].getDestroyer().length );
+		this.initGameView.setFrigate( player[playerId].getFrigate().length );
+		this.initGameView.setCorvette( player[playerId].getCorvette().length );
+		this.initGameView.setSubmarine( player[playerId].getSubmarine().length );
 
-			IO.println("Spieler \"" + player[i].getPlayerName() + "\" ist an der Reihe. \n Bitte geben sie die Koordinaten ein (X,Y)");
+		this.initGameView.initField();
 
-			/*
-			 * der Benutzer aufgefordert seine Schiffe zu positionieren
-			 * Solange wie die eingegebenen Koordinaten ungültig sind,
-			 * wird erneut aufgefordert das Schiff zu positionieren
-			 */
+		this.initGameView.setBattleFieldMouseListener(new BattleFieldMouseListener());
+		//this.initGameView.setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
 
-			//ZERSTÖRER
-			for(int d = 0; d < destroyer.length; d++){
-				int id = d+1;
-				IO.println("Zerstörer (" + id + ")");
+		this.initGameView.setShipsSelectionListener(new ShipsListener());
 
-				setShipToField(destroyer[d], player[i]);
-
-			}
-
-			//FREGATTE
-			for(int f = 0; f < frigate.length; f++){
-				int id = f+1;
-				IO.println("Fregatte (" + id + ")");
-				setShipToField(frigate[f], player[i]);
-			}
-
-			//KORVETTE
-			for(int k = 0; k < corvette.length; k++){
-				int id = k+1;
-				IO.println("Korvette (" + id + ")");
-				setShipToField(corvette[k], player[i]);
-			}
-
-			//UBOOT
-			for(int s = 0; s < submarine.length; s++){
-				int id = s+1;
-				IO.println("UBoot (" + id + ")");
-				setShipToField(submarine[s], player[i]);
-			}
-			if(i+1 < player.length){
-				System.out.println("Drücken sie (n) damit der nächste Spieler an der Reihe ist.");
-			}else{
-				System.out.println("Drücken sie (n) um das Spiel zu starten.");
-			}
-
-
-			String eingabe = IO.readString();
-			while(!eingabe.equals("n")){
-				System.out.println("Sie müssen bitte (n) drücken, damit der nächste Spieler an der Reihe ist.");
-				eingabe = IO.readString();
-			}
-			if(eingabe.equals("n")){
-				for(int q = 0; q < 150; q++){
-					System.out.println("");
-				}
-
-			}
-		}
-		rounds = new Round(this.player, this.fieldSize);
-		rounds.play();
+		//		rounds = new Round(this.player, this.fieldSize);
+		//		rounds.play();
 
 	}
 
-	private void setShipToField(Ship ship, Player player) {
-		boolean checked = false;
+	private boolean setShipToField(Ship ship, Player player, String pos) {
 
-		while(checked == false){
+		int[] koordinaten = checkPos(pos);
 
-			String pos = IO.readString();
-			int[] koordinaten = checkPos(pos);
-
-			if(koordinaten == null){
-				this.colorPrint.println(EPrintColor.RED, "Fehler in der Eingabe! (X, Y)");
-			}
-			else{
-				IO.println("Horizontal h \nVertikal v");
-				char orientation = IO.readChar();
-
-				while(orientation != 'h' && orientation != 'v'){
-					this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-					orientation = IO.readChar();
-				}
-
-				if(orientation == 'h'){
-					player.saveShipCoordinatesH(koordinaten[0], koordinaten[1], ship);
-				}
-				else{
-					player.saveShipCoordinatesV(koordinaten[0], koordinaten[1], ship);
-				}
-
-				if(player.getPrivateField().setShips(ship, koordinaten[0], koordinaten[1], orientation) == true){
-					player.getPrivateField().printPrivateField(player.getPlayerName());
-					checked = true;
-				}
-				else{
-					this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-				}
-			}
+		if(orientation == 'h'){
+			player.saveShipCoordinatesH(koordinaten[0], koordinaten[1], ship);
 		}
+		else{
+			player.saveShipCoordinatesV(koordinaten[0], koordinaten[1], ship);
+		}
+
+		if(player.getPrivateField().setShips(ship, koordinaten[0], koordinaten[1], orientation) == true){
+			player.getPrivateField().printPrivateField(initGameView.getBattleField(), player.getPlayerName());
+
+
+			return true;
+		}
+		else{
+			this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
+			return false;
+		}
+
 	}
 
 
@@ -303,4 +265,171 @@ public class InitGame implements Serializable{
 		return null;
 	}
 
+	private void setChoosenShipVisibility(boolean state){
+		if(choosenShip instanceof Destroyer){
+			this.initGameView.setDestroyerIconVisible(state);
+		}
+
+	}
+
+	/*private class BattleFieldMouseMotionListener implements MouseMotionListener{
+		int mouseY = 0;
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			if(placingShip == true){
+				//int mouse2 = MouseInfo.getPointerInfo().getLocation().y;
+				//int mouseX = MouseInfo.getPointerInfo().getLocation().x;
+				int mouse2 = e.getY();
+				int mouseX = e.getX();
+				JButton btn = (JButton)e.getSource();
+				String pos = btn.getActionCommand();
+				int btnX = Integer.parseInt(pos.substring(1, 2) );
+				int btnY = Integer.parseInt(pos.substring(3) );
+				int offsetX = initGameView.getCellSize() * (btnX-1);
+				int offsetY = initGameView.getCellSize() * (btnY-1);
+
+				if(mouseY >= mouse2){
+					orientation = 'h';
+					System.out.println("h");
+					initGameView.setDestroyerIcon( (mouseX)+offsetX, (mouse2)+offsetY, 'h');
+				}
+				else{
+					orientation = 'v';	
+					System.out.println("v");
+					initGameView.setDestroyerIcon( (mouseX)+offsetX, (mouse2)+offsetY, 'h');
+
+				}
+				mouseY = mouse2;
+			}
+		}
+	}
+	 */
+
+	private class BattleFieldMouseListener implements MouseListener{
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			isPressed = true;
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			isPressed = false;
+			Player playerOnTurn = player[playerId];
+
+			boolean checked;
+
+			if(choosenShip != null){
+				JButton btn = (JButton)e.getSource();
+				String pos = btn.getActionCommand();
+
+				if(choosenShip instanceof Destroyer){
+					checked = setShipToField(choosenShip, playerOnTurn, pos);
+					if(checked == true){
+						destroyerCount++;
+
+						if(destroyerCount >= destroyer.length){
+							initGameView.setDestroyerDisabled();
+							setShipToField(choosenShip, playerOnTurn, pos);
+							choosenShip = null;
+						}
+					}
+				}
+				else if(choosenShip instanceof Frigate){
+					checked = setShipToField(choosenShip, playerOnTurn, pos);
+					if(checked == true){
+						frigateCount++;
+
+						if(frigateCount >= frigate.length){
+							initGameView.setFrigateDisabled();
+							setShipToField(choosenShip, playerOnTurn, pos);
+							choosenShip = null;
+						}
+					}
+
+				}
+				else if(choosenShip instanceof Corvette){
+					checked = setShipToField(choosenShip, playerOnTurn, pos);
+					if(checked == true){
+						corvetteCount++;
+
+						if(corvetteCount >= corvette.length){
+							initGameView.setCorvetteDisabled();
+							choosenShip = null;
+						}
+					}
+				}
+
+				else if(choosenShip instanceof Submarine){
+					checked = setShipToField(choosenShip, playerOnTurn, pos);
+					if(checked == true){
+						submarineCount++;
+
+						if(submarineCount >= submarine.length){
+							initGameView.setSubmarineDisabled();
+							choosenShip = null;
+						}
+					}
+				}
+			}
+			//placingShip = false;
+			//setChoosenShipVisibility(false);
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	private class ShipsListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JToggleButton btn = (JToggleButton)e.getSource();
+
+			if(btn.getActionCommand().equals("destroyer")){
+				initGameView.setChoosenShip(btn);
+				choosenShip = destroyer[destroyerCount];
+				initGameView.setDestroyerIconVisible(true);
+			}
+			else if(btn.getActionCommand().equals("frigate")){
+				initGameView.setChoosenShip(btn);
+				choosenShip = frigate[frigateCount];
+			}
+			else if(btn.getActionCommand().equals("corvette")){
+				initGameView.setChoosenShip(btn);
+				choosenShip = corvette[corvetteCount];
+			}
+			else if(btn.getActionCommand().equals("submarine")){
+				initGameView.setChoosenShip(btn);
+				choosenShip = submarine[submarineCount];
+			}
+
+			//			if(btn.isSelected() == true){
+			//				setChoosenShipVisibility(true);
+			//				placingShip = true;
+			//			}
+			//			else{
+			//				setChoosenShipVisibility(false);
+			//				placingShip = false;
+			//			}
+
+		}
+
+	}
 }

@@ -1,5 +1,11 @@
 package Tools;
+import java.awt.Color;
+import java.awt.Image;
 import java.io.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import Game.Player;
 import Ships.Corvette;
@@ -21,8 +27,25 @@ public class MatrixTools implements Serializable{
 	private static final long serialVersionUID = -6993189195389536759L;
 	private final char black ='\u25A0';
 	private final char wave ='\u223C';
+
+	private JLabel destroyerIcon;
+	private JLabel frigateIcon;
+	private JLabel corveteIcon;
+	private JLabel submarineIcon;
+	
+	public MatrixTools(){
+		//initIcons();
+	}
 	//private ColoredPrint colorPrint =  new ColoredPrint();
 
+	
+	private void initIcons(){
+		ImageIcon destroyerImage = new ImageIcon("Resources/Ships/destroyer.png");
+		destroyerImage.setImage(destroyerImage.getImage().getScaledInstance(0,0,Image.SCALE_DEFAULT)); 
+		this.destroyerIcon = new JLabel(destroyerImage);
+		//this.destroyerIcon.setBounds(startX,startY,width,height);
+	}
+	
 	/**
 	 * @param matrix 
 	 * Druckt die Matrix als Spielfeld 
@@ -30,74 +53,85 @@ public class MatrixTools implements Serializable{
 	 * Die Matrix mit verschönerungen wird nur ausgedruckt und 
 	 * nicht gespeichert oder zurückgegeben!
 	 */
-	public void printPrivateField(int[][] matrix, String name){
+	public void printPrivateField(int[][] privateField, JButton[][] matrix, String name){
 
 		int[][] printMatrix = new int[matrix.length][matrix.length];
 
-		IO.println("Spielfeld von \"" + name + "\"");
+//		IO.println("Spielfeld von \"" + name + "\"");
+//
+//		for(int y = 0; y < printMatrix.length; y++){
+//			String leftAlignFormat = "| %-3s ";
+//			boolean isSmallField = true;
+//
+//			if(matrix.length > 9){
+//				isSmallField  = true;
+//			}
+//			else{
+//				isSmallField = false;
+//			}
+//
+//			for(int f = 0; f < printMatrix.length; f++){
+//
+//				System.out.format("+-----");
+//			}
+//
+//			System.out.print("+ \n");
+//
+//			for(int x = 0; x < printMatrix.length; x++){
+//
+//
+//				if( (x == 0) && (y == 0)){
+//					System.out.format(leftAlignFormat, "y\\x");
+//				}
+//				else if(y == 0){
+//					if(isSmallField == true && x < 10){
+//
+//						System.out.format(leftAlignFormat, " " + x);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, x);
+//					}
+//				}
+//				else if(x == 0){
+//					if(isSmallField == true && x < 10){
+//
+//						System.out.format(leftAlignFormat, " " + y);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, y);
+//					}
+//				}
+//				else{
+//					if(privateField[y][x] == 0){
+//						System.out.format(leftAlignFormat, " " + wave);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, " " + black);
+//					}
+//
+//				}
+//
+//			}
+//			System.out.println("");
+//		}
+//
+//		for(int f = 0; f < printMatrix.length; f++){
+//
+//			System.out.format("+-----");
+//		}
+//
+//		System.out.print("+ \n");
 
-		for(int y = 0; y < printMatrix.length; y++){
-			String leftAlignFormat = "| %-3s ";
-			boolean isSmallField = true;
-
-			if(matrix.length > 9){
-				isSmallField  = true;
-			}
-			else{
-				isSmallField = false;
-			}
-
-			for(int f = 0; f < printMatrix.length; f++){
-
-				System.out.format("+-----");
-			}
-
-			System.out.print("+ \n");
-
-			for(int x = 0; x < printMatrix.length; x++){
-
-
-				if( (x == 0) && (y == 0)){
-					System.out.format(leftAlignFormat, "y\\x");
+		
+		for(int y = 0; y < matrix.length; y++){
+			for(int x = 0; x < matrix.length; x++){
+				if(privateField[y+1][x+1] == 2){
+					
+					matrix[x][y].setForeground(Color.green);
+					matrix[x][y].setOpaque(true);
 				}
-				else if(y == 0){
-					if(isSmallField == true && x < 10){
-
-						System.out.format(leftAlignFormat, " " + x);
-					}
-					else{
-						System.out.format(leftAlignFormat, x);
-					}
-				}
-				else if(x == 0){
-					if(isSmallField == true && x < 10){
-
-						System.out.format(leftAlignFormat, " " + y);
-					}
-					else{
-						System.out.format(leftAlignFormat, y);
-					}
-				}
-				else{
-					if(matrix[y][x] == 0){
-						System.out.format(leftAlignFormat, " " + wave);
-					}
-					else{
-						System.out.format(leftAlignFormat, " " + black);
-					}
-
-				}
-
 			}
-			System.out.println("");
 		}
-
-		for(int f = 0; f < printMatrix.length; f++){
-
-			System.out.format("+-----");
-		}
-
-		System.out.print("+ \n");
 
 	}
 

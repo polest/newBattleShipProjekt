@@ -1,6 +1,8 @@
 package Game;
 import java.io.Serializable;
 
+import javax.swing.JButton;
+
 import Ships.Corvette;
 import Ships.Destroyer;
 import Ships.Frigate;
@@ -460,8 +462,8 @@ for(int i = 0; i < submarine.length; i++){
 		return false;
 	}
 
-	public void printPrivateField(){
-		privateField.printPrivateField(playerName);
+	public void printPrivateField(JButton[][] field){
+		privateField.printPrivateField(field, playerName);
 	}
 
 	public void printPublicField(){

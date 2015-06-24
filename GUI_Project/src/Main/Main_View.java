@@ -84,7 +84,7 @@ public class Main_View extends JFrame{
 		//this.welcome_text.setText("<HTML><BODY>Willkommen bei BATTLESHIP special LARS edition</BODY></HTML>");
 		//this.welcome_text.setForeground(Color.black);	
 		//this.welcome_text.setFont(new Font(this.welcome_text.getFont().getName(), Font.BOLD, 2));
-		this.welcome_text.setIcon(new ImageIcon(""+welcomeTextIcon));
+		this.welcome_text.setIcon(new ImageIcon("Resources/welcomeText.png"));
 		int labelWidth = 800;
 		//		ImageIcon img = new ImageIcon(""+welcomeTextIcon);
 		//        Image newimg = img.getImage().getScaledInstance(800, 100, java.awt.Image.SCALE_SMOOTH);  
@@ -130,9 +130,6 @@ public class Main_View extends JFrame{
 		this.instructions.setContentAreaFilled(false);
 		this.instructions.setBorderPainted(false);
 		this.instructions.setVisible(true);
-
-
-
 
 		this.welcomePan.add(this.newGame);
 		this.welcomePan.add(this.loadGame);

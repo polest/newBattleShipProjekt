@@ -27,18 +27,17 @@ public class Options_View {
 		this.width = width;
 		this.height = height;
 		this.optionsView = new ImagePanel("Resources/unterwasser.jpg");
-		this.optionsView.setVisible(true);
-		this.optionsView.setLayout(null);
 		this.totalShipSize = 0;
 		this.initOptionsPan(); 
-	    this.optionsView.repaint();
+		this.initOptions();
+		this.optionsView.repaint();
 		
 	}
 
 	private void initOptionsPan(){
-		this.optionsView.setSize(this.width, this.height);
 		this.optionsView.setVisible(true);
-		this.initOptions();
+		this.optionsView.setLayout(null);
+		this.optionsView.setSize(this.width, this.height);
 	}
 
 	public JPanel getPanel(){

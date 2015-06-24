@@ -1,7 +1,5 @@
 package Game;
 
-
-
 import java.io.File;
 
 import SaveGame.Save;
@@ -43,6 +41,7 @@ public class Round{
 		int gegner = 0;
 		int schiff = 0;
 		int counter = 1;
+		
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
@@ -52,7 +51,7 @@ public class Round{
 						if(player[i].checkIfAnyShipIsReady()){
 
 							System.out.println(player[i].getPlayerName() + " ist an der Reihe.");
-							player[i].printPrivateField();
+							//player[i].printPrivateField();
 							System.out.println("Gegen welchen Spieler möchten sie spielen?");
 
 							for(int j = 0; j < player.length; j++){
