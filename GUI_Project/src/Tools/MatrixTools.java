@@ -57,77 +57,76 @@ public class MatrixTools implements Serializable{
 
 		int[][] printMatrix = new int[matrix.length][matrix.length];
 
-//		IO.println("Spielfeld von \"" + name + "\"");
-//
-//		for(int y = 0; y < printMatrix.length; y++){
-//			String leftAlignFormat = "| %-3s ";
-//			boolean isSmallField = true;
-//
-//			if(matrix.length > 9){
-//				isSmallField  = true;
-//			}
-//			else{
-//				isSmallField = false;
-//			}
-//
-//			for(int f = 0; f < printMatrix.length; f++){
-//
-//				System.out.format("+-----");
-//			}
-//
-//			System.out.print("+ \n");
-//
-//			for(int x = 0; x < printMatrix.length; x++){
-//
-//
-//				if( (x == 0) && (y == 0)){
-//					System.out.format(leftAlignFormat, "y\\x");
-//				}
-//				else if(y == 0){
-//					if(isSmallField == true && x < 10){
-//
-//						System.out.format(leftAlignFormat, " " + x);
-//					}
-//					else{
-//						System.out.format(leftAlignFormat, x);
-//					}
-//				}
-//				else if(x == 0){
-//					if(isSmallField == true && x < 10){
-//
-//						System.out.format(leftAlignFormat, " " + y);
-//					}
-//					else{
-//						System.out.format(leftAlignFormat, y);
-//					}
-//				}
-//				else{
-//					if(privateField[y][x] == 0){
-//						System.out.format(leftAlignFormat, " " + wave);
-//					}
-//					else{
-//						System.out.format(leftAlignFormat, " " + black);
-//					}
-//
-//				}
-//
-//			}
-//			System.out.println("");
-//		}
-//
-//		for(int f = 0; f < printMatrix.length; f++){
-//
-//			System.out.format("+-----");
-//		}
-//
-//		System.out.print("+ \n");
+		IO.println("Spielfeld von \"" + name + "\"");
+
+		for(int y = 0; y < printMatrix.length; y++){
+			String leftAlignFormat = "| %-3s ";
+			boolean isSmallField = true;
+
+			if(matrix.length > 9){
+				isSmallField  = true;
+			}
+			else{
+				isSmallField = false;
+			}
+
+			for(int f = 0; f < printMatrix.length; f++){
+
+				System.out.format("+-----");
+			}
+
+			System.out.print("+ \n");
+
+			for(int x = 0; x < printMatrix.length; x++){
+
+
+				if( (x == 0) && (y == 0)){
+					System.out.format(leftAlignFormat, "y\\x");
+				}
+				else if(y == 0){
+					if(isSmallField == true && x < 10){
+
+						System.out.format(leftAlignFormat, " " + x);
+					}
+					else{
+						System.out.format(leftAlignFormat, x);
+					}
+				}
+				else if(x == 0){
+					if(isSmallField == true && x < 10){
+
+						System.out.format(leftAlignFormat, " " + y);
+					}
+					else{
+						System.out.format(leftAlignFormat, y);
+					}
+				}
+				else{
+					if(privateField[y][x] == 0){
+						System.out.format(leftAlignFormat, " " + wave);
+					}
+					else{
+						System.out.format(leftAlignFormat, " " + black);
+					}
+
+				}
+
+			}
+			System.out.println("");
+		}
+
+		for(int f = 0; f < printMatrix.length; f++){
+
+			System.out.format("+-----");
+		}
+
+		System.out.print("+ \n");
 
 		
 		for(int y = 0; y < matrix.length; y++){
 			for(int x = 0; x < matrix.length; x++){
-				if(privateField[y+1][x+1] == 2){
-					
-					matrix[x][y].setForeground(Color.green);
+				if(privateField[y+1][x+1] != 0){
+					matrix[x][y].setBackground(Color.green);
 					matrix[x][y].setOpaque(true);
 				}
 			}

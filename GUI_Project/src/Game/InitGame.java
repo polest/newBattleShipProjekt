@@ -339,7 +339,6 @@ public class InitGame implements Serializable{
 
 						if(destroyerCount >= destroyer.length){
 							initGameView.setDestroyerDisabled();
-							setShipToField(choosenShip, playerOnTurn, pos);
 							choosenShip = null;
 						}
 					}
@@ -351,7 +350,6 @@ public class InitGame implements Serializable{
 
 						if(frigateCount >= frigate.length){
 							initGameView.setFrigateDisabled();
-							setShipToField(choosenShip, playerOnTurn, pos);
 							choosenShip = null;
 						}
 					}
@@ -376,7 +374,7 @@ public class InitGame implements Serializable{
 
 						if(submarineCount >= submarine.length){
 							initGameView.setSubmarineDisabled();
-							choosenShip = null;
+								choosenShip = null;
 						}
 					}
 				}
@@ -405,7 +403,7 @@ public class InitGame implements Serializable{
 			if(btn.getActionCommand().equals("destroyer")){
 				initGameView.setChoosenShip(btn);
 				choosenShip = destroyer[destroyerCount];
-				initGameView.setDestroyerIconVisible(true);
+				//initGameView.setDestroyerIconVisible(true);
 			}
 			else if(btn.getActionCommand().equals("frigate")){
 				initGameView.setChoosenShip(btn);
