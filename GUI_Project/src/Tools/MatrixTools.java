@@ -27,25 +27,11 @@ public class MatrixTools implements Serializable{
 	private static final long serialVersionUID = -6993189195389536759L;
 	private final char black ='\u25A0';
 	private final char wave ='\u223C';
-
-	private JLabel destroyerIcon;
-	private JLabel frigateIcon;
-	private JLabel corveteIcon;
-	private JLabel submarineIcon;
 	
 	public MatrixTools(){
-		//initIcons();
-	}
 	//private ColoredPrint colorPrint =  new ColoredPrint();
-
-	
-	private void initIcons(){
-		ImageIcon destroyerImage = new ImageIcon("Resources/Ships/destroyer.png");
-		destroyerImage.setImage(destroyerImage.getImage().getScaledInstance(0,0,Image.SCALE_DEFAULT)); 
-		this.destroyerIcon = new JLabel(destroyerImage);
-		//this.destroyerIcon.setBounds(startX,startY,width,height);
 	}
-	
+
 	/**
 	 * @param matrix 
 	 * Druckt die Matrix als Spielfeld 
@@ -102,7 +88,7 @@ public class MatrixTools implements Serializable{
 					}
 				}
 				else{
-					if(privateField[y][x] == 0){
+					if(privateField[y-1][x-1] == 0){
 						System.out.format(leftAlignFormat, " " + wave);
 					}
 					else{
@@ -122,13 +108,13 @@ public class MatrixTools implements Serializable{
 
 		System.out.print("+ \n");
 
-		
+
 		for(int y = 0; y < matrix.length; y++){
 			for(int x = 0; x < matrix.length; x++){
-				if(privateField[y+1][x+1] != 0){
-					matrix[x][y].setBackground(Color.green);
-					matrix[x][y].setOpaque(true);
+				if(privateField[y+1][x+1] == 1){
+					//matrix[x][y].setIcon(x);
 				}
+
 			}
 		}
 
@@ -242,11 +228,11 @@ public class MatrixTools implements Serializable{
 			 */
 
 			//obere Ecke
-			if(yIndex == 1){
+			if(yIndex == 0){
 				yMarginTop = 0;
 			}
 			//linke Ecke
-			if(xIndex == 1){
+			if(xIndex == 0){
 				xMarginLeft = 0;
 			}
 			//untere Ecke
@@ -283,11 +269,11 @@ public class MatrixTools implements Serializable{
 		else{
 
 			//obere Ecke
-			if(yIndex == 1){
+			if(yIndex == 0){
 				yMarginTop = 0;
 			}
 			//linke Ecke
-			if(xIndex == 1){
+			if(xIndex == 0){
 				xMarginLeft = 0;
 			}
 			//untere Ecke

@@ -21,8 +21,7 @@ import Tools.MatrixTools;
 		private boolean isFree;
 		private MatrixTools matrixTools;
 		private String fieldId;
-		private BattleField_View battlefieldView;
-
+		
 		/**
 		 * Konstruktor eins Spielfeldes
 		 * @param size Seitengröße des Spielfeldes (quadratisch)
@@ -32,8 +31,6 @@ import Tools.MatrixTools;
 			this.field = new int[this.size+1][this.size+1];
 			this.matrixTools = new MatrixTools();
 			initField();
-			
-			
 		}
 		
 		
@@ -112,6 +109,8 @@ import Tools.MatrixTools;
 		 */
 		public boolean setShips(Ship ship, int iPos, int jPos, char orientation){
 			boolean isFree = true;
+			iPos--;
+			jPos--;
 			if( (isFree = matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship)) == true){
 				field = matrixTools.addMatrix(iPos, jPos, orientation, field, ship);
 			}

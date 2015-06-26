@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Ships.Destroyer_View;
 import Tools.RotateLabel;
 
 public class BattleField_View {
@@ -26,7 +25,6 @@ public class BattleField_View {
 	private int startX;
 	private int startY;
 	private int cellSize;
-	private Destroyer_View destroyerView;
 
 	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
 		this.panel = panel;
@@ -36,6 +34,16 @@ public class BattleField_View {
 		this.startY = startY;
 		this.fieldSize = fieldSize;
 		initField();
+	}
+	
+	public void clear(){
+		for(int i = 0; i < this.fieldSize; i++){
+			for(int j = 0; j < this.fieldSize; j++){
+				this.field[i][j].setBackground(null);
+				this.field[i][j].setOpaque(false);
+				this.field[i][j].setEnabled(true);
+			}
+		}
 	}
 
 	public JButton[][] getBattleField(){
@@ -55,12 +63,11 @@ public class BattleField_View {
 	}
 
 	private void initField(){
-
 		this.field = new JButton[this.fieldSize][this.fieldSize];
 
 		cellSize = width/this.fieldSize;
-//		destroyerView = new Destroyer_View(cellSize);
-//		this.panel.add(destroyerView.getShipIcon());
+		//		destroyerView = new Destroyer_View(cellSize);
+		//		this.panel.add(destroyerView.getShipIcon());
 
 		//vertical 
 		for(int i = 0; i < this.fieldSize; i++){
@@ -78,20 +85,13 @@ public class BattleField_View {
 			}
 		}
 
-		
+
 		ImageIcon icon = new ImageIcon("Resources/Meer.jpg");
-		icon.setImage(icon.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT)); 
+		int size = this.fieldSize*this.cellSize;
+		icon.setImage(icon.getImage().getScaledInstance( size ,size, Image.SCALE_DEFAULT)); 
 		iconLabel = new JLabel(icon);
-		iconLabel.setBounds(startX,startY,width,height);
+		iconLabel.setBounds(startX,startY,size,size);
 		this.panel.add(iconLabel);
-	}
-
-	public void setDestroyerIcon(int mouseX, int mouseY, char orientation) {
-		this.destroyerView.setIcon(mouseX, mouseY, orientation);
-	}
-
-	public void setDestroyerIconVisible(boolean state){
-		this.destroyerView.setIconVisibility(state);
 	}
 
 	public void setBattleFieldMouseListener(MouseListener l){

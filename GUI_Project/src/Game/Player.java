@@ -1,6 +1,8 @@
 package Game;
+import java.awt.Image;
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import Ships.Corvette;
@@ -13,7 +15,7 @@ import Tools.ColoredPrint.EPrintColor;
 /**
  * Write a description of class MatrixTools here.
  * 
- * @author JL
+ * @author JL, ML
  * @version 07.05.14
  */
 
@@ -36,6 +38,8 @@ public class Player implements Serializable{
 	private BattleField publicField;
 	private ColoredPrint colorPrint;
 	private boolean isBot;
+	private ImageIcon[] shipIconH;
+	private ImageIcon[] shipIconV;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -264,6 +268,44 @@ public class Player implements Serializable{
 	}
 
 
+	private void initShipIconH(int cellSize){
+		this.shipIconH = new ImageIcon[5];
+		this.shipIconH[0] = new ImageIcon("Resources/Ships/ship1.png");
+		this.shipIconH[0].setImage(this.shipIconH[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconH[1] = new ImageIcon("Resources/Ships/ship2.png");
+		this.shipIconH[1].setImage(this.shipIconH[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconH[2] = new ImageIcon("Resources/Ships/ship3.png");
+		this.shipIconH[2].setImage(this.shipIconH[2].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconH[3] = new ImageIcon("Resources/Ships/ship4.png");
+		this.shipIconH[3].setImage(this.shipIconH[3].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconH[4] = new ImageIcon("Resources/Ships/ship5.png");
+		this.shipIconH[4].setImage(this.shipIconH[4].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+	}
+
+	private void initShipIconV(int cellSize){
+		this.shipIconV = new ImageIcon[5];
+		this.shipIconV[0] = new ImageIcon("Resources/Ships/ship1V.png");
+		this.shipIconV[0].setImage(this.shipIconV[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconV[1] = new ImageIcon("Resources/Ships/ship2V.png");
+		this.shipIconV[1].setImage(this.shipIconV[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconV[2] = new ImageIcon("Resources/Ships/ship3V.png");
+		this.shipIconV[2].setImage(this.shipIconV[2].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconV[3] = new ImageIcon("Resources/Ships/ship4V.png");
+		this.shipIconV[3].setImage(this.shipIconV[3].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+		this.shipIconV[4] = new ImageIcon("Resources/Ships/ship5V.png");
+		this.shipIconV[4].setImage(this.shipIconV[4].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+
+	}
+
 	/**
 	 * überprüft, ob ein Schiff verfügbar ist.
 	 * @param whichShip
@@ -418,7 +460,7 @@ public class Player implements Serializable{
 				}
 			}
 		}else if(shipSymbol.equals("S")){
-for(int i = 0; i < submarine.length; i++){
+			for(int i = 0; i < submarine.length; i++){
 				if(submarine[i].checkIfIsSwimming() == false){
 					System.out.println("Herzlichen Glückwunsch, du hast das U-Boot von " + this.playerName + " versenkt.");
 
@@ -462,7 +504,53 @@ for(int i = 0; i < submarine.length; i++){
 		return false;
 	}
 
-	public void printPrivateField(JButton[][] field){
+	public void printPrivateField(Ship ship, BattleField_View battlefieldView){
+		int length = ship.getShipSize();
+		int[] coords = ship.getStartCoordsAndOrientation();
+		int x = coords[0];
+		int y = coords[1];
+		int orientation = coords[2];
+		JButton[][] field = battlefieldView.getBattleField();
+		
+		if(orientation == 0){
+			initShipIconH(battlefieldView.getCellSize());
+
+			int[] icons = new int[]{0,1,2,3,4};
+
+			if(ship instanceof Frigate){
+				icons = new int[]{0,2,3,4};
+			}
+			else if(ship instanceof Corvette){
+				icons = new int[]{0,3,4};
+			}
+			else if(ship instanceof Submarine){
+				icons = new int[]{0,4};
+			}
+
+			for(int i = 0; i < length; i++){
+				field[x+i-1][y-1].setIcon(shipIconH[icons[i] ]);
+			}
+		}
+		else{
+			initShipIconV(battlefieldView.getCellSize());
+
+			int[] icons = new int[]{0,1,2,3,4};
+
+			if(ship instanceof Frigate){
+				icons = new int[]{0,2,3,4};
+			}
+			else if(ship instanceof Corvette){
+				icons = new int[]{0,3,4};
+			}
+			else if(ship instanceof Submarine){
+				icons = new int[]{0,4};
+			}
+
+			for(int i = 0; i < length; i++){
+				field[x-1][y+i-1].setIcon(shipIconV[icons[i] ]);
+			}
+
+		}
 		privateField.printPrivateField(field, playerName);
 	}
 
