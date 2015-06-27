@@ -45,7 +45,8 @@ public class Main_Controler {
 	}
 
 	private void addOptionsListener(){
-		this.gameOptions.getView().setOkSelectionListener(new SetOptionsOkListener() );
+		this.gameOptions.getView().setOkSelectionListener(new SetOptionsOkListener());
+		this.gameOptions.getView().setBackSelectionListener(new SetOptionsBackListener());
 	}
 
 	/**
@@ -80,6 +81,14 @@ public class Main_Controler {
 	private class InstructionsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			Instructions ins = new Instructions();
+		}
+
+	}
+	
+	private class SetOptionsBackListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			main_view.addPanel(main_view.getWelcomePan(), "welcomePan");
+			main_view.changeShownPan("welcomePan");
 		}
 
 	}
