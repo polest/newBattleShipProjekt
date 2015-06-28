@@ -81,8 +81,10 @@ public class Round{
 
 							// Start Änderung für AI
 
+							System.out.println("#test# -> " + ai.checkThisField(13, 5, player[i].getPublicField().getField()));
+							
 							if(player[i].isBot()){
-								if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()].getIsAlive()){								
+								if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()-1].getIsAlive()){								
 									gegner = player[i].getEnemyNumber();																	
 								} else {
 									gegner = ai.getAliveEnemy();
@@ -91,7 +93,7 @@ public class Round{
 								gegner = IO.readEnemyInt();
 							}
 
-
+							System.out.println("gegner -> " + gegner);
 							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
 								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
 
@@ -155,6 +157,8 @@ public class Round{
 									go = player[i].checkIfShipIsReady("C");
 								} else if(schiff == 4){
 									go = player[i].checkIfShipIsReady("S");
+								} else if(schiff == 0){
+									// Mach nichts!
 								}
 
 								if(!go){
