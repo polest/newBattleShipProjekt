@@ -13,6 +13,7 @@ import Game.Options_View;
 import Game.InitGame_View;
 import Game.Player;
 import Game.Round;
+import SaveGame.Save;
 
 public class Main_Controler {
 
@@ -43,6 +44,7 @@ public class Main_Controler {
 		this.main_view.setNewGameSelectionListener(new StartNewGameListener());
 		this.main_view.setLoadSelectionListener(new LoadGameListener());
 		this.main_view.setInstructionsSelectionListener(new InstructionsListener());
+		this.main_view.setSaveSelectionListener(new SaveGameListener());
 	}
 
 	private void addOptionsListener(){
@@ -61,7 +63,7 @@ public class Main_Controler {
 			main_view.changeShownPan("optionsPanel");
 		}
 	}
-	
+
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser jfc = new JFileChooser();
@@ -85,7 +87,7 @@ public class Main_Controler {
 		}
 
 	}
-	
+
 	private class SetOptionsBackListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			main_view.addPanel(main_view.getWelcomePan(), "welcomePan");
@@ -101,10 +103,11 @@ public class Main_Controler {
 			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 			main_view.changeShownPan("placeShipsPan");
 			initGameView.setNextSelectionListener(new NextPlayerListener());
+			main_view.getSave().setEnabled(true);
 
 		}
 	}
-	
+
 	private class NextPlayerListener implements ActionListener{
 
 		@Override
@@ -112,7 +115,7 @@ public class Main_Controler {
 			initGame.incrementPlayerId();
 			int playerId = initGame.getPlayerId();
 			Player[] player = initGame.getPlayer();
-			
+
 			if(playerId < player.length){
 				initGameView.clearField();
 				initGame.initPlayerBattleShip();
@@ -120,9 +123,27 @@ public class Main_Controler {
 			}
 			else{
 				//start Game
-				
+
 			}
 
+		}
+	}
+
+	private class SaveGameListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser jfc = new JFileChooser();
+			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			File f = new File(System.getProperty("user.dir", "save"));
+			jfc.setCurrentDirectory(f);
+			int returnVal = jfc.showSaveDialog(null);
+			File file = jfc.getSelectedFile();
+			if(returnVal == JFileChooser.APPROVE_OPTION){
+				Save save = new Save();
+				Round round = new Round();
+				save.saveGame(file.getPath(), round.getPlayer());
+			}else if(returnVal == JFileChooser.CANCEL_OPTION){
+				System.out.println("Es wurde keine Datei ausgewählt.");
+			}
 		}
 	}
 }

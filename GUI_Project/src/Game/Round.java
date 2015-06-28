@@ -26,6 +26,10 @@ public class Round{
 		this.save = new Save();
 		this.play();
 	}
+	
+	public Round(){
+		
+	}
 
 	public Player[] getPlayer() {
 		return player;

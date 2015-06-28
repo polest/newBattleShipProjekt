@@ -17,6 +17,9 @@ public class Main_View extends JFrame{
 	private JButton newGame;
 	private JButton loadGame;
 	private JButton instructions;
+	private MenuBar menubar;
+	private Menu datei;
+	private MenuItem save;
 	private int width;
 	private int height;
 	private int selection = 0;
@@ -31,6 +34,7 @@ public class Main_View extends JFrame{
 		this.cards.setVisible(true);
 		this.initFrame();
 		this.initStartPanel();
+		this.initMenu();
 		this.welcomeTextIcon = "Resources/welcomeText.png";
 		changeShownPan("welcomePan");
 		//doStartAnim();
@@ -53,6 +57,20 @@ public class Main_View extends JFrame{
 		this.frame.add(this.cards);
 
 		//TODO Frame Icon hinzufügen
+	}
+	
+	private void initMenu(){
+		this.menubar = new MenuBar();
+		this.datei = new Menu("Datei");
+		this.save = new MenuItem("Speichern");
+		this.save.setEnabled(false);
+		this.datei.add(save);
+		this.menubar.add(datei);
+		this.frame.setMenuBar(this.menubar);
+	}
+
+	public MenuItem getSave() {
+		return save;
 	}
 
 	private void initStartPanel(){
@@ -170,8 +188,6 @@ public class Main_View extends JFrame{
 
 	}
 
-
-
 	/**
 	 * Funktionen bereitstellen, mit denen man später aus
 	 * dem Controller die nötigen Listener hinzufügen kann
@@ -190,6 +206,10 @@ public class Main_View extends JFrame{
 
 	public void setInstructionsSelectionListener(ActionListener l){
 		this.instructions.addActionListener(l);
+	}
+	
+	public void setSaveSelectionListener(ActionListener l){
+		this.save.addActionListener(l);
 	}
 
 }

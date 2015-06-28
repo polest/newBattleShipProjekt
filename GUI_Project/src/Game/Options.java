@@ -177,8 +177,8 @@ public class Options implements Serializable{
 		this.optionsView.setShipsSelectionListener(new SetShipsListener() );
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
 		this.optionsView.setNameSelectionListener(new SetNameListener() );
-		this.optionsView.setBackSelectionListener(new BackListener());
 	}
+	
 
 	/**
 	 * Inneren Listener Klassen implementieren das Interface ActionListener
@@ -214,14 +214,5 @@ public class Options implements Serializable{
 			JTextField name =  (JTextField)e.getSource();
 			setName(name);
 		}
-	}
-
-	private class BackListener implements ActionListener{
-
-		public void actionPerformed(ActionEvent e) {
-
-
-		}
-
 	}
 }

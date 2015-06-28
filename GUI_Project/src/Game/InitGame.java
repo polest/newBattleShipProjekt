@@ -373,7 +373,7 @@ public class InitGame implements Serializable{
 
 			for(int i = xVal; i < lengthX; i++){
 				for(int j = yVal; j < lengthY; j++){
-					System.out.println("X, Y: " + (y + j) + "," + (x + i));
+					//System.out.println("X, Y: " + (y + j) + "," + (x + i));
 					if(field[y + j][x + i] != 0){
 						return false;
 					}
@@ -437,7 +437,7 @@ public class InitGame implements Serializable{
 				String xString = pos[0];
 				String yString = pos[1];
 				int btnX = Integer.parseInt(""+xString);
-				System.out.println(btnX);
+				//System.out.println(btnX);
 				int btnY = Integer.parseInt(yString);
 
 				mouse2 += ( btnY - 1) * initGameView.getCellSize();
