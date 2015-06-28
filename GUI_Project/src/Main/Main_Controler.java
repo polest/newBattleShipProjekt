@@ -11,6 +11,7 @@ import Game.InitGame;
 import Game.Options;
 import Game.Options_View;
 import Game.InitGame_View;
+import Game.Player;
 import Game.Round;
 
 public class Main_Controler {
@@ -60,7 +61,7 @@ public class Main_Controler {
 			main_view.changeShownPan("optionsPanel");
 		}
 	}
-
+	
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser jfc = new JFileChooser();
@@ -99,7 +100,29 @@ public class Main_Controler {
 			initGame = new InitGame(gameOptionsView, gameOptions, initGameView);
 			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 			main_view.changeShownPan("placeShipsPan");
-			//TODO Fenster des Spielbeginns hinzufügen
+			initGameView.setNextSelectionListener(new NextPlayerListener());
+
+		}
+	}
+	
+	private class NextPlayerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			initGame.incrementPlayerId();
+			int playerId = initGame.getPlayerId();
+			Player[] player = initGame.getPlayer();
+			
+			if(playerId < player.length){
+				initGameView.clearField();
+				initGame.initPlayerBattleShip();
+				initGameView.setPlayerName(player[playerId].getPlayerName());
+			}
+			else{
+				//start Game
+				
+			}
+
 		}
 	}
 }

@@ -167,7 +167,15 @@ public class InitGame implements Serializable{
 
 	}
 
-	private void initPlayerBattleShip(){
+	public void incrementPlayerId(){
+		this.playerId++;
+	}
+	
+	public int getPlayerId(){
+		return this.playerId;
+	}
+	
+	public void initPlayerBattleShip(){
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
 
@@ -225,8 +233,6 @@ public class InitGame implements Serializable{
 		this.initGameView.setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
 
 		this.initGameView.setShipsSelectionListener(new ShipsListener());
-		this.initGameView.setNextSelectionListener(new NextPlayerListener());
-
 	}
 
 	private boolean setShipToField(Ship ship, Player player, String pos) {
@@ -425,9 +431,14 @@ public class InitGame implements Serializable{
 				int mouse2 = e.getY();
 				//				int mouseX = e.getX();
 				JButton btn = (JButton)e.getSource();
-				String pos = btn.getActionCommand();
-				int btnX = Integer.parseInt(pos.substring(1, 2) );
-				int btnY = Integer.parseInt(pos.substring(3) );
+				String ac = btn.getActionCommand();
+				ac = ac.trim();
+				String[] pos = ac.split(",");
+				String xString = pos[0];
+				String yString = pos[1];
+				int btnX = Integer.parseInt(""+xString);
+				System.out.println(btnX);
+				int btnY = Integer.parseInt(yString);
 
 				mouse2 += ( btnY - 1) * initGameView.getCellSize();
 
@@ -444,7 +455,8 @@ public class InitGame implements Serializable{
 				setShipsOrientation(btnX, btnY);
 			}
 			catch(Exception f){
-				//System.out.println(f.getMessage());
+				//
+				System.out.println(f.getMessage());
 			}
 		}
 	}
@@ -561,20 +573,5 @@ public class InitGame implements Serializable{
 	}
 
 
-	private class NextPlayerListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			playerId++;
-			if(playerId < player.length){
-				initGameView.clearField();
-				initPlayerBattleShip();
-				initGameView.setPlayerName(player[playerId].getPlayerName());
-			}
-			else{
-				//start Game
-			}
-
-		}
-	}
+	
 }
