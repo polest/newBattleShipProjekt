@@ -81,7 +81,7 @@ public class Round{
 
 							// Start Änderung für AI
 
-							System.out.println("#test# -> " + ai.checkThisField(13, 5, player[i].getPublicField().getField()));
+							//System.out.println("#test# -> " + ai.checkThisField(4, 4, player[i].getPublicField().getField()));
 							
 							if(player[i].isBot()){
 								if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()-1].getIsAlive()){								
@@ -93,7 +93,7 @@ public class Round{
 								gegner = IO.readEnemyInt();
 							}
 
-							System.out.println("gegner -> " + gegner);
+							//System.out.println("gegner -> " + gegner);
 							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
 								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
 
@@ -102,7 +102,7 @@ public class Round{
 							}
 
 							player[i].setEnemyNumber(gegner);
-							System.out.println(gegner);
+							//System.out.println(gegner);
 
 							// Ende Änderung für AI
 
@@ -112,7 +112,12 @@ public class Round{
 							//Schiff zum angreifen wählen
 
 							System.out.println("Mit welchem Schiff möchten sie schießen?");
-
+							
+							ai.setDestroyerRdy(false);
+							ai.setFrigateRdy(false);
+							ai.setCorvetteRdy(false);
+							ai.setSubmarineRdy(false);
+							
 							if(player[i].getDestroyer().length > 0){
 								if(player[i].checkIfShipIsReady("D")){
 									ai.setDestroyerRdy(true);
@@ -123,6 +128,8 @@ public class Round{
 								if(player[i].checkIfShipIsReady("F")){
 									ai.setFrigateRdy(true);
 									System.out.println("Frigatte\t (2)");
+								} else {
+									
 								}
 							}
 							if(player[i].getCorvette().length > 0){
@@ -158,7 +165,11 @@ public class Round{
 								} else if(schiff == 4){
 									go = player[i].checkIfShipIsReady("S");
 								} else if(schiff == 0){
-									// Mach nichts!
+									System.out.println("Destroyer -> " + player[i].checkIfShipIsReady("D"));
+									System.out.println("Frigate -> " + player[i].checkIfShipIsReady("F"));
+									System.out.println("Corvette -> " + player[i].checkIfShipIsReady("C"));
+									System.out.println("Submarine -> " + player[i].checkIfShipIsReady("S"));
+									schiff = 4;
 								}
 
 								if(!go){
@@ -167,7 +178,7 @@ public class Round{
 
 							}
 
-							System.out.println(schiff);
+							//System.out.println(schiff);
 							player[gegner-1].printPublicField();
 
 
@@ -188,9 +199,9 @@ public class Round{
 
 							if(player[i].isBot()){
 								pos = ai.chooseWhereToShoot(gegnerMinusEins, gegnerPublicField, max);
-								System.out.println("getget" + ai.getBotOrientation());
+								//System.out.println("getget" + ai.getBotOrientation());
 
-								System.out.println(pos);
+								//System.out.println(pos);
 							} else {
 								pos = IO.readString();
 							}
@@ -211,7 +222,7 @@ public class Round{
 
 								if(player[i].isBot()){
 									orientation = ai.chooseBotOrientation();
-									System.out.println("BotOrien -> " + orientation);
+									//System.out.println("BotOrien -> " + orientation);
 								} else {
 									orientation = IO.readChar();
 								}
@@ -223,7 +234,7 @@ public class Round{
 								}
 								ship = player[i].getAvailableDestroyer();
 
-								System.out.println(orientation);
+								//System.out.println(orientation);
 
 							} else if(schiff == 2){
 								System.out.println("Horizontal (h) oder Vertikal(v)?");
@@ -242,7 +253,7 @@ public class Round{
 
 								ship = player[i].getAvailableFrigate();
 
-								System.out.println(orientation);
+								//System.out.println(orientation);
 
 
 							} else if(schiff == 3){

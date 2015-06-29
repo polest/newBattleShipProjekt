@@ -88,106 +88,143 @@ public class ArtificialIntelligence {
 		// geht die matrix durch
 		for(int y = 0; y < gegnerPublicField[0].length; y++){
 			for(int x = 0; x < gegnerPublicField[0].length; x++){
-				
-				// guckt ob das aktuelle feld ein schiffstreffer ist
-				if(gegnerPublicField[y][x] == 2){
-					
-					// methode schuss für bot
-					
-					// prüfe ob drum herum ein schiff getroffen ist
-					if(gegnerPublicField[y-1][x] == 2 || gegnerPublicField[y+1][x] == 2 || gegnerPublicField[y][x-1] == 2 || gegnerPublicField[y][x+1] == 2){
+				if(goContinue){
+					// guckt ob das aktuelle feld ein schiffstreffer ist
+					if(gegnerPublicField[y][x] == 2){
 						
-						// wenn ja dann gucke wo schon getroffen wurde und prüfe ob die gegenseite frei ist, wenn ja dann schieße auf die gegenseite
-						// 1
-						if(gegnerPublicField[y-1][x] == 2){
-							// prüfe ob gegenseite nur wasser ist
-							if(gegnerPublicField[y+1][x] == 0){
-								// wenn ja, dann schieße dort hin!
-								xCoordinateForShooting = x;
-								yCoordinateForShooting = y+1;
-								goContinue = false;
-								this.setBotOrientation('v');
-							} 
+						// methode schuss für bot
 						
-						} else if(goContinue){
-							//###
-							// 2
-							if(gegnerPublicField[y+1][x] == 2){
+						// prüfe ob drum herum ein schiff getroffen ist
+						//if(gegnerPublicField[y-1][x] == 2 || gegnerPublicField[y+1][x] == 2 || gegnerPublicField[y][x-1] == 2 || gegnerPublicField[y][x+1] == 2){
+							if(checkThisField(x, y, gegnerPublicField)){
+							// wenn ja dann gucke wo schon getroffen wurde und prüfe ob die gegenseite frei ist, wenn ja dann schieße auf die gegenseite
+							// 1
+							 // 
+							if(checkSingleField(x, y-1, gegnerPublicField.length)){
+								if(gegnerPublicField[y-1][x] == 2){
+								//if(gegnerPublicField[y-1][x] == 2){
 								// prüfe ob gegenseite nur wasser ist
-								if(gegnerPublicField[y-1][x] == 0){
-									// wenn ja, dann schieße dort hin!
-									xCoordinateForShooting = x;
-									yCoordinateForShooting = y-1;
-									goContinue = false;
-									this.setBotOrientation('v');
-								} 
-							} else if (goContinue){
-								// 3
-								if(gegnerPublicField[y][x-1] == 2){
-									// prüfe ob gegenseite nur wasser ist
-									if(gegnerPublicField[y][x+1] == 0){
-										// wenn ja, dann schieße dort hin!
-										xCoordinateForShooting = x+1;
-										yCoordinateForShooting = y;
-										goContinue = false;
-										this.setBotOrientation('h');
-									} 
-								} else if (goContinue){
-									
-									// 4
-									if(gegnerPublicField[y][x+1] == 2){
-										// prüfe ob gegenseite nur wasser ist
-										if(gegnerPublicField[y][x-1] == 0){
+									if(checkSingleField(x, y+1, gegnerPublicField.length)){
+										if(gegnerPublicField[y+1][x] == 0) {
 											// wenn ja, dann schieße dort hin!
-											xCoordinateForShooting = x-1;
-											yCoordinateForShooting = y;
+											xCoordinateForShooting = x;
+											yCoordinateForShooting = y+1;
 											goContinue = false;
-											this.setBotOrientation('h');
-										} 
-									}	
+											this.setBotOrientation('v');
+										}
+									} 
+								}
+							} 
+							
+							if(goContinue){
+								//###
+								// 2
+								if(checkSingleField(x, y+1, gegnerPublicField.length)){
+									if(gegnerPublicField[y+1][x] == 2){
+										// prüfe ob gegenseite nur wasser ist
+										if(checkSingleField(x, y-1, gegnerPublicField.length)){
+											if(gegnerPublicField[y-1][x] == 0){
+												// wenn ja, dann schieße dort hin!
+												xCoordinateForShooting = x;
+												yCoordinateForShooting = y-1;
+												goContinue = false;
+												this.setBotOrientation('v');
+											}
+										}
+									}
+								} 
+								
+								if (goContinue){
+									// 3
+									if(checkSingleField(x-1, y, gegnerPublicField.length)){
+										if(gegnerPublicField[y][x-1] == 2){
+											// prüfe ob gegenseite nur wasser ist
+											if(checkSingleField(x+1, y, gegnerPublicField.length)){
+												if(gegnerPublicField[y][x+1] == 0){
+													// wenn ja, dann schieße dort hin!
+													xCoordinateForShooting = x+1;
+													yCoordinateForShooting = y;
+													goContinue = false;
+													this.setBotOrientation('h');
+												}
+											} 
+										}
+									} 
+									
+									if (goContinue){
+										
+										// 4
+										if(checkSingleField(x+1, y, gegnerPublicField.length)){
+											if(gegnerPublicField[y][x+1] == 2){
+											// prüfe ob gegenseite nur wasser ist
+												if(checkSingleField(x-1, y, gegnerPublicField.length)){
+													if(gegnerPublicField[y][x-1] == 0){
+														// wenn ja, dann schieße dort hin!
+														xCoordinateForShooting = x-1;
+														yCoordinateForShooting = y;
+														goContinue = false;
+														this.setBotOrientation('h');
+													}
+												} 
+											}
+										}	
+									}
 								}
 							}
-						}
-						
-						
-						
-					} else {
-						
-						// prüfe jede seite ob wasser getroffen wurde, wenn nicht dann schieß darauf
-						// 1
-						if(goContinue){
-							// prüfe ob hier wasser ist, wenn ja dann schieß drauf
-							if(gegnerPublicField[y-1][x] == 0){
-								xCoordinateForShooting = x;
-								yCoordinateForShooting = y-1;
-								goContinue = false;
-							} else if(goContinue){
-								
-								if(gegnerPublicField[y+1][x] == 0){
-									xCoordinateForShooting = x;
-									yCoordinateForShooting = y+1;
-									goContinue = false;
-								} else if (goContinue){
-									if(gegnerPublicField[y][x-1] == 0){
-										xCoordinateForShooting = x-1;
-										yCoordinateForShooting = y;
+							
+							
+							
+						} else {
+							
+							// prüfe jede seite ob wasser getroffen wurde, wenn nicht dann schieß darauf
+							// 1
+							if(goContinue){
+								// prüfe ob hier wasser ist, wenn ja dann schieß drauf
+								if(checkSingleField(x, y-1, gegnerPublicField.length)){
+									if(gegnerPublicField[y-1][x] == 0){
+										xCoordinateForShooting = x;
+										yCoordinateForShooting = y-1;
 										goContinue = false;
-									} else if(goContinue){
-										if(gegnerPublicField[y][x+1] == 0){
-											xCoordinateForShooting = x+1;
-											yCoordinateForShooting = y;
+									}
+								} 
+								
+								if(goContinue){
+									
+									if(checkSingleField(x, y+1, gegnerPublicField.length)){
+										if(gegnerPublicField[y+1][x] == 0){
+											xCoordinateForShooting = x;
+											yCoordinateForShooting = y+1;
 											goContinue = false;
+										}
+									} 
+									
+									if (goContinue){
+										if(checkSingleField(x-1, y, gegnerPublicField.length)){
+											if(gegnerPublicField[y][x-1] == 0){
+												xCoordinateForShooting = x-1;
+												yCoordinateForShooting = y;
+												goContinue = false;
+											}
+										} 
+										
+										if(goContinue){
+											if(checkSingleField(x+1, y, gegnerPublicField.length)){
+												if(gegnerPublicField[y][x+1] == 0){
+													xCoordinateForShooting = x+1;
+													yCoordinateForShooting = y;
+													goContinue = false;
+												}
+											}
 										}
 									}
 								}
 							}
+							
 						}
 						
-					}
-					
-				}	// Ende if
+					}	// Ende if
 				
-				
+				}
 			} // for2
 		} // for1
 		
@@ -205,11 +242,7 @@ public class ArtificialIntelligence {
 				randomX = rn.nextInt(max - 1 + 1) + 1;
 				randomY = rn.nextInt(max - 1 + 1) + 1;
 			}
-			
-			System.out.println("frei x -> " + randomX);
-			System.out.println("frei y -> " + randomY);
-			
-			
+
 			xCoordinateForShooting = randomX;
 			yCoordinateForShooting = randomY;
 			
@@ -233,13 +266,13 @@ public class ArtificialIntelligence {
 	}
 	
 	public int chooseShipToShoot(){
-		if(isDestroyerRdy()){
+		if(isDestroyerRdy() == true){
 			return 1;
-		} else if(isFrigateRdy()){
+		} else if(isFrigateRdy() == true){
 			return 2;
-		} else if(isCorvetteRdy()){
+		} else if(isCorvetteRdy() == true){
 			return 3;
-		} else if(isSubmarineRdy()){
+		} else if(isSubmarineRdy() == true){
 			return 4;
 		} else {
 			return 0;
@@ -249,7 +282,7 @@ public class ArtificialIntelligence {
 	
 	public boolean checkThisField(int xVal, int yVal, int[][]matrix){
 		
-		int length = matrix.length;
+		int length = matrix.length-1;
 		
 		int top = -1;
 		int left = -1;
@@ -277,21 +310,42 @@ public class ArtificialIntelligence {
 		boolean isTreffer = false;
 		
 		for(int i = ( yVal + top);  i <= (yVal+bottom); i++){
-			if(matrix[i][xVal] == 2){
-				System.out.println("treffer drum herum!");
-				isTreffer = true;
+			if(i != yVal){
+				if(matrix[i][xVal] == 2){
+					isTreffer = true;
+				}
 			}
 		}
 	
 		for(int j = ( xVal + left);  j<= (xVal+right); j++){
-			if(matrix[yVal][j] == 2){
-				System.out.println("treffer drum herum!");
-				isTreffer = true;
+			if(j != xVal){
+				if(matrix[yVal][j] == 2){
+					isTreffer = true;
+				}
 			}
 		}
 		
 		return isTreffer;
 		
+	}
+	
+	
+	public boolean checkSingleField(int x, int y, int length){
+		boolean isFieldInMatrix = true;
+		
+		int fieldLength = length - 1;
+		
+		try{
+			if((x >= 0 && x <= fieldLength) && (y >= 0 && y <= fieldLength)){
+				isFieldInMatrix = true;
+			} else {
+				isFieldInMatrix = false;
+			}
+		} catch(Exception e) {
+			isFieldInMatrix = false;
+		}
+		
+		return isFieldInMatrix;
 	}
 	
 	
