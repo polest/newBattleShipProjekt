@@ -248,60 +248,51 @@ public class ArtificialIntelligence {
 	
 	
 	public boolean checkThisField(int xVal, int yVal, int[][]matrix){
-		int length = 1;
-
-		int yIndex = yVal;
-		int xIndex = xVal;
-		int yMarginTop = 1;
-		int xMarginLeft = 1;
-		int yMarginBottom = 1;
-		int xMarginRight = 1;
-
+		
+		int length = matrix.length;
+		
+		int top = -1;
+		int left = -1;
+		int right = +1;
+		int bottom = +1;
 	
-		//obere Ecke
-		if(yIndex == 1){
-			yMarginTop = 0;
+	
+		if( yVal <= 0){
+			top = 0;
 		}
-		//linke Ecke
-		if(xIndex == 1){
-			xMarginLeft = 0;
+	
+		if( yVal > length -1 ){
+			bottom = 0;	
 		}
-		//untere Ecke
-		if( (yIndex + length) == matrix.length){
-			yMarginBottom = 0;
+	
+	
+		if( xVal<= 0){
+			left = 0;
 		}
-		//rechte Ecke
-		if(xIndex == (matrix.length - 1) ){
-			xMarginRight = 0;
+	
+		if( xVal > length -1 ){
+			right = 0;	
 		}
-
-		//Koordinaten Länge des Schiffes ab der gewählten Position
-		int shipLength = yIndex + length;
-
-		/*Wenn die Schiffslänge ab den gewählten Startkoordinaten 
-		 * länger ist als die Feldlänge, ist eine positionierung nicht möglich
-		 */
-		if(shipLength > matrix.length){
-			return false;
-		}
-
-		/*
-		 * Ansonsten, prüfe nun ob das Schiff in Vertikaler ausrichtung 
-		 * an ein anderes Schiff anrenzt
-		 */
-		for(int y = (yIndex - yMarginTop); y < (shipLength + yMarginBottom); y++ ){
-			for( int x = (xIndex - xMarginLeft); x <= (xIndex + xMarginRight); x++){
-				//TESTAUSGABE IO.println("j: " + j + " i: " + i);
-				if(matrix[y][x] > 0){
-					return false;
-				}
+	
+		boolean isTreffer = false;
+		
+		for(int i = ( yVal + top);  i <= (yVal+bottom); i++){
+			if(matrix[i][xVal] == 2){
+				System.out.println("treffer drum herum!");
+				isTreffer = true;
 			}
 		}
 	
-		return true;
-
+		for(int j = ( xVal + left);  j<= (xVal+right); j++){
+			if(matrix[yVal][j] == 2){
+				System.out.println("treffer drum herum!");
+				isTreffer = true;
+			}
+		}
+		
+		return isTreffer;
+		
 	}
-	
 	
 	
 	
