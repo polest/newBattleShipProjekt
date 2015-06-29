@@ -15,24 +15,33 @@ import javax.swing.JPanel;
  */
 public class ImagePanel extends JPanel {
 
-  private Image img;
+	private Image img;
 
-  public ImagePanel(String img) {
-     this(new ImageIcon(img).getImage());
-  }
+	public ImagePanel(String img) {
+		this(new ImageIcon(img).getImage());
+	}
 
-  public ImagePanel(Image img) {
-    this.img = img;
-    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-    setPreferredSize(size);
-    setMinimumSize(size);
-    setMaximumSize(size);
-    setSize(size);
-   
-    }
+	public ImagePanel() {
 
-  public void paintComponent(Graphics g) {
-    g.drawImage(img, 0, 0, null);
-  }
+	}
+
+	public ImagePanel(Image img) {
+		this.img = img;
+		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+		setPreferredSize(size);
+		setMinimumSize(size);
+		setMaximumSize(size);
+		setSize(size);
+
+	}
+
+	public void setImageSize(int x, int y){
+
+		this.img. getScaledInstance( x ,y, Image.SCALE_DEFAULT);
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, null);
+	}
 
 }

@@ -40,6 +40,7 @@ public class Player implements Serializable{
 	private boolean isBot;
 	private ImageIcon[] shipIconH;
 	private ImageIcon[] shipIconV;
+	private BattleField_View battleFieldView;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -56,6 +57,7 @@ public class Player implements Serializable{
 		this.playerName = playerName;
 		this.colorPrint = new ColoredPrint();
 		this.isBot = isKi;
+		//this.battleFieldView;
 
 		this.destroyer = new Destroyer[destroyer];
 		for(int i = 0; i < destroyer; i++){
@@ -168,6 +170,16 @@ public class Player implements Serializable{
 		this.publicField = field;
 	}
 
+	
+	public void setBattleFieldView(BattleField_View battlefield){
+		this.battleFieldView = battlefield;
+	}
+	
+	
+	public BattleField_View getBattleFieldView(){
+		return battleFieldView;
+	}
+	
 	/**
 	 * Getter isActive
 	 * @return
@@ -504,7 +516,7 @@ public class Player implements Serializable{
 		return false;
 	}
 
-	public void printPrivateField(Ship ship, BattleField_View battlefieldView){
+	public void printShipOnField(Ship ship, BattleField_View battlefieldView){
 		int length = ship.getShipSize();
 		int[] coords = ship.getStartCoordsAndOrientation();
 		int x = coords[0];
@@ -549,7 +561,6 @@ public class Player implements Serializable{
 			for(int i = 0; i < length; i++){
 				field[x-1][y+i-1].setIcon(shipIconV[icons[i] ]);
 			}
-
 		}
 		privateField.printPrivateField(field, playerName);
 	}

@@ -1,19 +1,15 @@
 package Game;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import Tools.ImagePanel;
-import Tools.RotateLabel;
 
 public class InitGame_View {
 
@@ -22,7 +18,7 @@ public class InitGame_View {
 	private int height;
 	private JLabel playerName;
 	private int fieldSize;
-	private BattleField_View battleFieldView;
+	private BattleField_View[] battleFieldView;
 	private int destroyer;
 	private int frigate;
 	private int corvette;
@@ -34,10 +30,11 @@ public class InitGame_View {
 	private int cellSize;
 	private JButton nextPlayer;
 
-	public InitGame_View(int width, int height){
+	public InitGame_View(int width, int height, int playerLength){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = width;
 		this.height = height;
+		this.battleFieldView =  new BattleField_View[playerLength];
 		initPan();
 		this.initGamePan.repaint();
 	}
@@ -89,12 +86,12 @@ public class InitGame_View {
 		this.initGamePan.add(this.nextPlayer);
 	}
 
-	public JButton[][] getBattleField(){
-		return this.battleFieldView.getBattleField();
+	public JButton[][] getBattleField(int i){
+		return this.battleFieldView[i].getBattleField();
 	}
 
-	public BattleField_View getBattleFieldView(){
-		return this.battleFieldView;
+	public BattleField_View getBattleFieldView(int i){
+		return this.battleFieldView[i];
 	}
 
 	public void setFieldSize(int fieldSize){
@@ -121,12 +118,16 @@ public class InitGame_View {
 		this.submarine = submarine;
 	}
 
-	public void setBattleFieldMouseListener(MouseListener l){
-		this.battleFieldView.setBattleFieldMouseListener(l);
-	}
-	public void setBattleFieldMouseMotionListener(MouseMotionListener l){
-		this.battleFieldView.setBattleFieldMouseMotionListener(l);
-	}
+		public void setBattleFieldMouseListener(MouseListener l){
+			for(int i = 0; i < this.battleFieldView.length; i++){
+				this.battleFieldView[i].setBattleFieldMouseListener(l);
+			}
+		}
+		public void setBattleFieldMouseMotionListener(MouseMotionListener l){
+			for(int i = 0; i < this.battleFieldView.length; i++){
+				this.battleFieldView[i].setBattleFieldMouseMotionListener(l);
+			}
+		}
 
 	public int getCellSize(){
 		return this.width/this.fieldSize;
@@ -141,6 +142,11 @@ public class InitGame_View {
 
 	public void setNextSelectionListener(ActionListener n){
 		this.nextPlayer.addActionListener(n);
+	}
+
+
+	public void disableNext(){
+		this.nextPlayer.setEnabled(false);
 	}
 
 	public void setChoosenShip(JToggleButton ship){
@@ -198,25 +204,24 @@ public class InitGame_View {
 		this.nextPlayer.setEnabled(true);
 	}
 
-	public void clearField(){
-		JButton[][] field = this.battleFieldView.getBattleField();
-		ImageIcon emptyIcon = new ImageIcon("Resources/Ships/empty.png");
-		//emptyIcon.setImage(emptyIcon.getImage().getScaledInstance( this.cellSize, this.cellSize, Image.SCALE_DEFAULT)); 
-		
-		for(int i = 0; i < field.length; i++){
-			for(int j = 0; j < field.length; j++){
-				if(field[i][j].getIcon() != null){
-					field[i][j].setIcon(emptyIcon);
-				}
-				field[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));
-			}
+	public void initFields(int length){
+		for(int i = 0; i < length; i++){
+			this.battleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
 		}
 	}
 
-	public void initField(boolean start){
-		if(start == true){
-			this.battleFieldView = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
-		}
+
+	public void initPlayerField(Player player, int id){
+		player.setBattleFieldView(this.battleFieldView[id]);
+		//			this.battleFieldView.clear();
+		//			this.initGamePan.repaint();
+		//			this.initGamePan.revalidate();
+		//		
+
+		this.destroyerBtn.setSelected(false);
+		this.frigateBtn.setSelected(false);
+		this.corvetteBtn.setSelected(false);
+		this.submarineBtn.setSelected(false);
 
 		if(this.destroyer <= 0 ){
 			this.destroyerBtn.setEnabled(false);
@@ -250,7 +255,6 @@ public class InitGame_View {
 		this.frigateBtn.setText("Fregatten " + this.frigate);
 		this.corvetteBtn.setText("Korvetten " + this.corvette);
 		this.submarineBtn.setText("UBoote " + this.submarine);
-
 	}
 
 	public ImagePanel getPanel(){

@@ -18,17 +18,22 @@ public class Round{
 	private ColoredPrint colorPrint;
 	private Save save;
 	private int fieldSize;
+	private Round_View roundView;
 
 	public Round(Player[] player, int fieldSize){
 		this.player = player;
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.save = new Save();
-		this.play();
+		this.roundView = new Round_View(this.fieldSize, player);
+		//this.play();
 	}
 	
 	public Round(){
+	}
 		
+	public Round_View getRoundView(){
+		return this.roundView;
 	}
 
 	public Player[] getPlayer() {

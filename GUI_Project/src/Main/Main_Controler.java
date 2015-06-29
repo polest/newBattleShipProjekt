@@ -14,6 +14,7 @@ import Game.InitGame_View;
 import Game.Player;
 import Game.Round;
 import SaveGame.Save;
+import Game.Round_View;
 
 public class Main_Controler {
 
@@ -24,6 +25,7 @@ public class Main_Controler {
 	private Options gameOptions;
 	private Options_View gameOptionsView;
 	private InitGame_View initGameView;
+	private Round round;
 
 
 	public Main_Controler(){
@@ -98,7 +100,7 @@ public class Main_Controler {
 
 	private class SetOptionsOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			initGameView =  new InitGame_View(width, height);
+			initGameView =  new InitGame_View(width, height, gameOptions.getPlayer());
 			initGame = new InitGame(gameOptionsView, gameOptions, initGameView);
 			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 			main_view.changeShownPan("placeShipsPan");
@@ -115,15 +117,26 @@ public class Main_Controler {
 			initGame.incrementPlayerId();
 			int playerId = initGame.getPlayerId();
 			Player[] player = initGame.getPlayer();
-
+			
+//			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
+			
+			
 			if(playerId < player.length){
-				initGameView.clearField();
+				//initGameView.clearField();
 				initGame.initPlayerBattleShip();
+				main_view.repaint();
+				main_view.revalidate();
 				initGameView.setPlayerName(player[playerId].getPlayerName());
+				initGameView.disableNext();
 			}
 			else{
 				//start Game
 
+				int fieldSize = initGame.getFieldSize();
+				round = new Round(player, fieldSize);
+				Round_View roundView = round.getRoundView();
+				main_view.addPanel(roundView.getPanel(), "roundView"); 
+				main_view.changeShownPan("roundView");
 			}
 
 		}
