@@ -23,6 +23,7 @@ public class BattleField_View {
 	private JLabel iconLabel;
 	private JPanel panel;	
 	private JPanel battleFieldViewPanel;
+	private JPanel test;
 	private int width;
 	private int height;
 	private int startX;
@@ -153,6 +154,7 @@ public class BattleField_View {
 		this.panel.add(this.battleFieldViewPanel);
 	}
 
+	
 	public void setBattleFieldMouseListener(MouseListener l){
 		//vertical 
 		for(int i = 0; i < this.fieldSize; i++){

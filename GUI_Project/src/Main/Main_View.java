@@ -53,6 +53,7 @@ public class Main_View{
 		this.frame.setSize(this.width, this.height);
 		this.frame.setResizable(false);
 		this.frame.setLocationRelativeTo(null);
+		this.frame.setResizable(false);
 		this.frame.setVisible(true);
 		this.frame.add(this.cards);
 

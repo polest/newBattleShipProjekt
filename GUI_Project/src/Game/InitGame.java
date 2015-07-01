@@ -108,6 +108,7 @@ public class InitGame implements Serializable{
 		BattleField battlefield = new BattleField(this.fieldSize);
 
 		if(i == 0){
+			
 			player[i] = new Player(true, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
 					this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, false);
 			addListener(i);

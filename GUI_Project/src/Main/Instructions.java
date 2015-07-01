@@ -1,23 +1,27 @@
 package Main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Label;
 import java.awt.Toolkit;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 	
 	public class Instructions {
 		
 		private JFrame frame;
 		private Label instructions;
+		private JScrollPane scrollBar;
 		
 		
 		public Instructions(){
@@ -40,10 +44,9 @@ import javax.swing.JPanel;
 				System.out.println("Datei nicht gefunden.");
 			}
 			this.frame.pack();
-			this.frame.setResizable(false);
+			this.frame.setResizable(true);
 			this.frame.setVisible(true);
 		}
-
 		
 		private void addText(){
 			this.instructions = new Label("Instructions");
