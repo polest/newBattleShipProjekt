@@ -1,5 +1,6 @@
 package Game;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,6 +18,7 @@ public class InitGame_View {
 	private int width;
 	private int height;
 	private JLabel playerName;
+	private JPanel cards;
 	private int fieldSize;
 	private BattleField_View[] battleFieldView;
 	private int destroyer;
@@ -34,8 +36,14 @@ public class InitGame_View {
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = width;
 		this.height = height;
+
+		this.cards = new JPanel(new CardLayout());
+		this.cards.setBounds(30,30, 510, 510);
+		this.cards.setVisible(true);
 		this.battleFieldView =  new BattleField_View[playerLength];
+
 		initPan();
+		this.initGamePan.add(this.cards);
 		this.initGamePan.repaint();
 	}
 
@@ -84,6 +92,23 @@ public class InitGame_View {
 		this.nextPlayer.setEnabled(false);
 		this.nextPlayer.setActionCommand("next");
 		this.initGamePan.add(this.nextPlayer);
+
+	}
+
+	private void addPanel(JPanel panel, String name){
+		this.cards.add(panel, name);
+	}
+
+	public void changeShownPan(String cardName){
+		CardLayout cardLayout = (CardLayout) cards.getLayout();
+		cardLayout.show(cards, cardName);
+		cards.revalidate();
+
+	}
+
+	public void nextBattleField(){
+		CardLayout cardLayout = (CardLayout) cards.getLayout();
+		cardLayout.next(cards);
 	}
 
 	public JButton[][] getBattleField(int i){
@@ -118,16 +143,16 @@ public class InitGame_View {
 		this.submarine = submarine;
 	}
 
-		public void setBattleFieldMouseListener(MouseListener l){
-			for(int i = 0; i < this.battleFieldView.length; i++){
-				this.battleFieldView[i].setBattleFieldMouseListener(l);
-			}
+	public void setBattleFieldMouseListener(MouseListener l){
+		for(int i = 0; i < this.battleFieldView.length; i++){
+			this.battleFieldView[i].setBattleFieldMouseListener(l);
 		}
-		public void setBattleFieldMouseMotionListener(MouseMotionListener l){
-			for(int i = 0; i < this.battleFieldView.length; i++){
-				this.battleFieldView[i].setBattleFieldMouseMotionListener(l);
-			}
+	}
+	public void setBattleFieldMouseMotionListener(MouseMotionListener l){
+		for(int i = 0; i < this.battleFieldView.length; i++){
+			this.battleFieldView[i].setBattleFieldMouseMotionListener(l);
 		}
+	}
 
 	public int getCellSize(){
 		return this.width/this.fieldSize;
@@ -207,17 +232,14 @@ public class InitGame_View {
 	public void initFields(int length){
 		for(int i = 0; i < length; i++){
 			this.battleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
+			addPanel(this.battleFieldView[i].getView(), ("field"+i) );
 		}
 	}
 
 
 	public void initPlayerField(Player player, int id){
-		player.setBattleFieldView(this.battleFieldView[id]);
-		//			this.battleFieldView.clear();
-		//			this.initGamePan.repaint();
-		//			this.initGamePan.revalidate();
-		//		
-
+//		player.setBattleFieldView(this.battleFieldView[id]);
+		
 		this.destroyerBtn.setSelected(false);
 		this.frigateBtn.setSelected(false);
 		this.corvetteBtn.setSelected(false);

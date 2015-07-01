@@ -3,8 +3,10 @@ package Game;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 
 import Tools.ImagePanel;
 
@@ -12,6 +14,7 @@ public class Options_View {
 
 	private ImagePanel optionsView;
 	private JToggleButton[] player;
+	private int playerCount;
 	private JTextField[] playerNames;
 	private JCheckBox[] kiBox;
 	private JComboBox size;
@@ -28,6 +31,7 @@ public class Options_View {
 		this.height = height;
 		this.optionsView = new ImagePanel("Resources/unterwasser.jpg");
 		this.totalShipSize = 0;
+		this.playerCount = 0;
 		this.initOptionsPan(); 
 		this.initOptions();
 		this.optionsView.repaint();
@@ -46,6 +50,10 @@ public class Options_View {
 	
 	public JTextField[] getNamesFields(){
 		return this.playerNames;
+	}
+	
+	public void setPlayerCount(int i){
+		this.playerCount = i;
 	}
 	
 	public void setPlayerToggle(int count){
@@ -98,7 +106,6 @@ public class Options_View {
 	}
 	 
 	public void setSize(int minSize){
-		
 		
 		this.size.setSelectedIndex( (minSize-1) );
 		
@@ -203,6 +210,7 @@ public class Options_View {
 		this.optionsView.add(this.size);
 
 		this.ok = new JButton("OK");
+		this.ok.setEnabled(false);
 		this.ok.setBounds(590, 515, 80, 35);
 		this.optionsView.add(this.ok);
 		
@@ -210,6 +218,27 @@ public class Options_View {
 		this.back.setBounds(690, 515, 80, 35);
 		this.optionsView.add(this.back);
 		
+	}
+	
+	public void checkOkButton(){
+		boolean setEnabled = true;
+		
+		if(this.playerCount == 0){
+			setEnabled = false;
+		}
+		else if(this.totalShipSize == 0){
+			setEnabled = false;
+		}
+		else if(this.size.getSelectedIndex() == 0){
+			setEnabled = false;
+		}
+		
+		if(setEnabled == true){
+			this.ok.setEnabled(true);
+		}
+		else{
+			this.ok.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -238,9 +267,9 @@ public class Options_View {
 		this.size.addActionListener(m);
 	}
 	
-	public void setNameSelectionListener(ActionListener n){
+	public void setNameSelectionListener(FocusListener n){
 		for(int j = 0; j < this.playerNames.length; j++){
-			this.playerNames[j].addActionListener(n);
+			this.playerNames[j].addFocusListener(n);
 		}
 	}
 	

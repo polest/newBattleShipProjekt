@@ -11,7 +11,6 @@ import Ships.Frigate;
 import Ships.Ship;
 import Ships.Submarine;
 import Tools.ColoredPrint;
-import Tools.ColoredPrint.EPrintColor;
 /**
  * Write a description of class MatrixTools here.
  * 

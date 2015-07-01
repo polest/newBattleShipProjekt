@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,15 +62,13 @@ public class BattleField_View {
 		return this.field;
 	}
 	
-//	public void clear(){
-//		for(int i = 0; i < this.fieldSize; i++){
-//			for(int j = 0; j < this.fieldSize; j++){
-//				this.field[i][j].setIcon(empty);
-//				this.field[i][j].setOpaque(false);
-//				this.field[i][j].setEnabled(true);
-//			}
-//		}
-//	}
+	public void clearBorder(){
+		for(int i = 0; i < this.fieldSize; i++){
+			for(int j = 0; j < this.fieldSize; j++){
+				this.field[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));
+			}
+		}
+	}
 
 	public void setSize(int x, int y, int width){
 		this.battleFieldViewPanel.setBounds(x, y, width, width);
@@ -80,6 +79,12 @@ public class BattleField_View {
 			//horizontal
 			for(int j = 0; j < this.fieldSize; j++){
 				this.field[i][j].setBounds(cellSize*i, cellSize*j, cellSize, cellSize);
+				Icon icon = this.field[i][j].getIcon();
+				Image img = ((ImageIcon) icon).getImage() ;  
+				 Image newimg = img.getScaledInstance( cellSize, cellSize,  java.awt.Image.SCALE_SMOOTH ) ;  
+				 icon = new ImageIcon( newimg );
+				 this.field[i][j].setIcon(icon);
+				
 			}
 		}
 		
@@ -108,6 +113,7 @@ public class BattleField_View {
 		int size = this.fieldSize*this.cellSize;
 		battleFieldViewPanel = new JPanel();
 		battleFieldViewPanel.setLayout(null);
+		battleFieldViewPanel.setOpaque(false);
 		this.field = new JButton[this.fieldSize][this.fieldSize];
 
 		empty.setImage(empty.getImage().getScaledInstance( cellSize ,cellSize, Image.SCALE_DEFAULT)); 
@@ -133,7 +139,7 @@ public class BattleField_View {
 		meer.setImage(meer.getImage().getScaledInstance(size,size, Image.SCALE_DEFAULT));
 		background = new JLabel(meer);
 		background.setSize(size, size);
-		battleFieldViewPanel.setVisible(false);
+		battleFieldViewPanel.setVisible(true);
 		this.battleFieldViewPanel.add(background);
 
 		//		ImageIcon icon = new ImageIcon("Resources/Meer.jpg");
@@ -144,7 +150,6 @@ public class BattleField_View {
 		//		this.battleFieldViewPanel.add(iconLabel);
 		//		this.battleFieldViewPanel.setBorder(BorderFactory.createLineBorder(Color.pink));
 		this.battleFieldViewPanel.setBounds(30,30,size,size);
-		this.battleFieldViewPanel.setVisible(true);
 		this.panel.add(this.battleFieldViewPanel);
 	}
 

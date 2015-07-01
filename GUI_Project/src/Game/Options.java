@@ -1,14 +1,15 @@
 package Game;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.Serializable;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import Main.Main_View;
+import javax.swing.event.DocumentListener;
 
 
 public class Options implements Serializable{
@@ -88,6 +89,7 @@ public class Options implements Serializable{
 	private void setPlayer(String number){
 		int count = Integer.parseInt(number); 
 		this.player = count;
+		this.optionsView.setPlayerCount(count);
 		this.playerIsKi = new boolean[count-1];
 		this.optionsView.setPlayerToggle(count);
 	}
@@ -115,7 +117,7 @@ public class Options implements Serializable{
 		else if(cmbbox.getActionCommand() == "submarine"){
 			this.submarine = Integer.parseInt( cmbbox.getSelectedItem().toString() );
 		}
-
+		this.optionsView.setShips(cmbbox);
 		int minSize = setBattleFieldSize();
 		this.battlefieldSize = minSize;
 		this.optionsView.setSize(minSize);
@@ -178,14 +180,15 @@ public class Options implements Serializable{
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
 		this.optionsView.setNameSelectionListener(new SetNameListener() );
 	}
-	
 
+	
 	/**
 	 * Inneren Listener Klassen implementieren das Interface ActionListener
 	 */
 	class SetPlayerListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			setPlayer(e.getActionCommand());
+			optionsView.checkOkButton();
 		}
 	}
 
@@ -198,6 +201,7 @@ public class Options implements Serializable{
 	private class SetShipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			setShips((JComboBox) e.getSource());
+			optionsView.checkOkButton();
 		}
 	}
 
@@ -206,11 +210,20 @@ public class Options implements Serializable{
 			JComboBox sizeBox =  (JComboBox)e.getSource();
 			int size = Integer.parseInt( sizeBox.getSelectedItem().toString() );
 			setSize(size);
+			optionsView.checkOkButton();
 		}
 	}
 
-	private class SetNameListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
+	private class SetNameListener implements FocusListener{
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
 			JTextField name =  (JTextField)e.getSource();
 			setName(name);
 		}

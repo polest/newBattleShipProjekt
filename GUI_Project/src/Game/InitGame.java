@@ -87,13 +87,11 @@ public class InitGame implements Serializable{
 		this.player = new Player[this.gameOptions.getPlayer()];
 		this.fieldSize = this.gameOptions.getBattlefieldSize();
 		this.initGameView.setFieldSize(this.fieldSize);
+		this.initGameView.initFields(player.length);
 
 		if(playerId < player.length){
-
 			initPlayerBattleShip();
 		}
-
-
 	}
 
 	public void incrementPlayerId(){
@@ -105,7 +103,6 @@ public class InitGame implements Serializable{
 	}
 
 	public void initPlayerBattleShip(){
-		this.initGameView.initFields(player.length);
 
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
@@ -114,22 +111,17 @@ public class InitGame implements Serializable{
 			player[i] = new Player(true, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
 					this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, false);
 			addListener(i);
-			this.initGameView.getBattleFieldView(i).getView().setVisible(true);
-			this.initGameView.getPanel().repaint();
+
 		}else{
 			player[i] = new Player(false, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
 					this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, this.gameOptions.getPlayerKi(i-1));
 			addListener(i);
-			this.initGameView.getBattleFieldView(i).getView().setVisible(true);
-			this.initGameView.getBattleFieldView(i-1).getView().setVisible(false);
-			
-			this.initGameView.getBattleFieldView(i).getView().repaint();
-			
 			this.initGameView.getPanel().repaint();
 			this.initGameView.getPanel().revalidate();
-			
 		}
-		
+		String panelName = "field"+i;
+		this.initGameView.changeShownPan(panelName);
+
 		this.initShips();
 	}
 
@@ -163,21 +155,14 @@ public class InitGame implements Serializable{
 			start = false;
 		}
 		this.initGameView.initPlayerField(player[playerId], playerId);
-		//		rounds = new Round(this.player, this.fieldSize);
-		//		rounds.play();
-
 	}
 
 	private void addListener(int i){
-//		this.initGameView.setBattleFieldMouseListener(new BattleFieldMouseListener());
-//		this.initGameView.setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
-//		
 		this.initGameView.getBattleFieldView(i).setBattleFieldMouseListener(new BattleFieldMouseListener());
 		this.initGameView.getBattleFieldView(i).setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
-	
+
 		this.initGameView.setShipsSelectionListener(new ShipsListener());
 	}
-
 
 	private boolean setShipToField(Ship ship, Player player, String pos) {
 
@@ -283,6 +268,7 @@ public class InitGame implements Serializable{
 		}
 	}
 
+
 	private boolean checkBorder(int x, int y, int length){
 		int[][] field = this.player[playerId].getPrivateField().getField();
 		x--;
@@ -362,7 +348,6 @@ public class InitGame implements Serializable{
 		return true;
 	}
 
-
 	private class BattleFieldMouseMotionListener implements MouseMotionListener{
 
 		@Override
@@ -375,7 +360,7 @@ public class InitGame implements Serializable{
 		public void mouseMoved(MouseEvent e) {
 			try{
 				int mouse2 = e.getY();
-				//				int mouseX = e.getX();
+				//int mouseX = e.getX();
 				JButton btn = (JButton)e.getSource();
 				String ac = btn.getActionCommand();
 				ac = ac.trim();
@@ -401,12 +386,10 @@ public class InitGame implements Serializable{
 				setShipsOrientation(btnX, btnY);
 			}
 			catch(Exception f){
-				//
 				System.out.println(f.getMessage());
 			}
 		}
 	}
-
 
 	private class BattleFieldMouseListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {

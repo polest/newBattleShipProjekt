@@ -118,14 +118,15 @@ public class Main_Controler {
 			int playerId = initGame.getPlayerId();
 			Player[] player = initGame.getPlayer();
 			
+			
+			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView( (playerId-1) ) );
+			player[playerId-1].getBattleFieldView().clearBorder();
 //			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
 			
 			
 			if(playerId < player.length){
 				//initGameView.clearField();
 				initGame.initPlayerBattleShip();
-				main_view.repaint();
-				main_view.revalidate();
 				initGameView.setPlayerName(player[playerId].getPlayerName());
 				initGameView.disableNext();
 			}

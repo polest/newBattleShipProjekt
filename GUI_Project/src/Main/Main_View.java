@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Main_View extends JFrame{
+public class Main_View{
 
 	private JFrame frame; 
 	private ImagePanel welcomePan;	
@@ -27,7 +27,6 @@ public class Main_View extends JFrame{
 	private String welcomeTextIcon;
 
 	public Main_View(int width, int height){
-		super();
 		this.width = width;
 		this.height = height;
 		this.cards = new JPanel(new CardLayout());
@@ -52,6 +51,7 @@ public class Main_View extends JFrame{
 		this.frame = new JFrame("BattleShip Galactica");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setSize(this.width, this.height);
+		this.frame.setResizable(false);
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setVisible(true);
 		this.frame.add(this.cards);
@@ -110,7 +110,7 @@ public class Main_View extends JFrame{
 		//        this.welcome_text.setIcon(icon);
 		this.welcome_text.setBounds((this.width-labelWidth)/2, 100, labelWidth, 100);
 		this.welcome_text.setVisible(true);
-		repaint();
+		this.frame.repaint();
 		this.welcomePan.add(welcome_text);
 	}
 
@@ -165,7 +165,7 @@ public class Main_View extends JFrame{
 			Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
 			ImageIcon icon = new ImageIcon(newimg);
 			this.welcome_text.setIcon(icon);
-			repaint();
+			this.frame.repaint();
 
 			//			//sleep for a bit
 			//			try {
@@ -182,7 +182,7 @@ public class Main_View extends JFrame{
 			ImageIcon icon = new ImageIcon(newimg);
 			this.welcome_text.setIcon(icon); 
 
-			repaint();
+			this.frame.repaint();
 		}
 
 
