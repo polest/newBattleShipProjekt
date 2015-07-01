@@ -1,5 +1,14 @@
 package Game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JToggleButton;
+
 import SaveGame.Save;
 import Ships.Ship;
 import Tools.ColoredPrint;
@@ -17,6 +26,8 @@ public class Round{
 	private Save save;
 	private int fieldSize;
 	private Round_View roundView;
+	private int gegner;
+	private int schiff = 0;
 
 	public Round(Player[] player, int fieldSize){
 		this.player = player;
@@ -25,11 +36,13 @@ public class Round{
 		this.save = new Save();
 		this.roundView = new Round_View(this.fieldSize, player);
 		//this.play();
+		addListener();
+		setShipText();
 	}
-	
+
 	public Round(){
 	}
-		
+
 	public Round_View getRoundView(){
 		return this.roundView;
 	}
@@ -42,13 +55,26 @@ public class Round{
 		this.player = player;
 	}
 
+	private void addListener(){
+		this.roundView.setChangePlayerViewListener(new ChangePlayerListener());
+		this.roundView.setShipsListener(new ShipListener());
+		this.roundView.setPositionListener(new PositionListener());
+	}
+
+	private void setShipText(){
+		roundView.setDestroyer(player[0].getDestroyer().length);
+		roundView.setFrigate(player[0].getFrigate().length);
+		roundView.setCorvette(player[0].getCorvette().length);
+		roundView.setSubmarine(player[0].getSubmarine().length);
+	}
+
 	public void play(){
 		char orientation = 'h';
 		String eingabe;
 		int gegner = 0;
 		int schiff = 0;
 		int counter = 1;
-		
+
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
@@ -57,181 +83,147 @@ public class Round{
 
 						if(player[i].checkIfAnyShipIsReady()){
 
-							System.out.println(player[i].getPlayerName() + " ist an der Reihe.");
-							//player[i].printPrivateField();
-							System.out.println("Gegen welchen Spieler möchten sie spielen?");
+							//							System.out.println(player[i].getPlayerName() + " ist an der Reihe.");
+							//							//player[i].printPrivateField();
+							//							System.out.println("Gegen welchen Spieler möchten sie spielen?");
+							//
+							//							for(int j = 0; j < player.length; j++){
+							//								counter = j+1;
+							//								if(j != i){
+							//									if(player[j].getIsAlive()){
+							//										System.out.println(player[j].getPlayerName() + "\t Spieler: " + counter);
+							//										player[j].printPublicField();
+							//									}else{
+							//										System.out.println(player[j].getPlayerName() + "\t ist Tot");
+							//									}
+							//								}
+							//							}
+							//
+							//							System.out.println("Geben sie nun die Zahl ihres Wunschgegners ein.");
+							//
+							//							gegner = IO.readEnemyInt();
+							//
+							//							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
+							//								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
+							//								gegner = IO.readEnemyInt();
+							//							}
+							//
+							//							//Schiff zum angreifen wählen
+							//							System.out.println("Sie spielen nun gegen "+ player[gegner-1].getPlayerName());
+							//
+							//							//Schiff zum angreifen wählen
+							//
+							//							System.out.println("Mit welchem Schiff möchten sie schießen?");
+							//
+							//							if(player[i].getDestroyer().length > 0){
+							//								if(player[i].checkIfShipIsReady("D")){
+							//									System.out.println("Zerstörer\t (1)");
+							//								}
+							//							}
+							//							if(player[i].getFrigate().length > 0){
+							//
+							//								if(player[i].checkIfShipIsReady("F")){
+							//									System.out.println("Frigatte\t (2)");
+							//								}
+							//							}
+							//							if(player[i].getCorvette().length > 0){
+							//
+							//								if(player[i].checkIfShipIsReady("C")){
+							//									System.out.println("Korvette\t (3)");
+							//								}
+							//							}
+							//							if(player[i].getSubmarine().length > 0){
+							//
+							//								if(player[i].checkIfShipIsReady("S")){
+							//									System.out.println("U-Boot\t\t (4)");	
+							//								}
+							//							}
+							//
+							//
+							//							boolean go = false;
+							//							while(!go){
+							//								schiff = IO.readShipInt();
+							//
+							//								if(schiff == 1){
+							//									go = player[i].checkIfShipIsReady("D");
+							//								} else if(schiff == 2){
+							//									go = player[i].checkIfShipIsReady("F");
+							//								} else if(schiff == 3){
+							//									go = player[i].checkIfShipIsReady("C");
+							//								} else if(schiff == 4){
+							//									go = player[i].checkIfShipIsReady("S");
+							//								}
+							//
+							//								if(!go){
+							//									this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte wählen sie ein Schiff aus!");
+							//								}
+							//
+							//							}
+							//
+							//							player[gegner-1].printPublicField();
+							//
+							//							//Koordinaten wählen und schießen
+							//
+							//							System.out.println("Geben sie nun die Koordinaten ein, auf die sie schießen möchten. (X,Y)");
+							//
+							//							String pos = IO.readString();
+							//							int[] koordinaten = checkPos(pos);
+							//
+							//							while(koordinaten == null){
+							//								System.out.println("Bitte geben sie die X,Y Koordinaten ein, auf die sie schießen möchten.");
+							//								pos = IO.readString();
+							//								koordinaten = checkPos(pos);
+							//							}
+							//							Ship ship = null;
+							//
+							//							if(schiff == 1){
+							//								System.out.println("Horizontal (h) oder Vertikal(v)?");
+							//								orientation = IO.readChar();
+							//
+							//								while(orientation != 'h' && orientation != 'v'){
+							//									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
+							//									orientation = IO.readChar();
+							//								}
+							//								ship = player[i].getAvailableDestroyer();
+							//
+							//							}else if(schiff == 2){
+							//								System.out.println("Horizontal (h) oder Vertikal(v)?");
+							//								orientation = IO.readChar();
+							//
+							//								while(orientation != 'h' && orientation != 'v'){
+							//									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
+							//									orientation = IO.readChar();
+							//								}
+							//								ship = player[i].getAvailableFrigate();
+							//							} else if(schiff == 3){
+							//								orientation = 'h';
+							//								ship = player[i].getAvailableCorvette();
+							//
+							//							} else if(schiff == 4){
+							//								orientation = 'h';
+							//								ship = player[i].getAvailableSubmarine();
+							//							}
 
-							for(int j = 0; j < player.length; j++){
-								counter = j+1;
-								if(j != i){
-									if(player[j].getIsAlive()){
-										System.out.println(player[j].getPlayerName() + "\t Spieler: " + counter);
-										player[j].printPublicField();
-									}else{
-										System.out.println(player[j].getPlayerName() + "\t ist Tot");
-									}
-								}
-							}
-
-							System.out.println("Geben sie nun die Zahl ihres Wunschgegners ein.");
-
-							gegner = IO.readEnemyInt();
-
-							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
-								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
-								gegner = IO.readEnemyInt();
-							}
-
-							//Schiff zum angreifen wählen
-							System.out.println("Sie spielen nun gegen "+ player[gegner-1].getPlayerName());
-
-							//Schiff zum angreifen wählen
-
-							System.out.println("Mit welchem Schiff möchten sie schießen?");
-
-							if(player[i].getDestroyer().length > 0){
-								if(player[i].checkIfShipIsReady("D")){
-									System.out.println("Zerstörer\t (1)");
-								}
-							}
-							if(player[i].getFrigate().length > 0){
-
-								if(player[i].checkIfShipIsReady("F")){
-									System.out.println("Frigatte\t (2)");
-								}
-							}
-							if(player[i].getCorvette().length > 0){
-
-								if(player[i].checkIfShipIsReady("C")){
-									System.out.println("Korvette\t (3)");
-								}
-							}
-							if(player[i].getSubmarine().length > 0){
-
-								if(player[i].checkIfShipIsReady("S")){
-									System.out.println("U-Boot\t\t (4)");	
-								}
-							}
-
-
-							boolean go = false;
-							while(!go){
-								schiff = IO.readShipInt();
-
-								if(schiff == 1){
-									go = player[i].checkIfShipIsReady("D");
-								} else if(schiff == 2){
-									go = player[i].checkIfShipIsReady("F");
-								} else if(schiff == 3){
-									go = player[i].checkIfShipIsReady("C");
-								} else if(schiff == 4){
-									go = player[i].checkIfShipIsReady("S");
-								}
-
-								if(!go){
-									this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte wählen sie ein Schiff aus!");
-								}
-
-							}
-
-							player[gegner-1].printPublicField();
-
-							//Koordinaten wählen und schießen
-
-							System.out.println("Geben sie nun die Koordinaten ein, auf die sie schießen möchten. (X,Y)");
-
-							String pos = IO.readString();
-							int[] koordinaten = checkPos(pos);
-
-							while(koordinaten == null){
-								System.out.println("Bitte geben sie die X,Y Koordinaten ein, auf die sie schießen möchten.");
-								pos = IO.readString();
-								koordinaten = checkPos(pos);
-							}
-							Ship ship = null;
-
-							if(schiff == 1){
-								System.out.println("Horizontal (h) oder Vertikal(v)?");
-								orientation = IO.readChar();
-
-								while(orientation != 'h' && orientation != 'v'){
-									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-									orientation = IO.readChar();
-								}
-								ship = player[i].getAvailableDestroyer();
-
-							}else if(schiff == 2){
-								System.out.println("Horizontal (h) oder Vertikal(v)?");
-								orientation = IO.readChar();
-
-								while(orientation != 'h' && orientation != 'v'){
-									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-									orientation = IO.readChar();
-								}
-								ship = player[i].getAvailableFrigate();
-							} else if(schiff == 3){
-								orientation = 'h';
-								ship = player[i].getAvailableCorvette();
-
-							} else if(schiff == 4){
-								orientation = 'h';
-								ship = player[i].getAvailableSubmarine();
-							}
-
-							if(ship != null){
-								player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
-								player[i].setShipIsntReady(ship);
-							}
-
-
-							//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-
-							if(player[gegner-1].getIsAlive() == false){
-								this.colorPrint.println(EPrintColor.PURPLE,"Herzlichen Glückwunsch, sie haben " + player[gegner-1].getPlayerName() + " besiegt.");
-							}
-
-
-							//überprüft, ob noch Spieler am leben sind. Wenn nicht wird Spiel beendet.
-							if(ende() == 1){
-								this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-								System.exit(-1);
-							}
-
-							player[i].setActive(false);
-							if(i == player.length-1){
-								player[0].setActive(true);
-							}else{
-								player[i+1].setActive(true);
-							}
-
-
-
-							System.out.println("Drücken sie (n) damit der nächste Spieler an der Reihe ist.");
-							System.out.println("Drücken sie (x) um das Spiel zu beenden ohne zu speichern.");
-							System.out.println("Drücken sie (s) um das Spiel zu speichern.");
-
-							eingabe = IO.readString();
-
-							while((!(eingabe.equals("n"))) && (!(eingabe.equals("x"))) &&  (!(eingabe.equals("s")))){
-								System.out.println("Sie müssen eine dieser Auswahlmöglichkeiten wählen.");
-								eingabe = IO.readString();
-							}
-							if(eingabe.equals("n")){
-								for(int q = 0; q < 150; q++){
-									System.out.println("");
-								}
-							}else if(eingabe.equals("x")){
-								System.exit(0);
-							}else if(eingabe.equals("s")){
-								System.out.println("Bitte geben sie ihrem Spiel einen Namen unter dem sie es abspeichern möchten.");
-								eingabe = IO.readString();
-								save.saveGame(eingabe, player);
-								System.out.println("Wenn sie das Spiel jetzt beenden möchten, drücken sie (x) um weiter zu spielen drücken sie eine andere Taste.");
-								eingabe = IO.readString();
-								if(eingabe.equals("x")){
-									System.exit(0);
-								}
-							}
+							//TODO in den Event einbauen
+							//							if(ship != null){
+							//								player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
+							//								player[i].setShipIsntReady(ship);
+							//							}//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
+							//
+							//							if(player[gegner-1].getIsAlive() == false){
+							//								this.colorPrint.println(EPrintColor.PURPLE,"Herzlichen Glückwunsch, sie haben " + player[gegner-1].getPlayerName() + " besiegt.");
+							//							}
+							//							überprüft, ob noch Spieler am leben sind. Wenn nicht wird Spiel beendet.
+							//							if(ende() == 1){
+							//								this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
+							//								System.exit(-1);
+							//							}
+							//							player[i].setActive(false);
+							//							if(i == player.length-1){
+							//								player[0].setActive(true);
+							//							}else{
+							//								player[i+1].setActive(true);
+							//							}
 						}else{
 							colorPrint.println(EPrintColor.BLUE, "Spieler " + player[i].getPlayerName() + " hat keine geladenen Schiffe zur verfügung! "
 									+ "Sie müssen diese Runde leider aussetzen.");
@@ -243,42 +235,6 @@ public class Round{
 							}else{
 								player[i+1].setActive(true);
 							}
-
-							System.out.println("Drücken sie (n) damit der nächste Spieler an der Reihe ist.");
-							System.out.println("Drücken sie (x) um das Spiel zu beenden ohne zu speichern.");
-							System.out.println("Drücken sie (s) um das Spiel zu speichern.");
-
-							eingabe = IO.readString();
-
-							while((!(eingabe.equals("n"))) && (!(eingabe.equals("x"))) &&  (!(eingabe.equals("s")))){
-								System.out.println("Sie müssen eine dieser Auswahlmöglichkeiten wählen.");
-								eingabe = IO.readString();
-							}
-							if(eingabe.equals("n")){
-								for(int q = 0; q < 150; q++){
-									System.out.println("");
-								}
-							}else if(eingabe.equals("x")){
-								System.exit(0);
-							}else if(eingabe.equals("s")){
-								System.out.println("Bitte geben sie ihrem Spiel einen Namen unter dem sie es abspeichern möchten.");
-								eingabe = IO.readString();
-								save.saveGame(eingabe, player);
-								System.out.println("Wenn sie das Spiel jetzt beenden möchten, drücken sie (x) um weiter zu spielen drücken sie eine andere Taste.");
-								eingabe = IO.readString();
-								if(eingabe.equals("x")){
-									System.exit(0);
-								}
-							}
-
-						}
-					}
-					else{
-						player[i].setActive(false);
-						if(i == player.length-1){
-							player[0].setActive(true);
-						}else{
-							player[i+1].setActive(true);
 						}
 					}
 				}
@@ -337,4 +293,75 @@ public class Round{
 		}
 		return counter;
 	}
+
+	private class ShipListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JToggleButton ship = (JToggleButton)e.getSource();
+
+			if(ship.getActionCommand().equals("destroyer") ){
+				schiff = 1;
+			}
+			else if(ship.getActionCommand().equals("frigate") ){
+				schiff = 2;
+			}
+			else if(ship.getActionCommand().equals("corvette") ){
+				schiff = 3;
+			}
+			else if(ship.getActionCommand().equals("submarine") ){
+				schiff = 4;
+			}
+		}
+	}
+
+	private class PositionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JButton btn = (JButton)e.getSource();
+			String pos = btn.getActionCommand();
+			
+			int koords[] = new int[2];
+			koords = checkPos(pos);
+
+			
+			
+		}
+
+
+	}
+	private class ChangePlayerListener implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			JLabel selectedLabel = (JLabel)e.getSource();
+			JLabel[] switchableLabels = roundView.getSwitchLabel();
+
+			for(int i = 0; i < switchableLabels.length; i++){
+				if(selectedLabel == switchableLabels[i]){
+					roundView.changePlayer(i);
+
+				}
+			}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub	
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
 }
+
+

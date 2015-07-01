@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
@@ -67,6 +68,30 @@ public class BattleField_View {
 			}
 		}
 	}
+	
+	public void removeListener(){
+		for(int i = 0; i < this.fieldSize; i++){
+			for(int j = 0; j < this.fieldSize; j++){
+				ActionListener[] l = this.field[i][j].getActionListeners();
+				MouseListener[] m = this.field[i][j].getMouseListeners();
+				MouseMotionListener[] ml = this.field[i][j].getMouseMotionListeners();
+				
+				
+				for(int k = 0; k < l.length; k++){
+				this.field[i][j].removeActionListener(l[k]);
+				}
+				
+				for(int k = 0; k < m.length; k++){
+					this.field[i][j].removeMouseListener(m[k]);
+				}
+				
+				for(int k = 0; k < ml.length; k++){
+					this.field[i][j].removeMouseMotionListener(ml[k]);
+				}
+			}
+		}
+	}
+	
 
 	public void setSize(int x, int y, int width){
 		this.battleFieldViewPanel.setBounds(x, y, width, width);

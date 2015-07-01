@@ -40,6 +40,7 @@ public class InitGame_View {
 		this.cards = new JPanel(new CardLayout());
 		this.cards.setBounds(30,30, 510, 510);
 		this.cards.setVisible(true);
+		this.cards.setOpaque(false);
 		this.battleFieldView =  new BattleField_View[playerLength];
 
 		initPan();
