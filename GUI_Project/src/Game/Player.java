@@ -339,10 +339,10 @@ public class Player implements Serializable{
 
 	private void setSubmarineIconsH(int cellSize){
 		this.submarineIconH = new ImageIcon[2];
-		this.submarineIconH[0] = new ImageIcon("Resources/ShipsNeu/Submarine/submarine1.png");
+		this.submarineIconH[0] = new ImageIcon("Resources/ShipsNeu/Submarine/submarine2.png");
 		this.submarineIconH[0].setImage(this.submarineIconH[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.submarineIconH[1] = new ImageIcon("Resources/ShipsNeu/Submarine/submarine2.png");
+		this.submarineIconH[1] = new ImageIcon("Resources/ShipsNeu/Submarine/submarine1.png");
 		this.submarineIconH[1].setImage(this.submarineIconH[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 	}
 
@@ -356,46 +356,46 @@ public class Player implements Serializable{
 
 	private void setDestroyerIconsV(int cellSize){
 		this.destroyerIconV = new ImageIcon[5];
-		this.destroyerIconV[0] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer5_verti.png");
+		this.destroyerIconV[0] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer1_verti.png");
 		this.destroyerIconV[0].setImage(this.destroyerIconV[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.destroyerIconV[1] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer4_verti.png");
+		this.destroyerIconV[1] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer2_verti.png");
 		this.destroyerIconV[1].setImage(this.destroyerIconV[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
 		this.destroyerIconV[2] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer3_verti.png");
 		this.destroyerIconV[2].setImage(this.destroyerIconV[2].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.destroyerIconV[3] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer2_verti.png");
+		this.destroyerIconV[3] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer4_verti.png");
 		this.destroyerIconV[3].setImage(this.destroyerIconV[3].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.destroyerIconV[4] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer1_verti.png");
+		this.destroyerIconV[4] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer5_verti.png");
 		this.destroyerIconV[4].setImage(this.destroyerIconV[4].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 	}
 
 	private void setFrigateIconsV(int cellSize){
 		this.frigateIconV = new ImageIcon[4];
-		this.frigateIconV[0] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate4_verti.png");
-		this.frigateIconV[0].setImage(this.destroyerIconV[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
+		this.frigateIconV[0] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate1_verti.png");
+		this.frigateIconV[0].setImage(this.frigateIconV[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.frigateIconV[1] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate3_verti.png");
+		this.frigateIconV[1] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate2_verti.png");
 		this.frigateIconV[1].setImage(this.frigateIconV[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.frigateIconV[2] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate2_verti.png");
+		this.frigateIconV[2] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate3_verti.png");
 		this.frigateIconV[2].setImage(this.frigateIconV[2].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.frigateIconV[3] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate1_verti.png");
+		this.frigateIconV[3] = new ImageIcon("Resources/ShipsNeu/Frigate/frigate4_verti.png");
 		this.frigateIconV[3].setImage(this.frigateIconV[3].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 	}
 
 	private void setCorvetteIconsV(int cellSize){
 		this.corvetteIconV = new ImageIcon[3];
-		this.corvetteIconV[0] = new ImageIcon("Resources/ShipsNeu/Corvette/corvette3_verti.png");
+		this.corvetteIconV[0] = new ImageIcon("Resources/ShipsNeu/Corvette/corvette1_verti.png");
 		this.corvetteIconV[0].setImage(this.corvetteIconV[0].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
 		this.corvetteIconV[1] = new ImageIcon("Resources/ShipsNeu/Corvette/corvette2_verti.png");
 		this.corvetteIconV[1].setImage(this.corvetteIconV[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 
-		this.corvetteIconV[2] = new ImageIcon("Resources/ShipsNeu/Corvette/corvette1_verti.png");
+		this.corvetteIconV[2] = new ImageIcon("Resources/ShipsNeu/Corvette/corvette3_verti.png");
 		this.corvetteIconV[2].setImage(this.corvetteIconV[2].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 	}
 
@@ -643,24 +643,25 @@ public class Player implements Serializable{
 		else{
 			if(ship instanceof Destroyer){
 				for(int i = 0; i < length; i++){
-					field[x+i-1][y-1].setIcon(destroyerIconV[i]);
+					field[x-1][y+i-1].setIcon(destroyerIconV[i]);
 				}
 			}
 			else if(ship instanceof Frigate){
 				for(int i = 0; i < length; i++){
-					field[x+i-1][y-1].setIcon(frigateIconV[i]);
+					field[x-1][y+i-1].setIcon(frigateIconV[i]);
 				}
 			}
 			else if(ship instanceof Corvette){
 				for(int i = 0; i < length; i++){
-					field[x+i-1][y-1].setIcon(corvetteIconV[i]);
+					field[x-1][y+i-1].setIcon(corvetteIconV[i]);
 				};
 			}
 			else if(ship instanceof Submarine){
 				for(int i = 0; i < length; i++){
-					field[x+i-1][y-1].setIcon(submarineIconV[i]);
+					field[x-1][y+i-1].setIcon(submarineIconV[i]);
 				}
 			}
+			
 		}
 		privateField.printPrivateField(field, playerName);
 	}
