@@ -1,367 +1,382 @@
-package Game;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-
-import SaveGame.Save;
-import Ships.Ship;
-import Tools.ColoredPrint;
-import Tools.IO;
-import Tools.ColoredPrint.EPrintColor;
-
-public class Round{
-
-	/**
-	 * * @author ML, JL
-	 * @version 25.03.15
-	 */
-	private Player[] player;
-	private ColoredPrint colorPrint;
-	private Save save;
-	private int fieldSize;
-	private Round_View roundView;
-	private int gegner;
-	private int schiff = 0;
-
-	public Round(Player[] player, int fieldSize){
-		this.player = player;
-		this.colorPrint = new ColoredPrint();
-		this.fieldSize = fieldSize;
-		this.save = new Save();
-		this.roundView = new Round_View(this.fieldSize, player);
-		//this.play();
-		addListener();
-		setShipText();
-	}
-
-	public Round(){
-	}
-
-	public Round_View getRoundView(){
-		return this.roundView;
-	}
-
-	public Player[] getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player[] player) {
-		this.player = player;
-	}
-
-	private void addListener(){
-		this.roundView.setChangePlayerViewListener(new ChangePlayerListener());
-		this.roundView.setShipsListener(new ShipListener());
-		this.roundView.setPositionListener(new PositionListener());
-	}
-
-	private void setShipText(){
-		roundView.setDestroyer(player[0].getDestroyer().length);
-		roundView.setFrigate(player[0].getFrigate().length);
-		roundView.setCorvette(player[0].getCorvette().length);
-		roundView.setSubmarine(player[0].getSubmarine().length);
-	}
-
-	public void play(){
-		char orientation = 'h';
-		String eingabe;
-		int gegner = 0;
-		int schiff = 0;
-		int counter = 1;
-
-		while(ende() > 1){
-			for(int i = 0; i < player.length; i++){
-				if(player[i].getIsActive()){
-
-					if(player[i].getIsAlive()){
-
-						if(player[i].checkIfAnyShipIsReady()){
-
-							//							System.out.println(player[i].getPlayerName() + " ist an der Reihe.");
-							//							//player[i].printPrivateField();
-							//							System.out.println("Gegen welchen Spieler möchten sie spielen?");
-							//
-							//							for(int j = 0; j < player.length; j++){
-							//								counter = j+1;
-							//								if(j != i){
-							//									if(player[j].getIsAlive()){
-							//										System.out.println(player[j].getPlayerName() + "\t Spieler: " + counter);
-							//										player[j].printPublicField();
-							//									}else{
-							//										System.out.println(player[j].getPlayerName() + "\t ist Tot");
-							//									}
-							//								}
-							//							}
-							//
-							//							System.out.println("Geben sie nun die Zahl ihres Wunschgegners ein.");
-							//
-							//							gegner = IO.readEnemyInt();
-							//
-							//							while( (gegner < 0) || ( (gegner-1) == i) || (gegner > player.length)){
-							//								this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte Zahl ihres Wunschgegners auswählen!");
-							//								gegner = IO.readEnemyInt();
-							//							}
-							//
-							//							//Schiff zum angreifen wählen
-							//							System.out.println("Sie spielen nun gegen "+ player[gegner-1].getPlayerName());
-							//
-							//							//Schiff zum angreifen wählen
-							//
-							//							System.out.println("Mit welchem Schiff möchten sie schießen?");
-							//
-							//							if(player[i].getDestroyer().length > 0){
-							//								if(player[i].checkIfShipIsReady("D")){
-							//									System.out.println("Zerstörer\t (1)");
-							//								}
-							//							}
-							//							if(player[i].getFrigate().length > 0){
-							//
-							//								if(player[i].checkIfShipIsReady("F")){
-							//									System.out.println("Frigatte\t (2)");
-							//								}
-							//							}
-							//							if(player[i].getCorvette().length > 0){
-							//
-							//								if(player[i].checkIfShipIsReady("C")){
-							//									System.out.println("Korvette\t (3)");
-							//								}
-							//							}
-							//							if(player[i].getSubmarine().length > 0){
-							//
-							//								if(player[i].checkIfShipIsReady("S")){
-							//									System.out.println("U-Boot\t\t (4)");	
-							//								}
-							//							}
-							//
-							//
-							//							boolean go = false;
-							//							while(!go){
-							//								schiff = IO.readShipInt();
-							//
-							//								if(schiff == 1){
-							//									go = player[i].checkIfShipIsReady("D");
-							//								} else if(schiff == 2){
-							//									go = player[i].checkIfShipIsReady("F");
-							//								} else if(schiff == 3){
-							//									go = player[i].checkIfShipIsReady("C");
-							//								} else if(schiff == 4){
-							//									go = player[i].checkIfShipIsReady("S");
-							//								}
-							//
-							//								if(!go){
-							//									this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe! Bitte wählen sie ein Schiff aus!");
-							//								}
-							//
-							//							}
-							//
-							//							player[gegner-1].printPublicField();
-							//
-							//							//Koordinaten wählen und schießen
-							//
-							//							System.out.println("Geben sie nun die Koordinaten ein, auf die sie schießen möchten. (X,Y)");
-							//
-							//							String pos = IO.readString();
-							//							int[] koordinaten = checkPos(pos);
-							//
-							//							while(koordinaten == null){
-							//								System.out.println("Bitte geben sie die X,Y Koordinaten ein, auf die sie schießen möchten.");
-							//								pos = IO.readString();
-							//								koordinaten = checkPos(pos);
-							//							}
-							//							Ship ship = null;
-							//
-							//							if(schiff == 1){
-							//								System.out.println("Horizontal (h) oder Vertikal(v)?");
-							//								orientation = IO.readChar();
-							//
-							//								while(orientation != 'h' && orientation != 'v'){
-							//									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							//									orientation = IO.readChar();
-							//								}
-							//								ship = player[i].getAvailableDestroyer();
-							//
-							//							}else if(schiff == 2){
-							//								System.out.println("Horizontal (h) oder Vertikal(v)?");
-							//								orientation = IO.readChar();
-							//
-							//								while(orientation != 'h' && orientation != 'v'){
-							//									this.colorPrint.println(EPrintColor.RED,"Fehler! Bitte h oder v eingeben!");
-							//									orientation = IO.readChar();
-							//								}
-							//								ship = player[i].getAvailableFrigate();
-							//							} else if(schiff == 3){
-							//								orientation = 'h';
-							//								ship = player[i].getAvailableCorvette();
-							//
-							//							} else if(schiff == 4){
-							//								orientation = 'h';
-							//								ship = player[i].getAvailableSubmarine();
-							//							}
-
-							//TODO in den Event einbauen
-							//							if(ship != null){
-							//								player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
-							//								player[i].setShipIsntReady(ship);
-							//							}//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-							//
-							//							if(player[gegner-1].getIsAlive() == false){
-							//								this.colorPrint.println(EPrintColor.PURPLE,"Herzlichen Glückwunsch, sie haben " + player[gegner-1].getPlayerName() + " besiegt.");
-							//							}
-							//							überprüft, ob noch Spieler am leben sind. Wenn nicht wird Spiel beendet.
-							//							if(ende() == 1){
-							//								this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-							//								System.exit(-1);
-							//							}
-							//							player[i].setActive(false);
-							//							if(i == player.length-1){
-							//								player[0].setActive(true);
-							//							}else{
-							//								player[i+1].setActive(true);
-							//							}
-						}else{
-							colorPrint.println(EPrintColor.BLUE, "Spieler " + player[i].getPlayerName() + " hat keine geladenen Schiffe zur verfügung! "
-									+ "Sie müssen diese Runde leider aussetzen.");
-							System.out.println("");
-
-							player[i].setActive(false);
-							if(i == player.length-1){
-								player[0].setActive(true);
+	package Game;
+	
+	import java.awt.Color;
+	import java.awt.event.ActionEvent;
+	import java.awt.event.ActionListener;
+	import java.awt.event.MouseEvent;
+	import java.awt.event.MouseListener;
+	import java.awt.event.MouseMotionListener;
+	
+	import javax.swing.BorderFactory;
+	import javax.swing.JButton;
+	import javax.swing.JLabel;
+	import javax.swing.JToggleButton;
+	
+	import SaveGame.Save;
+	import Ships.Ship;
+	import Tools.ColoredPrint;
+	import Tools.ColoredPrint.EPrintColor;
+	
+	public class Round{
+	
+		/**
+		 * * @author ML, JL
+		 * @version 25.03.15
+		 */
+		private Player[] player;
+		private ColoredPrint colorPrint;
+		private Save save;
+		private int fieldSize;
+		private Round_View roundView;
+		private int gegner;
+		private int schiff;
+		private int playerOnTurn;
+		private char orientation;
+		private int mouseY;
+		private int oldBtnY;
+	
+		public Round(Player[] player, int fieldSize){
+			this.player = player;
+			this.playerOnTurn = 0;
+			this.gegner = 0;
+			this.schiff = 0;
+			this.colorPrint = new ColoredPrint();
+			this.fieldSize = fieldSize;
+			this.save = new Save();
+			this.orientation = 'h';
+			this.roundView = new Round_View(this.fieldSize, player);
+			//this.play();
+			addListener();
+			setShipText();
+		}
+	
+		public Round(){
+		}
+	
+		public Round_View getRoundView(){
+			return this.roundView;
+		}
+	
+		public Player[] getPlayer() {
+			return player;
+		}
+	
+		public void setPlayer(Player[] player) {
+			this.player = player;
+		}
+	
+		private void addListener(){
+			this.roundView.setChangePlayerViewListener(new ChangePlayerListener());
+			this.roundView.setShipsListener(new ShipListener());
+			this.roundView.setPositionListener(new PositionListener());
+			this.roundView.setOrientationListener(new OrientationListener());
+		}
+	
+		private void setShipText(){
+			roundView.setDestroyer(player[0].getDestroyer().length);
+			roundView.setFrigate(player[0].getFrigate().length);
+			roundView.setCorvette(player[0].getCorvette().length);
+			roundView.setSubmarine(player[0].getSubmarine().length);
+		}
+	
+		public void play(){
+			char orientation = 'h';
+			String eingabe;
+			int gegner = 0;
+			int schiff = 0;
+			int counter = 1;
+	
+			while(ende() > 1){
+				for(int i = 0; i < player.length; i++){
+					if(player[i].getIsActive()){
+	
+						if(player[i].getIsAlive()){
+	
+							if(player[i].checkIfAnyShipIsReady()){
+	
+	
+								//TODO in den Event einbauen
+								//							
 							}else{
-								player[i+1].setActive(true);
+								colorPrint.println(EPrintColor.BLUE, "Spieler " + player[i].getPlayerName() + " hat keine geladenen Schiffe zur verfügung! "
+										+ "Sie müssen diese Runde leider aussetzen.");
+								System.out.println("");
+	
+								player[i].setActive(false);
+								if(i == player.length-1){
+									player[0].setActive(true);
+								}else{
+									player[i+1].setActive(true);
+								}
 							}
 						}
 					}
 				}
+				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
+				for(int j = 0; j < player.length; j++){
+					player[j].reloadTimeCountdown();
+				}
+	
 			}
-			//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-			for(int j = 0; j < player.length; j++){
-				player[j].reloadTimeCountdown();
-			}
-
 		}
-	}
-
-
-
-
-	/**
-	 * @param pos - die zu überprüfenden Koordinaten 
-	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
-	 */
-	private int[] checkPos(String pos){
-		try{
-			pos = pos.replaceAll("\\s+", "");
-
-			String[] sKoordinaten = pos.split(",");
-			int[] iKoordinaten = new int[2];
-
-			if(sKoordinaten.length != 2){
-				return null;
-			}
-			for(int i = 0; i < 2; i++){
-				int toInt = Integer.parseInt(sKoordinaten[i]);
-				if(toInt < 0 || toInt > fieldSize){
+	
+	
+	
+	
+		/**
+		 * @param pos - die zu überprüfenden Koordinaten 
+		 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
+		 */
+		private int[] checkPos(String pos){
+			try{
+				pos = pos.replaceAll("\\s+", "");
+	
+				String[] sKoordinaten = pos.split(",");
+				int[] iKoordinaten = new int[2];
+	
+				if(sKoordinaten.length != 2){
 					return null;
 				}
+				for(int i = 0; i < 2; i++){
+					int toInt = Integer.parseInt(sKoordinaten[i]);
+					if(toInt < 0 || toInt > fieldSize){
+						return null;
+					}
+					else{
+						iKoordinaten[i] = toInt;
+					}
+				}
+	
+				return iKoordinaten;
+			}
+			catch(Exception e){
+				this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
+	
+			}
+			return null;
+		}
+	
+	
+		public int ende(){
+			int counter = 0;
+			for(int i = 0; i < player.length; i++){
+				if(player[i].getIsAlive()){
+					counter++;
+				}
+			}
+			return counter;
+		}
+	
+		private class ShipListener implements ActionListener{
+	
+			public void actionPerformed(ActionEvent e) {
+				JToggleButton ship = (JToggleButton)e.getSource();
+	
+				if(ship.getActionCommand().equals("destroyer") ){
+					schiff = 1;
+				}
+				else if(ship.getActionCommand().equals("frigate") ){
+					schiff = 2;
+				}
+				else if(ship.getActionCommand().equals("corvette") ){
+					schiff = 3;
+				}
+				else if(ship.getActionCommand().equals("submarine") ){
+					schiff = 4;
+				}
+			}
+		}
+	
+		private void setShipsOrientation(int x, int y ){
+			JButton[][] field = roundView.getClickField();
+			int length = 0;
+			int count = 0;
+			gegner = roundView.getEnemyIndex();
+	
+	
+			for(int i = 0; i < field.length; i++){
+				for(int j = 0; j < field.length; j++){
+					field[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));	
+				}	
+			}
+	
+			if(gegner != playerOnTurn){
+	
+				if(schiff != 0){
+	
+					if(schiff == 1){
+						length = player[0].getDestroyer()[0].getShootArea();
+					}
+					else if(schiff == 2){
+						length = player[0].getFrigate()[0].getShootArea();
+					}
+					else if(schiff == 3){
+						length = player[0].getCorvette()[0].getShootArea();
+					}
+					else if(schiff == 4){
+						length = player[0].getSubmarine()[0].getShootArea();
+					}
+	
+					if(orientation == 'h'){
+						for(int i = (x-1); i < (x-1)+length; i++){
+							field[i][y-1].setBorder(BorderFactory.createLineBorder(Color.green));
+						}
+					}
+					else{
+						for(int i = (y-1); i < (y-1)+length; i++){
+							field[x-1][i].setBorder(BorderFactory.createLineBorder(Color.green));
+						}
+	
+					}
+				}
 				else{
-					iKoordinaten[i] = toInt;
+					field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
 				}
 			}
-
-			return iKoordinaten;
-		}
-		catch(Exception e){
-			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
-
-		}
-		return null;
-	}
-
-
-	public int ende(){
-		int counter = 0;
-		for(int i = 0; i < player.length; i++){
-			if(player[i].getIsAlive()){
-				counter++;
+			else{
+				field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));
 			}
 		}
-		return counter;
-	}
+	
+		private class PositionListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				if(gegner != playerOnTurn){
+					JButton btn = (JButton)e.getSource();
+	
+					String pos = btn.getActionCommand();
+					int koords[] = new int[2];
+					koords = checkPos(pos);
+					Ship ship = null;
+	
+					if(schiff == 1){
+						ship = player[playerOnTurn].getAvailableDestroyer();
+					}
+					else if(schiff == 2){
+						ship = player[playerOnTurn].getAvailableFrigate();
+					}
+					else if(schiff == 3){
+						ship = player[playerOnTurn].getAvailableCorvette();
+					}
+					else if(schiff == 4){
+						ship = player[playerOnTurn].getAvailableSubmarine();
+					}
+					else{
+						roundView.setMessage("Schiff muss ausgewählt werden!");
+					}
+	
+					if(ship != null){
+						player[gegner].getPrivateField().setAttack(ship, koords,orientation, player[gegner-1]);
+						player[playerOnTurn].setShipIsntReady(ship);
+	
+	
+						//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
+						if(player[gegner].getIsAlive() == false){
+							roundView.setMessage("GEGNER WURDE BESIEGT!!!");
+							roundView.setPlayerDead(gegner);
+						}
+						//			
+						//			if(ende() == 1){
+						//				this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
+						//				System.exit(-1);
+						//			}
+	
+						player[playerOnTurn].setActive(false);
+						
+						if(playerOnTurn == player.length-1){
+							player[0].setActive(true);
+							roundView.setActive(0);
+						}else{
+							player[playerOnTurn+1].setActive(true);
+							roundView.setActive(playerOnTurn+1);
+						}
 
-	private class ShipListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			JToggleButton ship = (JToggleButton)e.getSource();
-
-			if(ship.getActionCommand().equals("destroyer") ){
-				schiff = 1;
-			}
-			else if(ship.getActionCommand().equals("frigate") ){
-				schiff = 2;
-			}
-			else if(ship.getActionCommand().equals("corvette") ){
-				schiff = 3;
-			}
-			else if(ship.getActionCommand().equals("submarine") ){
-				schiff = 4;
-			}
-		}
-	}
-
-	private class PositionListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			JButton btn = (JButton)e.getSource();
-			String pos = btn.getActionCommand();
-			
-			int koords[] = new int[2];
-			koords = checkPos(pos);
-
-			
-			
-		}
-
-
-	}
-	private class ChangePlayerListener implements MouseListener{
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			JLabel selectedLabel = (JLabel)e.getSource();
-			JLabel[] switchableLabels = roundView.getSwitchLabel();
-
-			for(int i = 0; i < switchableLabels.length; i++){
-				if(selectedLabel == switchableLabels[i]){
-					roundView.changePlayer(i);
-
+						playerOnTurn++;	
+					}
 				}
 			}
 		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub	
+	
+		private class OrientationListener implements MouseMotionListener{
+	
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+	
+			}
+	
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				try{
+					int mouse2 = e.getY();
+					//int mouseX = e.getX();
+					JButton btn = (JButton)e.getSource();
+					String ac = btn.getActionCommand();
+					ac = ac.trim();
+					String[] pos = ac.split(",");
+					String xString = pos[0];
+					String yString = pos[1];
+					int btnX = Integer.parseInt(""+xString);
+					//System.out.println(btnX);
+					int btnY = Integer.parseInt(yString);
+	
+					mouse2 += ( btnY - 1) * roundView.getShownPanCellSize();
+	
+					if(btnY == oldBtnY){
+						if( (mouseY - 5) >= mouse2){
+							orientation = 'h';
+						}
+						else if( (mouseY + 5) <=  mouse2){
+							orientation = 'v';	
+						}
+					}
+					oldBtnY = btnY;
+					mouseY = mouse2;
+					setShipsOrientation(btnX, btnY);
+				}
+	
+				catch(Exception f){
+					System.out.println(f.getMessage());
+				}
+			}
 		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+	
+		private class ChangePlayerListener implements MouseListener{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JLabel selectedLabel = (JLabel)e.getSource();
+				JLabel[] switchableLabels = roundView.getSwitchLabel();
+	
+				for(int i = 0; i < switchableLabels.length; i++){
+					if(selectedLabel == switchableLabels[i]){
+						roundView.changePlayer(i, false);
+					}
+				}
+				
+				gegner = roundView.getChoosenPlayer();
+				System.out.println("Gegner ist Spieler: " + gegner);
+			}
+	
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub	
+			}
+	
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+	
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+	
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+	
+			}
 		}
 	}
-}
-
-
+	
+	

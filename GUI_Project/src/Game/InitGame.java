@@ -108,7 +108,7 @@ public class InitGame implements Serializable{
 		BattleField battlefield = new BattleField(this.fieldSize);
 
 		if(i == 0){
-			
+
 			player[i] = new Player(true, this.gameOptions.getTotalShips(), this.gameOptions.getDestroyer(), 
 					this.gameOptions.getFrigate(), this.gameOptions.getCorvette(),this.gameOptions.getSubmarine(),this.gameOptions.getPlayerNames()[i], battlefield, false);
 			addListener(i);
@@ -161,7 +161,6 @@ public class InitGame implements Serializable{
 	private void addListener(int i){
 		this.initGameView.getBattleFieldView(i).setBattleFieldMouseListener(new BattleFieldMouseListener());
 		this.initGameView.getBattleFieldView(i).setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
-
 		this.initGameView.setShipsSelectionListener(new ShipsListener());
 	}
 
@@ -169,14 +168,13 @@ public class InitGame implements Serializable{
 
 		int[] koordinaten = checkPos(pos);
 
-		if(orientation == 'h'){
-			player.saveShipCoordinatesH(koordinaten[0], koordinaten[1], ship);
-		}
-		else{
-			player.saveShipCoordinatesV(koordinaten[0], koordinaten[1], ship);
-		}
-
 		if(player.getPrivateField().setShips(ship, koordinaten[0], koordinaten[1], orientation) == true){
+			if(orientation == 'h'){
+				player.saveShipCoordinatesH(koordinaten[0], koordinaten[1], ship);
+			}
+			else{
+				player.saveShipCoordinatesV(koordinaten[0], koordinaten[1], ship);
+			}
 			player.printShipOnField(ship,  initGameView.getBattleFieldView(playerId));
 			return true;
 		}

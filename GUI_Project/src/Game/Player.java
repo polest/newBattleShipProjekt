@@ -46,6 +46,7 @@ public class Player implements Serializable{
 	private ImageIcon[] corvetteIconV;
 	private ImageIcon[] submarineIconV;
 	private BattleField_View battleFieldView;
+	private BattleField_View publicBattleFieldView;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -179,10 +180,17 @@ public class Player implements Serializable{
 	public void setBattleFieldView(BattleField_View battlefield){
 		this.battleFieldView = battlefield;
 	}
-
+	
+	public void setPublicBattleFieldView(BattleField_View battlefield){
+		this.publicBattleFieldView = battlefield;
+	}
 
 	public BattleField_View getBattleFieldView(){
 		return battleFieldView;
+	}
+	
+	public BattleField_View getPublicBattleFieldView(){
+		return publicBattleFieldView;
 	}
 
 	/**
@@ -283,7 +291,6 @@ public class Player implements Serializable{
 			}
 		}
 	}
-
 
 	private void initShipIconH(int cellSize){
 		setDestroyerIconsH(cellSize);

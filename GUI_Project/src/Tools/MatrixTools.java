@@ -27,9 +27,9 @@ public class MatrixTools implements Serializable{
 	private static final long serialVersionUID = -6993189195389536759L;
 	private final char black ='\u25A0';
 	private final char wave ='\u223C';
-	
+
 	public MatrixTools(){
-	//private ColoredPrint colorPrint =  new ColoredPrint();
+		//private ColoredPrint colorPrint =  new ColoredPrint();
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class MatrixTools implements Serializable{
 	 */
 	public void printPrivateField(int[][] privateField, JButton[][] matrix, String name){
 
-		int[][] printMatrix = new int[matrix.length][matrix.length];
+		int[][] printMatrix = new int[privateField.length][privateField.length];
 
 		IO.println("Spielfeld von \"" + name + "\"");
 
@@ -138,8 +138,8 @@ public class MatrixTools implements Serializable{
 				else if(i == 0){
 					matrix[i][j] = -1;
 				}
-				//Ansonsten wird Matrix mit Tilde Symbol gefüllt
-				matrix[i][j] = 0;
+					//Ansonsten wird Matrix mit Tilde Symbol gefüllt
+					matrix[i][j] = 0;
 			}
 		}
 		return matrix;
@@ -154,7 +154,6 @@ public class MatrixTools implements Serializable{
 	 * @return Gibt das mit dem ausgewähltem Schiff positionierte Spielfeld zurück 
 	 */
 	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, Ship ship ){	
-
 		int shipSymbol = 0;
 		int length = ship.getShipSize();
 
@@ -204,6 +203,8 @@ public class MatrixTools implements Serializable{
 	 * basierend auf den Spielregeln positioniert werden kann oder nicht
 	 */
 	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, Ship ship){
+		xVal++;
+		yVal++;
 		int length = ship.getShipSize();
 
 		int yIndex = yVal;

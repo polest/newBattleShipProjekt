@@ -1,21 +1,19 @@
 package Game;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Tools.ImagePanel;
+import Ships.Ship;
+
 
 public class BattleField_View {
 
@@ -52,7 +50,14 @@ public class BattleField_View {
 			}
 		}
 	}
+	
 
+	public void shootOnField(Ship ship, int[] coords, char orientation){
+		int length = ship.getShipSize();
+		int x = coords[0];
+		int y = coords[1];
+	}
+	
 	public JPanel getView(){
 		return battleFieldViewPanel;
 	}
@@ -102,12 +107,10 @@ public class BattleField_View {
 			//horizontal
 			for(int j = 0; j < this.fieldSize; j++){
 				this.field[i][j].setBounds(cellSize*i, cellSize*j, cellSize, cellSize);
-				Icon icon = this.field[i][j].getIcon();
-				Image img = ((ImageIcon) icon).getImage() ;  
-				 Image newimg = img.getScaledInstance( cellSize, cellSize,  java.awt.Image.SCALE_SMOOTH ) ;  
-				 icon = new ImageIcon( newimg );
-				 this.field[i][j].setIcon(icon);
-				
+				String desc = ((ImageIcon)this.field[i][j].getIcon()).getDescription();
+				ImageIcon newIcon = new ImageIcon(""+desc, ""+desc);
+				newIcon.setImage(newIcon.getImage().getScaledInstance(cellSize,cellSize, Image.SCALE_DEFAULT));
+				this.field[i][j].setIcon(newIcon);	
 			}
 		}
 		

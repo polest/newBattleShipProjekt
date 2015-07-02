@@ -120,6 +120,7 @@ public class Main_Controler {
 			
 			
 			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView( (playerId-1) ) );
+			player[playerId-1].setPublicBattleFieldView(initGameView.getPublicBattleFieldView( (playerId-1) ) );
 			player[playerId-1].getBattleFieldView().clearBorder();
 //			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
 			

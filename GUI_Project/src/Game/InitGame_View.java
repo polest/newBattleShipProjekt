@@ -21,6 +21,7 @@ public class InitGame_View {
 	private JPanel cards;
 	private int fieldSize;
 	private BattleField_View[] battleFieldView;
+	private BattleField_View[] publicBattleFieldView;
 	private int destroyer;
 	private int frigate;
 	private int corvette;
@@ -42,6 +43,7 @@ public class InitGame_View {
 		this.cards.setVisible(true);
 		this.cards.setOpaque(false);
 		this.battleFieldView =  new BattleField_View[playerLength];
+		this.publicBattleFieldView =  new BattleField_View[playerLength];
 
 		initPan();
 		this.initGamePan.add(this.cards);
@@ -120,6 +122,10 @@ public class InitGame_View {
 		return this.battleFieldView[i];
 	}
 
+	public BattleField_View getPublicBattleFieldView(int i){
+		return this.publicBattleFieldView[i];
+	}
+	
 	public void setFieldSize(int fieldSize){
 		this.fieldSize = fieldSize;
 	}
@@ -234,6 +240,10 @@ public class InitGame_View {
 		for(int i = 0; i < length; i++){
 			this.battleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
 			addPanel(this.battleFieldView[i].getView(), ("field"+i) );
+		}
+		
+		for(int i = 0; i < length; i++){
+			this.publicBattleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
 		}
 	}
 
