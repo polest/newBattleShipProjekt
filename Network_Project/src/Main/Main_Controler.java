@@ -3,18 +3,18 @@ package Main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Game.InitGame;
+import Game.InitGame_View;
 import Game.Options;
 import Game.Options_View;
-import Game.InitGame_View;
 import Game.Player;
 import Game.Round;
-import SaveGame.Save;
 import Game.Round_View;
+import SaveGame.Save;
 
 public class Main_Controler {
 
@@ -68,6 +68,14 @@ public class Main_Controler {
 
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			try {
+				Process myProcess = Runtime.getRuntime().exec("sh "+ "serverAusführen" + ".sh");
+			} catch (IOException f) {
+					f.printStackTrace();
+		}
+			
+
+				/*
 			JFileChooser jfc = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Speicherstand", "save");
 			File f = new File(System.getProperty("user.dir", "save"));
@@ -80,6 +88,7 @@ public class Main_Controler {
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}
+				 */
 		}
 	}
 
@@ -106,7 +115,12 @@ public class Main_Controler {
 			main_view.changeShownPan("placeShipsPan");
 			initGameView.setNextSelectionListener(new NextPlayerListener());
 			main_view.getSave().setEnabled(true);
-
+			try {
+				Process myProcess = Runtime.getRuntime().exec("sh serverAusführen.sh");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -117,14 +131,14 @@ public class Main_Controler {
 			initGame.incrementPlayerId();
 			int playerId = initGame.getPlayerId();
 			Player[] player = initGame.getPlayer();
-			
-			
+
+
 			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView( (playerId-1) ) );
 			player[playerId-1].setPublicBattleFieldView(initGameView.getPublicBattleFieldView( (playerId-1) ) );
 			player[playerId-1].getBattleFieldView().clearBorder();
-//			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
-			
-			
+			//			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
+
+
 			if(playerId < player.length){
 				//initGameView.clearField();
 				initGame.initPlayerBattleShip();

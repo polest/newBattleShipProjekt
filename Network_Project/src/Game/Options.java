@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.JCheckBox;
@@ -189,6 +190,7 @@ public class Options implements Serializable{
 		public void actionPerformed(ActionEvent e) {
 			setPlayer(e.getActionCommand());
 			optionsView.checkOkButton();
+			
 		}
 	}
 
