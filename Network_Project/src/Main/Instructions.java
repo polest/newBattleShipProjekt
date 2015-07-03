@@ -35,11 +35,11 @@ public class Instructions {
 	private void initFrame(){
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth() - 400;
-		double height = screenSize.getHeight();
+		double height = screenSize.getHeight()-100;
 		int h = (int)height;
 		this.frame = new JFrame("Instructions");
 		this.frame.setLocation((int) width, 0);
-		this.frame.setSize(496,h);
+		this.frame.setSize(496,720);
 		this.frame.setResizable(true);
 		this.frame.setLayout(null);
 		this.frame.setVisible(true);
@@ -47,7 +47,7 @@ public class Instructions {
 
 	private void initPanel(){
 		this.panel = new ImagePanel("Resources/Panel.png");
-		this.panel.setSize(496,h);
+		this.panel.setSize(496,991);
 		this.panel.setLayout(null);
 		this.panel.setVisible(true);
 		this.panel.repaint();
@@ -56,7 +56,7 @@ public class Instructions {
 	
 	private void initScrollBar(){
 		this.scrollBar = new JScrollPane(this.panel);
-		this.scrollBar.setBounds(0, 0, 496,991);
+		this.scrollBar.setBounds(0, 0, 496,700);
 		
 		this.frame.add(this.scrollBar, BorderLayout.EAST);
 	}
