@@ -30,6 +30,7 @@ public class BattleField_View {
 	private ImageIcon empty;
 	private JLabel background;
 
+	
 	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
 		this.panel = panel;
 		this.width = width;
