@@ -47,6 +47,17 @@ public class BattleShipServer {
 	 * @param port Portnummer, auf der auf Verbindungen gewartet werden soll
 	 * (wenn 0, wird Default-Port verwendet)
 	 */
+	
+	public BattleShipServer(){
+		
+	}
+	
+	
+	public void setClientZahl(int clientZahl) {
+		this.clientZahl = clientZahl;
+	}
+
+
 	public BattleShipServer(int port, int clientZahl) {
 
 		if (port == 0)

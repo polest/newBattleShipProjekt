@@ -89,6 +89,9 @@ public class ClientRequestProcessor {
 					suchen();
 				} else if(input.equals("ueberprüfen")){
 					ueberprüfen();
+				} else if(input.equals("Spielerzahl")){
+					BattleShipServer s = new BattleShipServer();
+					s.setClientZahl(5);
 				}
 			} while (!(input.equals("quit")));
 			
@@ -110,9 +113,9 @@ public class ClientRequestProcessor {
 				System.out.println("--->Fehler beim Lesen vom Client (Name): ");
 				System.out.println(e.getMessage());
 			}
-
-			// Suche nach Adresse-Objekt in Hashtable
-			/*if (adressen.containsKey(name)) {
+			/*
+			 Suche nach Adresse-Objekt in Hashtable
+			if (adressen.containsKey(name)) {
 				Adresse adresse = adressen.get(name);
 				// Stra�e senden
 				out.println(adresse.getStrasse());
