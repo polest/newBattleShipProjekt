@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Hashtable;
 
-public class ClientRequestProcessor {
+public class ClientRequestProcessor implements Runnable{
 
 	// Referenz auf das serverseitige Adressbuch
 	//private Hashtable<String, Adresse> adressen;

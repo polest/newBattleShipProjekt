@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client{
 	// Datenstrukturen f�r die Kommunikation
 		private Socket socket = null;
 		private BufferedReader in; // server-input stream

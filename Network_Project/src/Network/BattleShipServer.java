@@ -14,6 +14,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import Game.InitGame;
 
 
@@ -45,9 +48,8 @@ public class BattleShipServer {
 
 	protected ServerSocket serverSocket;
 	private ClientRequestProcessor[] crp;
-	// Datenstruktur f�r das Adressbuch
-	//private Hashtable<String, Adresse> adressen;
-	//private Hashtable<String, Spielfeld> spielfeld;
+	private JFrame connection = new JFrame();
+	private JLabel wait = new JLabel("Warte auf Spieler...");
 
 
 	/**
@@ -64,6 +66,12 @@ public class BattleShipServer {
 
 
 	public BattleShipServer(int port, int clientZahl, int destroyer, int frigate, int corvette, int submarine, int fieldSize) {
+
+		connection.setVisible(true);
+		connection.setSize(200, 200);
+		
+		wait.setBounds(0,0, 100, 30);
+		connection.add(wait);
 
 		if (port == 0)
 			port = DEFAULT_PORT;
@@ -94,20 +102,6 @@ public class BattleShipServer {
 			System.err.println("Eine Ausnahme trat beim Anlegen des Server-Sockets auf: " + e);
 			System.exit(1);
 		}
-
-		// Interne Adress(test)daten erzeugen
-		/*
-		adressen = new Hashtable<String, Adresse>();
-		adressen.put("Meier", new Adresse("Flughafenallee 10", 28199, "Bremen"));
-		adressen.put("Schmidt", new Adresse("Hauptstra�e 28", 28357, "Bremen"));
-		adressen.put("Hinz", new Adresse("Elbchaussee 101", 20123, "Hamburg"));
-		adressen.put("Kunz", new Adresse("Weinsteige 12", 70711, "Stuttgart"));
-
-		spielfeld = new Hashtable<String, Spielfeld>();
-
-		int[][] array = {{7,1},{4,2}};
-		spielfeld.put("Spieler1", new Spielfeld(2,1,1,1,1,7,array));
-		 */
 	}
 
 	/**
@@ -126,9 +120,11 @@ public class BattleShipServer {
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
 				crp[i] = new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
-//				Thread t = new Thread((Runnable) crp[i]);
-//				t.start();
+				ClientRequestProcessor c = crp[i];
+				Thread s = new Thread(c);
+				s.start();
 				i++;
+				wait.setText("Spieler " + i + " ist beigetreten...");
 				System.out.println(i);
 			}
 		} catch (IOException e) {
