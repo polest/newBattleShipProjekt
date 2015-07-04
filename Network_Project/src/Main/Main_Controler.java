@@ -10,7 +10,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import Game.InitGame;
 import Game.InitGame_View;
 import Game.Options;
@@ -19,7 +18,6 @@ import Game.Player;
 import Game.Round;
 import Game.Round_View;
 import Network.BattleShipServer;
-import Network.Client;
 import SaveGame.Load;
 import SaveGame.Save;
 
@@ -130,14 +128,15 @@ public class Main_Controler implements Serializable{
 			int submarine = gameOptions.getSubmarine();
 			int size = gameOptions.getBattlefieldSize();
 			
+			JFrame connection = new JFrame();
+			connection.setVisible(true);
+			connection.setSize(200, 200);
+			connection.add(new JLabel("Warte auf Spieler..."));
+
 			BattleShipServer server = new BattleShipServer(4477, player, destroyer, frigate, corvette, submarine, size);
-			Thread t = new Thread((Runnable) server);
-			t.start();
 			server.acceptClientConnectRequests();
 			
-			Client client1 = new Client("localhost", 4477);
-			
-			initGameView =  new InitGame_View(gameOptions.getPlayer());
+			//initGameView =  new InitGame_View(width, height, gameOptions.getPlayer());
 			initGame = new InitGame(gameOptionsView, gameOptions, initGameView);
 			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 			main_view.changeShownPan("placeShipsPan");

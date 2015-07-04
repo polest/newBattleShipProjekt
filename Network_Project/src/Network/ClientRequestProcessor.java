@@ -121,6 +121,7 @@ public class ClientRequestProcessor implements Runnable{
 		try {
 			clientSocket.close();
 		} catch (IOException e2) {
+			
 		}
 	}
 

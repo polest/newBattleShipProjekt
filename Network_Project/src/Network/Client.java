@@ -7,11 +7,25 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client{
+import Game.InitGame;
+import Game.InitGame_View;
+
+public class Client {
 	// Datenstrukturen f�r die Kommunikation
 		private Socket socket = null;
 		private BufferedReader in; // server-input stream
 		private PrintStream out; // server-output stream
+		
+		private int player;
+		private int destroyer;
+		private int frigate;
+		private int corvette;
+		private int submarine;
+		private int fieldSize;
+		private InitGame_View initGameView;
+		private InitGame initGame;
+		
+		
 
 		/**
 		 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
@@ -51,68 +65,43 @@ public class Client{
 				System.out.println(message);
 			} catch (IOException e) { /* Fehlerbehandlung */ }
 		}
-
-		private void suchen(String name) {
-			out.println("suchen");
-			out.println(name);
-			
-			try {
-				String strasse = in.readLine();
-				if (! strasse.equals("Fehler")) {
-					int plz = Integer.parseInt(in.readLine());
-					String ort = in.readLine();
-					
-					System.out.println("Die Adresse von " + name + " lautet: ");
-				}
-				else {
-					System.out.println("Kein Eintrag unter diesem Namen.");
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-
-		}
 		
-		private void ueberpruefen(String name, String zahl){
-			out.println("ueberprüfen");
-			out.println(name);
-			out.println(zahl);
-			
-			try {
-				String strasse = in.readLine();
-				if (! strasse.equals("Nein")) {
-					
-					System.out.println("Ihre Zahl ist enthalten!");
-				}
-				else {
-					System.out.println("Ihre Zahl ist leider nicht enthalten.");
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-		}
 		
-		private void sendenAn(String name, String zahl){
-			out.println("sendenAn");
-			out.println("ueberprüfen");
-			out.println("2");
-			
+		private void verarbeiteServerAufgabe(){
+			String message = "";
 			try {
-				String strasse = in.readLine();
-				if (! strasse.equals("Nein")) {
-					
-					System.out.println("Ihre Zahl ist enthalten!");
-				}
-				else {
-					System.out.println("Ihre Zahl ist leider nicht enthalten.");
-				}
+				message = in.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(message.equals("setShips")){
+				try {
+					this.player = Integer.parseInt(in.readLine());
+					this.destroyer = Integer.parseInt(in.readLine());
+					this.frigate = Integer.parseInt(in.readLine());
+					this.corvette = Integer.parseInt(in.readLine());
+					this.submarine = Integer.parseInt(in.readLine());
+					this.fieldSize = Integer.parseInt(in.readLine());
+					
+					initGameView = new InitGame_View(this.player, this.destroyer, this.frigate, this.corvette, this.submarine, this.fieldSize);					
+					
+					
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
+
+		
+		
+		
+		
+		
 		
 		
 		private void quit() {
@@ -145,20 +134,13 @@ public class Client{
 			// Client starten und mit Server verbinden:
 			Client client = new Client(host, port);
 			// Ein paar Aufrufe von Diensten zum Testen:
+			
+			client.verarbeiteServerAufgabe();
+			
+			
 			Scanner scan = new Scanner(System.in);
-			/*
-			String name = "";
-			while(!(name.equals("exit"))){
-				name = scan.nextLine();
-				client.suchen(name);
-			}
-			*/
-			System.out.println("Geben sie eine Zahl ein");
-			String s = scan.nextLine();
-			while(!(s.equals("exit"))){
-				client.ueberpruefen("Spieler1", s);
-				s = scan.nextLine();
-			}
+			
+			
 			client.quit();
 		}
 }

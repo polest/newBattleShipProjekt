@@ -17,6 +17,7 @@ public class InitGame_View {
 	private ImagePanel initGamePan;
 	private int width;
 	private int height;
+	private int player;
 	private JLabel playerName;
 	private JPanel cards;
 	private int fieldSize;
@@ -33,10 +34,16 @@ public class InitGame_View {
 	private int cellSize;
 	private JButton nextPlayer;
 
-	public InitGame_View(int playerLength){
+	public InitGame_View(int playerLength, int destroyer, int frigate, int corvette, int submarine, int fieldsize){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = 600;
 		this.height = 800;
+		this.player = playerLength;
+		this.destroyer = destroyer;
+		this.frigate = frigate;
+		this.corvette = corvette;
+		this.submarine = submarine;
+		this.fieldSize = fieldsize;
 
 		this.cards = new JPanel(new CardLayout());
 		this.cards.setBounds(30,30, 510, 510);

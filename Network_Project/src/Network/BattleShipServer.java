@@ -8,11 +8,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Hashtable;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,7 +28,7 @@ import Game.InitGame;
  * 
  * @author teschke
  */				
-public class BattleShipServer {
+public class BattleShipServer implements Runnable{
 	//	public final static int DEFAULT_PORT = 6789;
 	public final static int DEFAULT_PORT = 4477;
 	public final static int DEFAULT_CLIENTS = 2;
@@ -157,6 +152,13 @@ public class BattleShipServer {
 		BattleShipServer server = new BattleShipServer(port, clientZahl, 1, 0, 0, 1, 5);
 		//		 Ab jetzt auf eingehende Verbindungsw�nsche von Clients warten
 		server.acceptClientConnectRequests();
+	}
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
