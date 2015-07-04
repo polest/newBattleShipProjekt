@@ -7,16 +7,12 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-import Game.InitGame;
-import Game.InitGame_View;
-import Game.Options;
-
 public class Client {
 	// Datenstrukturen f�r die Kommunikation
 		private Socket socket = null;
 		private BufferedReader in; // server-input stream
 		private PrintStream out; // server-output stream
-		
+
 		/**
 		 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 		 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
@@ -33,7 +29,6 @@ public class Client {
 				// Stream-Objekt fuer Text-I/O ueber Socket erzeugen
 				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				out = new PrintStream(socket.getOutputStream());
-			
 			} catch (IOException e) {
 				System.err.println("Fehler beim Socket-Stream �ffnen: " + e);
 				// Wenn im "try"-Block Fehler auftreten, dann Socket schlie�en:
@@ -52,36 +47,11 @@ public class Client {
 
 			// Begr��ungsmeldung vom Server lesen
 			try {
-				int index = Integer.parseInt(in.readLine() );
-			
 				String message = in.readLine();
-				if(message.equals("setShips")){
-					String destroyer = in.readLine();
-					String frigate = in.readLine();
-					String corvette = in.readLine();
-					String submarine = in.readLine();
-					String size = in.readLine();
-					setShipsToField(destroyer, frigate, corvette, submarine, size);
-				}
-				
-				
 				System.out.println(message);
-				String message2 = in.readLine();
-				System.out.println(message2);
 			} catch (IOException e) { /* Fehlerbehandlung */ }
 		}
 
-		private void setShipsToField(String dest, String fri, String cor, String sub, String fieldSize){
-			int destroyer = Integer.parseInt(dest);
-			int frigate = Integer.parseInt(fri);
-			int corvette = Integer.parseInt(cor);
-			int submarine = Integer.parseInt(sub);
-			int size = Integer.parseInt(fieldSize);
-			
-			
-		}
-		
-		
 		private void suchen(String name) {
 			out.println("suchen");
 			out.println(name);
@@ -173,21 +143,21 @@ public class Client {
 			}
 			// Client starten und mit Server verbinden:
 			Client client = new Client(host, port);
-//			// Ein paar Aufrufe von Diensten zum Testen:
-//			Scanner scan = new Scanner(System.in);
-//			/*
-//			String name = "";
-//			while(!(name.equals("exit"))){
-//				name = scan.nextLine();
-//				client.suchen(name);
-//			}
-//			*/
-//			System.out.println("Geben sie eine Zahl ein");
-//			String s = scan.nextLine();
-//			while(!(s.equals("exit"))){
-//				client.ueberpruefen("Spieler1", s);
-//				s = scan.nextLine();
-//			}
-//			client.quit();
+			// Ein paar Aufrufe von Diensten zum Testen:
+			Scanner scan = new Scanner(System.in);
+			/*
+			String name = "";
+			while(!(name.equals("exit"))){
+				name = scan.nextLine();
+				client.suchen(name);
+			}
+			*/
+			System.out.println("Geben sie eine Zahl ein");
+			String s = scan.nextLine();
+			while(!(s.equals("exit"))){
+				client.ueberpruefen("Spieler1", s);
+				s = scan.nextLine();
+			}
+			client.quit();
 		}
 }

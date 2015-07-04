@@ -7,13 +7,9 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.JFileChooser;
-<<<<<<< HEAD
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-=======
 import javax.swing.filechooser.FileNameExtensionFilter;
->>>>>>> origin/master
-
 import Game.InitGame;
 import Game.InitGame_View;
 import Game.Options;
@@ -21,11 +17,8 @@ import Game.Options_View;
 import Game.Player;
 import Game.Round;
 import Game.Round_View;
-<<<<<<< HEAD
 import Network.BattleShipServer;
-=======
 import SaveGame.Load;
->>>>>>> origin/master
 import SaveGame.Save;
 
 public class Main_Controler implements Serializable{
@@ -85,18 +78,12 @@ public class Main_Controler implements Serializable{
 	
 	private class ExitGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-
-
-			/*
-=======
 			System.exit(-1);
 		}
 	}
 
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
->>>>>>> origin/master
 			JFileChooser jfc = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Speicherstand", "save");
 			File f = new File(System.getProperty("user.dir", "save"));
@@ -111,14 +98,9 @@ public class Main_Controler implements Serializable{
 				Round_View roundView = round.getRoundView();
 				main_view.addPanel(roundView.getPanel(), "roundView"); 
 				main_view.changeShownPan("roundView");
-				
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}
-<<<<<<< HEAD
-			 */
-=======
->>>>>>> origin/master
 		}
 	}
 

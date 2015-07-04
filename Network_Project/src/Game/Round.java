@@ -1,44 +1,41 @@
-<<<<<<< HEAD
+
 package Game;
 
+
 import java.awt.Color;
-=======
-	package Game;
-	
-	import java.awt.Color;
->>>>>>> origin/master
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-<<<<<<< HEAD
 
 import javax.swing.BorderFactory;
-=======
+
 import java.io.Serializable;
 
-	import javax.swing.BorderFactory;
->>>>>>> origin/master
+import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
-
-<<<<<<< HEAD
 import SaveGame.Save;
 import Ships.Ship;
 import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
 
-public class Round{
 
+public class Round implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6295162987841937031L;
 	/**
 	 * * @author ML, JL
 	 * @version 25.03.15
 	 */
 	private Player[] player;
 	private ColoredPrint colorPrint;
-	private Save save;
 	private int fieldSize;
 	private Round_View roundView;
 	private int gegner;
@@ -48,17 +45,17 @@ public class Round{
 	private int mouseY;
 	private int oldBtnY;
 	private int alivePlayer;
+
 	public Round(Player[] player, int fieldSize){
 		this.player = player;
 		this.playerOnTurn = 0;
+		this.alivePlayer = player.length;
 		this.gegner = 0;
 		this.schiff = 0;
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
-		this.save = new Save();
 		this.orientation = 'h';
 		this.roundView = new Round_View(this.fieldSize, player);
-		this.alivePlayer = player.length;
 		//this.play();
 		addListener();
 		setShipText();
@@ -110,118 +107,21 @@ public class Round{
 
 
 							//TODO in den Event einbauen
-							//							
+							//						
 						}else{
-							colorPrint.println(EPrintColor.BLUE, "Spieler " + player[i].getPlayerName() + " hat keine geladenen Schiffe zur verfügung! "
-									+ "Sie müssen diese Runde leider aussetzen.");
-							System.out.println("");
-
-							player[i].setActive(false);
-							if(i == player.length-1){
-								player[0].setActive(true);
-=======
-	import SaveGame.Save;
-import Ships.Ship;
-import Tools.ColoredPrint;
-import Tools.ColoredPrint.EPrintColor;
-	
-	public class Round implements Serializable{
-	
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 6295162987841937031L;
-		/**
-		 * * @author ML, JL
-		 * @version 25.03.15
-		 */
-		private Player[] player;
-		private ColoredPrint colorPrint;
-		private int fieldSize;
-		private Round_View roundView;
-		private int gegner;
-		private int schiff;
-		private int playerOnTurn;
-		private char orientation;
-		private int mouseY;
-		private int oldBtnY;
-	
-		public Round(Player[] player, int fieldSize){
-			this.player = player;
-			this.playerOnTurn = 0;
-			this.gegner = 0;
-			this.schiff = 0;
-			this.colorPrint = new ColoredPrint();
-			this.fieldSize = fieldSize;
-			this.orientation = 'h';
-			this.roundView = new Round_View(this.fieldSize, player);
-			//this.play();
-			addListener();
-			setShipText();
-		}
-	
-		public Round(){
-		}
-	
-		public Round_View getRoundView(){
-			return this.roundView;
-		}
-	
-		public Player[] getPlayer() {
-			return player;
-		}
-	
-		public void setPlayer(Player[] player) {
-			this.player = player;
-		}
-	
-		private void addListener(){
-			this.roundView.setChangePlayerViewListener(new ChangePlayerListener());
-			this.roundView.setShipsListener(new ShipListener());
-			this.roundView.setPositionListener(new PositionListener());
-			this.roundView.setOrientationListener(new OrientationListener());
-		}
-	
-		private void setShipText(){
-			roundView.setDestroyer(player[0].getDestroyer().length);
-			roundView.setFrigate(player[0].getFrigate().length);
-			roundView.setCorvette(player[0].getCorvette().length);
-			roundView.setSubmarine(player[0].getSubmarine().length);
-		}
-	
-		public void play(){
-			char orientation = 'h';
-			String eingabe;
-			int gegner = 0;
-			int schiff = 0;
-			int counter = 1;
-	
-			while(ende() > 1){
-				for(int i = 0; i < player.length; i++){
-					if(player[i].getIsActive()){
-	
-						if(player[i].getIsAlive()){
-	
-							if(player[i].checkIfAnyShipIsReady()){
-	
-	
-								//TODO in den Event einbauen
-								//							
->>>>>>> origin/master
-							}else{
-								player[i+1].setActive(true);
-							}
+							player[i+1].setActive(true);
 						}
 					}
 				}
 			}
-			//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-			for(int j = 0; j < player.length; j++){
-				player[j].reloadTimeCountdown();
-			}
-
 		}
+		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
+		for(int j = 0; j < player.length; j++){
+			player[j].reloadTimeCountdown();
+		}
+
 	}
+
 
 
 
@@ -396,7 +296,7 @@ import Tools.ColoredPrint.EPrintColor;
 					System.out.println("playerOnTurn: " + playerOnTurn);
 					playerOnTurn++;	
 					index = playerOnTurn % player.length;
-					
+
 					while(player[index].getIsAlive() == false){
 						if(player[index].checkIfAnyShipIsReady() == false){
 							roundView.setMessage("Spieler " + player[index].getPlayerName() + "hat keine geladenen Schiffe!");
@@ -497,4 +397,3 @@ import Tools.ColoredPrint.EPrintColor;
 	}
 
 }
-
