@@ -1,5 +1,13 @@
 package Tools;
-public class ColoredPrint {
+
+import java.io.Serializable;
+
+public class ColoredPrint implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8766246344042568115L;
 
 	public enum EPrintColor{
 		BLACK,

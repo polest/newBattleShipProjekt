@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.LayoutManager;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -13,8 +14,11 @@ import javax.swing.JPanel;
  * @author ML
  * @version 25.12.14
  */
-public class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel{
 
+	/**
+	 * 
+	 */
 	private Image img;
 
 	public ImagePanel(String img) {

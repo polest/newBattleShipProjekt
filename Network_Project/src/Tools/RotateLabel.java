@@ -2,14 +2,15 @@ package Tools;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class RotateLabel extends JLabel {
+public class RotateLabel extends JLabel implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6993189195389536759L;
 
 	private int angle = 0;
 

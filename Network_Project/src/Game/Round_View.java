@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,9 +14,13 @@ import javax.swing.JToggleButton;
 
 import Tools.ImagePanel;
 
-public class Round_View {
+public class Round_View implements Serializable{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2275181958920926173L;
 	private ImagePanel roundPan;
 	private int fieldSize;
 	//private JPanel enemyFieldsPan;

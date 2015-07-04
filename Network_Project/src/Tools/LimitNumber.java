@@ -2,13 +2,22 @@ package Tools;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.AttributeSet;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
- 
+
 import javax.swing.*;
+
 import java.awt.*;
 
-public class LimitNumber extends PlainDocument {
+public class LimitNumber extends PlainDocument implements Serializable{
+	
+	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6922926963820634430L;
 	private int limit;
 
   public LimitNumber(int limit) {

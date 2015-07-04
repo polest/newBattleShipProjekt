@@ -4,10 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.swing.JFileChooser;
+<<<<<<< HEAD
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+=======
+import javax.swing.filechooser.FileNameExtensionFilter;
+>>>>>>> origin/master
 
 import Game.InitGame;
 import Game.InitGame_View;
@@ -16,11 +21,19 @@ import Game.Options_View;
 import Game.Player;
 import Game.Round;
 import Game.Round_View;
+<<<<<<< HEAD
 import Network.BattleShipServer;
+=======
+import SaveGame.Load;
+>>>>>>> origin/master
 import SaveGame.Save;
 
-public class Main_Controler {
+public class Main_Controler implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2959797632378263001L;
 	private Main_View main_view;
 	private int width;
 	private int height;
@@ -50,6 +63,7 @@ public class Main_Controler {
 		this.main_view.setLoadSelectionListener(new LoadGameListener());
 		this.main_view.setInstructionsSelectionListener(new InstructionsListener());
 		this.main_view.setSaveSelectionListener(new SaveGameListener());
+		this.main_view.setExitSelectionListener(new ExitGameListener());
 	}
 
 	private void addOptionsListener(){
@@ -68,12 +82,21 @@ public class Main_Controler {
 			main_view.changeShownPan("optionsPanel");
 		}
 	}
-
-	private class LoadGameListener implements ActionListener{
+	
+	private class ExitGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 
 
 			/*
+=======
+			System.exit(-1);
+		}
+	}
+
+	private class LoadGameListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+>>>>>>> origin/master
 			JFileChooser jfc = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Speicherstand", "save");
 			File f = new File(System.getProperty("user.dir", "save"));
@@ -82,11 +105,20 @@ public class Main_Controler {
 			int returnVal = jfc.showOpenDialog(null);
 			File file = jfc.getSelectedFile();
 			if(returnVal == JFileChooser.APPROVE_OPTION){
-				System.out.println(file.getPath());
+				Load load = new Load();
+				load.loadGame(file.getPath());
+				round = load.getRound();
+				Round_View roundView = round.getRoundView();
+				main_view.addPanel(roundView.getPanel(), "roundView"); 
+				main_view.changeShownPan("roundView");
+				
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}
+<<<<<<< HEAD
 			 */
+=======
+>>>>>>> origin/master
 		}
 	}
 
@@ -175,8 +207,7 @@ public class Main_Controler {
 			File file = jfc.getSelectedFile();
 			if(returnVal == JFileChooser.APPROVE_OPTION){
 				Save save = new Save();
-				Round round = new Round();
-				save.saveGame(file.getPath(), round.getPlayer());
+				save.saveGame(file.getPath(), round);
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}

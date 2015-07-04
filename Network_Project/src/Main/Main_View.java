@@ -20,6 +20,8 @@ public class Main_View{
 	private MenuBar menubar;
 	private Menu datei;
 	private MenuItem save;
+	private MenuItem anleitung;
+	private MenuItem exit;
 	private int width;
 	private int height;
 	private int selection = 0;
@@ -64,8 +66,12 @@ public class Main_View{
 		this.menubar = new MenuBar();
 		this.datei = new Menu("Datei");
 		this.save = new MenuItem("Speichern");
+		this.anleitung = new MenuItem("Anleitung");
+		this.exit = new MenuItem("Schließen");
 		this.save.setEnabled(false);
 		this.datei.add(save);
+		this.datei.add(anleitung);
+		this.datei.add(exit);
 		this.menubar.add(datei);
 		this.frame.setMenuBar(this.menubar);
 	}
@@ -207,10 +213,16 @@ public class Main_View{
 
 	public void setInstructionsSelectionListener(ActionListener l){
 		this.instructions.addActionListener(l);
+		this.anleitung.addActionListener(l);
 	}
 	
 	public void setSaveSelectionListener(ActionListener l){
 		this.save.addActionListener(l);
 	}
+	
+	public void setExitSelectionListener(ActionListener l){
+		this.exit.addActionListener(l);
+	}
+
 
 }
