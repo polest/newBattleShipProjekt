@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,8 +16,12 @@ import javax.swing.JPanel;
 import Ships.Ship;
 
 
-public class BattleField_View {
+public class BattleField_View implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3679747112888753051L;
 	private JButton[][] field;
 	private int fieldSize;
 	private JLabel iconLabel;

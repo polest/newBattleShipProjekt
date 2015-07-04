@@ -7,22 +7,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import Game.Player;
+import Game.Round;
 
 public class Load {
 
-	private Player[] player;
+	private Round round;
 
 	public Load(){
 		
 	}
 	
 	
-	public void loadGame(String name){
+	public void loadGame(String path){
 		ObjectInputStream input = null;
 		
 		try {
-			input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(name + ".save")));
-			player = (Player[]) input.readObject();
+			input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(path)));
+			round = (Round) input.readObject();
 			input.close();
 
 
@@ -38,8 +39,11 @@ public class Load {
 		}
 	}
 
-	public Player[] getPlayer() {
-		return player;
+
+	public Round getRound() {
+		return round;
 	}
+	
+	
 	
 }

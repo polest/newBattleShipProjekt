@@ -1,31 +1,35 @@
 	package Game;
 	
 	import java.awt.Color;
-	import java.awt.event.ActionEvent;
-	import java.awt.event.ActionListener;
-	import java.awt.event.MouseEvent;
-	import java.awt.event.MouseListener;
-	import java.awt.event.MouseMotionListener;
-	
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
+
 	import javax.swing.BorderFactory;
-	import javax.swing.JButton;
-	import javax.swing.JLabel;
-	import javax.swing.JToggleButton;
-	
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JToggleButton;
+
 	import SaveGame.Save;
-	import Ships.Ship;
-	import Tools.ColoredPrint;
-	import Tools.ColoredPrint.EPrintColor;
+import Ships.Ship;
+import Tools.ColoredPrint;
+import Tools.ColoredPrint.EPrintColor;
 	
-	public class Round{
+	public class Round implements Serializable{
 	
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6295162987841937031L;
 		/**
 		 * * @author ML, JL
 		 * @version 25.03.15
 		 */
 		private Player[] player;
 		private ColoredPrint colorPrint;
-		private Save save;
 		private int fieldSize;
 		private Round_View roundView;
 		private int gegner;
@@ -42,7 +46,6 @@
 			this.schiff = 0;
 			this.colorPrint = new ColoredPrint();
 			this.fieldSize = fieldSize;
-			this.save = new Save();
 			this.orientation = 'h';
 			this.roundView = new Round_View(this.fieldSize, player);
 			//this.play();

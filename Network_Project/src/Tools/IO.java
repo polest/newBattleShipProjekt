@@ -1,7 +1,12 @@
 package Tools;
 import java.io.*;
 
-public class IO {
+public class IO implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 64191092744116132L;
 	/** 
 	 * macht das Einlesen von Einfachen Daten einfacher 
 	 * durch Verdecken des Exception-Handlings
