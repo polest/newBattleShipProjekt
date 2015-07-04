@@ -125,7 +125,7 @@ public class InitGame_View {
 	public BattleField_View getPublicBattleFieldView(int i){
 		return this.publicBattleFieldView[i];
 	}
-	
+
 	public void setFieldSize(int fieldSize){
 		this.fieldSize = fieldSize;
 	}
@@ -182,6 +182,13 @@ public class InitGame_View {
 	}
 
 	public void setChoosenShip(JToggleButton ship){
+		if(ship == null){
+			this.destroyerBtn.setSelected(false);
+			this.frigateBtn.setSelected(false);
+			this.corvetteBtn.setSelected(false);
+			this.submarineBtn.setSelected(false);
+		}
+
 		if(ship != this.destroyerBtn){
 			this.destroyerBtn.setSelected(false);
 		}
@@ -241,7 +248,7 @@ public class InitGame_View {
 			this.battleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
 			addPanel(this.battleFieldView[i].getView(), ("field"+i) );
 		}
-		
+
 		for(int i = 0; i < length; i++){
 			this.publicBattleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
 		}
@@ -249,8 +256,8 @@ public class InitGame_View {
 
 
 	public void initPlayerField(Player player, int id){
-//		player.setBattleFieldView(this.battleFieldView[id]);
-		
+		//		player.setBattleFieldView(this.battleFieldView[id]);
+
 		this.destroyerBtn.setSelected(false);
 		this.frigateBtn.setSelected(false);
 		this.corvetteBtn.setSelected(false);

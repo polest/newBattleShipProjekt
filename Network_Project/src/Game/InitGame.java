@@ -269,82 +269,86 @@ public class InitGame implements Serializable{
 
 
 	private boolean checkBorder(int x, int y, int length){
-		int[][] field = this.player[playerId].getPrivateField().getField();
-		x--;
-		y--;
-		if(orientation == 'h'){
-			if(x+length >= field.length){
-				return false;
-			}
+		shipCanBePlaced =  this.player[playerId].getPrivateField().checkFree(choosenShip, x, y, orientation);
+return shipCanBePlaced;
+		//		int[][] field = this.player[playerId].getPrivateField().getField();
 
-			int xVal = 0;
-			int yVal = 0;
-			int lengthX = length;
-			int lengthY = 1;
 
-			if(x > 0){
-				xVal = -1;
-			}
 
-			if( (x+length-1) < field.length){
-				lengthX = length+1;
-			}
 
-			if(y > 0){
-				yVal = -1;
-			}
-
-			if(y < field.length){
-				lengthY = 2;
-			}
-
-			for(int i = xVal; i < lengthX; i++){
-				for(int j = yVal; j < lengthY; j++){
-					//System.out.println("X, Y: " + (y + j) + "," + (x + i));
-					if(field[y + j][x + i] != 0){
-						shipCanBePlaced = false;
-						return false;
-					}
-				}
-			}
-		}
-		else{
-			if(y+length >= field.length){
-				shipCanBePlaced = false;
-				return false;
-			}
-
-			int xVal = 0;
-			int yVal = 0;
-			int lengthX = 1;
-			int lengthY = length;
-
-			if(y > 0){
-				yVal = -1;
-			}
-
-			if( (y+length-1) < field.length){
-				lengthY = length+1;
-			}
-
-			if(x > 0){
-				xVal = -1;
-			}
-
-			if(x < field.length){
-				lengthX = 2;
-			}
-			for(int i = yVal; i < lengthY; i++){
-				for(int j = xVal; j < lengthX; j++){
-					if(field[y + i][x + j] != 0){
-						shipCanBePlaced = false;
-						return false;
-					}
-				}
-			}
-		}
-		shipCanBePlaced = true;
-		return true;
+		//		if(orientation == 'h'){
+		//			if(x+length >= field.length){
+		//				return false;
+		//			}
+		//
+		//			int xVal = 0;
+		//			int yVal = 0;
+		//			int lengthX = length;
+		//			int lengthY = 1;
+		//
+		//			if(x > 0){
+		//				xVal = -1;
+		//			}
+		//
+		//			if( (x+length-1) < field.length){
+		//				lengthX = length+1;
+		//			}
+		//
+		//			if(y > 0){
+		//				yVal = -1;
+		//			}
+		//
+		//			if(y < field.length){
+		//				lengthY = 2;
+		//			}
+		//
+		//			for(int i = xVal; i < lengthX; i++){
+		//				for(int j = yVal; j < lengthY; j++){
+		//					//System.out.println("X, Y: " + (y + j) + "," + (x + i));
+		//					if(field[y + j][x + i] != 0){
+		//						shipCanBePlaced = false;
+		//						return false;
+		//					}
+		//				}
+		//			}
+		//		}
+		//		else{
+		//			if(y+length >= field.length){
+		//				shipCanBePlaced = false;
+		//				return false;
+		//			}
+		//
+		//			int xVal = 0;
+		//			int yVal = 0;
+		//			int lengthX = 1;
+		//			int lengthY = length;
+		//
+		//			if(y > 0){
+		//				yVal = -1;
+		//			}
+		//
+		//			if( (y+length-1) < field.length){
+		//				lengthY = length+1;
+		//			}
+		//
+		//			if(x > 0){
+		//				xVal = -1;
+		//			}
+		//
+		//			if(x < field.length){
+		//				lengthX = 2;
+		//			}
+		//			for(int i = yVal; i < lengthY; i++){
+		//				for(int j = xVal; j < lengthX; j++){
+		//					if(field[y + i][x + j] != 0){
+		//						shipCanBePlaced = false;
+		//						return false;
+		//					}
+		//				}
+		//			}
+		//		}
+		//		shipCanBePlaced = true;
+		//		return true;
 	}
 
 	private class BattleFieldMouseMotionListener implements MouseMotionListener{
@@ -398,14 +402,6 @@ public class InitGame implements Serializable{
 
 	private class BattleFieldMouseListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
 			Player playerOnTurn = player[playerId];
 
 			boolean checked;
@@ -470,6 +466,18 @@ public class InitGame implements Serializable{
 		}
 
 		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
 
@@ -487,20 +495,45 @@ public class InitGame implements Serializable{
 			JToggleButton btn = (JToggleButton)e.getSource();
 
 			if(btn.getActionCommand().equals("destroyer")){
-				initGameView.setChoosenShip(btn);
-				choosenShip = destroyer[destroyer.length - destroyerCount];
+				if(btn.isSelected() == true){
+					initGameView.setChoosenShip(btn);
+					choosenShip = destroyer[destroyer.length - destroyerCount];
+				}
+				else{
+					initGameView.setChoosenShip(null);
+					choosenShip = null;
+				}
 			}
 			else if(btn.getActionCommand().equals("frigate")){
-				initGameView.setChoosenShip(btn);
-				choosenShip = frigate[frigate.length - frigateCount];
+				if(btn.isSelected() == true){
+					initGameView.setChoosenShip(btn);
+					choosenShip = frigate[frigate.length - frigateCount];
+				}
+				else{
+					initGameView.setChoosenShip(null);
+					choosenShip = null;
+				}
+
 			}
 			else if(btn.getActionCommand().equals("corvette")){
-				initGameView.setChoosenShip(btn);
-				choosenShip = corvette[corvette.length - corvetteCount];
+				if(btn.isSelected() == true){
+					initGameView.setChoosenShip(btn);
+					choosenShip = corvette[corvette.length - corvetteCount];
+				}
+				else{
+					initGameView.setChoosenShip(null);
+					choosenShip = null;
+				}
 			}
 			else if(btn.getActionCommand().equals("submarine")){
-				initGameView.setChoosenShip(btn);
-				choosenShip = submarine[submarine.length - submarineCount];
+				if(btn.isSelected() == true){
+					initGameView.setChoosenShip(btn);
+					choosenShip = submarine[submarine.length - submarineCount];
+				}
+				else{
+					initGameView.setChoosenShip(null);
+					choosenShip = null;
+				}
 			}
 		}
 

@@ -670,7 +670,7 @@ public class Player implements Serializable{
 			}
 			
 		}
-		privateField.printPrivateField(field, playerName);
+		privateField.printPrivateField(playerName);
 	}
 
 	public void printPublicField(){

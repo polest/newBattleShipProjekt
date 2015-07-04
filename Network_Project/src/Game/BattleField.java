@@ -80,8 +80,8 @@ import Tools.MatrixTools;
 		/**
 		 * Druckt das Spielfeld auf der Konsole aus
 		 */
-		public void printPrivateField(JButton[][] field, String name){
-			matrixTools.printPrivateField(this.field, field, name);
+		public void printPrivateField(String name){
+			matrixTools.printPrivateField(this.field,name);
 			
 		}
 
@@ -98,6 +98,19 @@ import Tools.MatrixTools;
 		public void setId(String id) {
 			this.fieldId = id;
 		}
+		
+		/**
+		 * Setzen der Schiffe auf dem Spielfeld, sofern möglich
+		 * @param ship - Schifftyp (ENUM - EShipType)
+		 * @param iPos - X-Koordinaten des Startfeldes
+		 * @param jPos - Y-Koordinate des Startfeldes
+		 * @param orientation - Ausrichtung v oder h
+		 * @return gibt zurück ob das Schiff platziert werden konnte
+		 */
+		public boolean checkFree(Ship ship, int iPos, int jPos, char orientation){
+			return matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship);
+		}
+
 
 		/**
 		 * Setzen der Schiffe auf dem Spielfeld, sofern möglich
@@ -109,8 +122,6 @@ import Tools.MatrixTools;
 		 */
 		public boolean setShips(Ship ship, int iPos, int jPos, char orientation){
 			boolean isFree = true;
-			iPos--;
-			jPos--;
 			if( (isFree = matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship)) == true){
 				field = matrixTools.addMatrix(iPos, jPos, orientation, field, ship);
 			}

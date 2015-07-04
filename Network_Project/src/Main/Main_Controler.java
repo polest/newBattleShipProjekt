@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import Game.InitGame;
 import Game.InitGame_View;
@@ -14,6 +16,7 @@ import Game.Options_View;
 import Game.Player;
 import Game.Round;
 import Game.Round_View;
+import Network.BattleShipServer;
 import SaveGame.Save;
 
 public class Main_Controler {
@@ -68,14 +71,9 @@ public class Main_Controler {
 
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			try {
-				Process myProcess = Runtime.getRuntime().exec("sh "+ "serverAusführen" + ".sh");
-			} catch (IOException f) {
-					f.printStackTrace();
-		}
-			
 
-				/*
+
+			/*
 			JFileChooser jfc = new JFileChooser();
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("Speicherstand", "save");
 			File f = new File(System.getProperty("user.dir", "save"));
@@ -88,7 +86,7 @@ public class Main_Controler {
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}
-				 */
+			 */
 		}
 	}
 
@@ -109,18 +107,27 @@ public class Main_Controler {
 
 	private class SetOptionsOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			int player = gameOptions.getPlayer();
+			int destroyer = gameOptions.getDestroyer();
+			int frigate = gameOptions.getFrigate();
+			int corvette = gameOptions.getCorvette();
+			int submarine = gameOptions.getSubmarine();
+			int size = gameOptions.getBattlefieldSize();
+			
+			JFrame connection = new JFrame();
+			connection.setVisible(true);
+			connection.setSize(200, 200);
+			connection.add(new JLabel("Warte auf Spieler..."));
+
+			BattleShipServer server = new BattleShipServer(4477, player, destroyer, frigate, corvette, submarine, size);
+			server.acceptClientConnectRequests();
+			
 			initGameView =  new InitGame_View(width, height, gameOptions.getPlayer());
 			initGame = new InitGame(gameOptionsView, gameOptions, initGameView);
 			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 			main_view.changeShownPan("placeShipsPan");
 			initGameView.setNextSelectionListener(new NextPlayerListener());
 			main_view.getSave().setEnabled(true);
-			try {
-				Process myProcess = Runtime.getRuntime().exec("sh serverAusführen.sh");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
 	}
 

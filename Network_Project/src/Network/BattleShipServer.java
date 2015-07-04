@@ -14,6 +14,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Hashtable;
 
+import Game.InitGame;
+
 
 
 /**
@@ -29,50 +31,59 @@ import java.util.Hashtable;
  * @author teschke
  */				
 public class BattleShipServer {
-	public final static int DEFAULT_PORT = 6789;
-	public final static int DEFAULT_CLIENTS = 3;
-	
+	//	public final static int DEFAULT_PORT = 6789;
+	public final static int DEFAULT_PORT = 4477;
+	public final static int DEFAULT_CLIENTS = 2;
+
 	protected int port;
 	protected int clientZahl;
-	protected ServerSocket serverSocket;
+	protected int destroyer;
+	protected int frigate;
+	protected int corvette;
+	protected int submarine;
+	protected int fieldSize;
 
+	protected ServerSocket serverSocket;
+	private ClientRequestProcessor[] crp;
 	// Datenstruktur f�r das Adressbuch
 	//private Hashtable<String, Adresse> adressen;
 	//private Hashtable<String, Spielfeld> spielfeld;
 
-	
+
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
 	 * 
 	 * @param port Portnummer, auf der auf Verbindungen gewartet werden soll
 	 * (wenn 0, wird Default-Port verwendet)
 	 */
-	
-	public BattleShipServer(){
-		
-	}
-	
-	
+
+
 	public void setClientZahl(int clientZahl) {
 		this.clientZahl = clientZahl;
 	}
 
 
-	public BattleShipServer(int port, int clientZahl) {
+	public BattleShipServer(int port, int clientZahl, int destroyer, int frigate, int corvette, int submarine, int fieldSize) {
 
 		if (port == 0)
 			port = DEFAULT_PORT;
 		this.port = port;
-		
+
 		if(clientZahl == 0){
 			clientZahl = DEFAULT_CLIENTS;
 		}
 		this.clientZahl = clientZahl;
-		
+
+		this.destroyer = destroyer;
+		this.frigate = frigate;
+		this.corvette = corvette;
+		this.submarine = submarine;
+		this.fieldSize = fieldSize;
+
 		try {
 			// Server-Socket anlegen
 			serverSocket = new ServerSocket(port, clientZahl);
-			
+
 			// Serverdaten ausgeben
 			InetAddress ia = InetAddress.getLocalHost();
 			System.out.println("Host: " + ia.getHostName());
@@ -90,12 +101,12 @@ public class BattleShipServer {
 		adressen.put("Schmidt", new Adresse("Hauptstra�e 28", 28357, "Bremen"));
 		adressen.put("Hinz", new Adresse("Elbchaussee 101", 20123, "Hamburg"));
 		adressen.put("Kunz", new Adresse("Weinsteige 12", 70711, "Stuttgart"));
-		
+
 		spielfeld = new Hashtable<String, Spielfeld>();
-		
+
 		int[][] array = {{7,1},{4,2}};
 		spielfeld.put("Spieler1", new Spielfeld(2,1,1,1,1,7,array));
-		*/
+		 */
 	}
 
 	/**
@@ -105,22 +116,27 @@ public class BattleShipServer {
 	 * fuer diese Verbindung erzeugten Client-Socket.
 	 */
 	public void acceptClientConnectRequests() {
-
 		try {
-			while (true) {
+			int i = 0;
+			while (i < clientZahl) {
 				// Auf Verbindungsw�nsche warten...
 				Socket clientSocket = serverSocket.accept();
 				// ... und dann Verarbeitung von Dienstanfragen starten:
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
-				ClientRequestProcessor c = new ClientRequestProcessor(clientSocket);
-				//Thread t = new Thread(c);
-				//t.start();
+				crp[i] = new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
+				Thread t = new Thread((Runnable) crp[i]);
+				t.start();
+				i++;
 			}
 		} catch (IOException e) {
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);
 			System.exit(1);
 		}
+		for(int i = 0; i < clientZahl; i++){
+			crp[i].verarbeiteAnfragen();
+		}
+
 	}
 
 
@@ -140,8 +156,8 @@ public class BattleShipServer {
 				port = 0;
 			}
 		}
-		BattleShipServer server = new BattleShipServer(port, clientZahl);
-		// Ab jetzt auf eingehende Verbindungsw�nsche von Clients warten
+		BattleShipServer server = new BattleShipServer(port, clientZahl, 1, 0, 0, 1, 5);
+		//		 Ab jetzt auf eingehende Verbindungsw�nsche von Clients warten
 		server.acceptClientConnectRequests();
 	}
 }

@@ -109,7 +109,7 @@ public class Round_View {
 		//this.roundPan.add(shownField.getView());
 		this.roundPan.add(player[0].getBattleFieldView().getView());
 		this.roundPan.add(player[0].getPublicBattleFieldView().getView());
-		
+
 		player[0].getBattleFieldView().setSize(30,100, 400);
 		player[0].getBattleFieldView().getView().setVisible(true);
 		player[0].getBattleFieldView().removeListener();
@@ -118,7 +118,7 @@ public class Round_View {
 		player[0].getPublicBattleFieldView().getView().setVisible(false);
 		player[0].getPublicBattleFieldView().removeListener();
 
-		
+
 		//this.enemies = new BattleField_View[enemysCount];
 		this.enemiesName = new JLabel[enemysCount];
 
@@ -150,7 +150,7 @@ public class Round_View {
 			player[i].getBattleFieldView().getView().setBounds(x, fieldY, miniFieldSize, miniFieldSize);
 			player[i].getBattleFieldView().getView().setVisible(false);
 
-			
+
 			player[i].getBattleFieldView().removeListener();
 
 			labelY = fieldY + miniFieldSize;
@@ -245,17 +245,22 @@ public class Round_View {
 	}
 
 	public void setPlayerDead(int i){
-		this.player[i].getBattleFieldView().getView().setEnabled(false);
+		//this.player[i].getBattleFieldView().getView().setEnabled(false);
+		for(int k = 0; k < this.player[i].getBattleFieldView().getField().length; k++){
+			for(int j = 0; j < this.player[i].getBattleFieldView().getField().length; j++){
+				this.player[i].getBattleFieldView().getField()[k][j].setEnabled(false);
+			}
+		}
 	}
 
 	public void setActive(int i){
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		for(int j = 0; j < order.length; j++){
 			if(order[j] == i){
 				nextRound(j);
@@ -310,11 +315,11 @@ public class Round_View {
 		enemiesName[selectedIndex-1].setText(oldName);
 		shownFieldPlayerName.setText(selectedName);
 
-		
+
 		if(player[order[selectedIndex]].getIsActive()){
 			player[order[selectedIndex]].getPublicBattleFieldView().getView().setVisible(false);
 			player[order[selectedIndex]].getBattleFieldView().getView().setVisible(true);
-			
+
 			player[order[selectedIndex]].getBattleFieldView().setSize(smallBounds[0], smallBounds[1], smallBounds[2]);
 			player[order[selectedIndex]].getBattleFieldView().getView().repaint();
 			player[order[selectedIndex]].getBattleFieldView().getView().revalidate();
@@ -323,7 +328,7 @@ public class Round_View {
 		else{
 			player[order[selectedIndex]].getPublicBattleFieldView().getView().setVisible(true);
 			player[order[selectedIndex]].getBattleFieldView().getView().setVisible(false);
-			
+
 			player[order[selectedIndex]].getPublicBattleFieldView().setSize(smallBounds[0], smallBounds[1], smallBounds[2]);
 			player[order[selectedIndex]].getPublicBattleFieldView().getView().repaint();
 			player[order[selectedIndex]].getPublicBattleFieldView().getView().revalidate();
@@ -333,7 +338,7 @@ public class Round_View {
 		if(player[order[0]].getIsActive()){
 			player[order[0]].getPublicBattleFieldView().getView().setVisible(false);
 			player[order[0]].getBattleFieldView().getView().setVisible(true);
-			
+
 			player[order[0]].getBattleFieldView().setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
 			player[order[0]].getBattleFieldView().getView().repaint();
 			player[order[0]].getBattleFieldView().getView().revalidate();
@@ -341,8 +346,8 @@ public class Round_View {
 		else{
 			player[order[0]].getPublicBattleFieldView().getView().setVisible(true);
 			player[order[0]].getBattleFieldView().getView().setVisible(false);
-			
-			
+
+
 			player[order[0]].getPublicBattleFieldView().setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
 			player[order[0]].getPublicBattleFieldView().getView().repaint();
 			player[order[0]].getPublicBattleFieldView().getView().revalidate();
@@ -353,7 +358,7 @@ public class Round_View {
 
 
 	public void nextRound(int selectedIndex){
-		
+
 		int[] smallBoundsY = new int[clickLabel.length-1];
 		for(int i = 1; i <= smallBoundsY.length; i++){
 			smallBoundsY[i-1] = clickLabel[i].getY();
@@ -386,7 +391,7 @@ public class Round_View {
 		player[index].getBattleFieldView().getView().setVisible(true);
 		player[index].getPublicBattleFieldView().getView().setVisible(false);
 
-		
+
 		this.setMessage("Spieler " + player[index].getPlayerName() + " ist an der Reihe!");
 
 		int counter = 0;

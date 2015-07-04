@@ -1,12 +1,7 @@
 package Tools;
-import java.awt.Color;
-import java.awt.Image;
 import java.io.*;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-
 import Game.Player;
 import Ships.Corvette;
 import Ships.Destroyer;
@@ -39,7 +34,7 @@ public class MatrixTools implements Serializable{
 	 * Die Matrix mit verschönerungen wird nur ausgedruckt und 
 	 * nicht gespeichert oder zurückgegeben!
 	 */
-	public void printPrivateField(int[][] privateField, JButton[][] matrix, String name){
+	public void printPrivateField(int[][] privateField, String name){
 
 		int[][] printMatrix = new int[privateField.length][privateField.length];
 
@@ -49,7 +44,7 @@ public class MatrixTools implements Serializable{
 			String leftAlignFormat = "| %-3s ";
 			boolean isSmallField = true;
 
-			if(matrix.length > 9){
+			if(printMatrix.length > 9){
 				isSmallField  = true;
 			}
 			else{
@@ -88,7 +83,7 @@ public class MatrixTools implements Serializable{
 					}
 				}
 				else{
-					if(privateField[y-1][x-1] == 0){
+					if(privateField[y][x] <= 0){
 						System.out.format(leftAlignFormat, " " + wave);
 					}
 					else{
@@ -107,16 +102,6 @@ public class MatrixTools implements Serializable{
 		}
 
 		System.out.print("+ \n");
-
-
-		for(int y = 0; y < matrix.length; y++){
-			for(int x = 0; x < matrix.length; x++){
-				if(privateField[y+1][x+1] == 1){
-					//matrix[x][y].setIcon(x);
-				}
-
-			}
-		}
 
 	}
 
@@ -137,9 +122,10 @@ public class MatrixTools implements Serializable{
 				}
 				else if(i == 0){
 					matrix[i][j] = -1;
-				}
+				}else{
 					//Ansonsten wird Matrix mit Tilde Symbol gefüllt
 					matrix[i][j] = 0;
+				}
 			}
 		}
 		return matrix;
@@ -154,8 +140,7 @@ public class MatrixTools implements Serializable{
 	 * @return Gibt das mit dem ausgewähltem Schiff positionierte Spielfeld zurück 
 	 */
 	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, Ship ship ){	
-//		xVal++;
-//		yVal++;
+
 		int shipSymbol = 0;
 		int length = ship.getShipSize();
 
@@ -205,8 +190,6 @@ public class MatrixTools implements Serializable{
 	 * basierend auf den Spielregeln positioniert werden kann oder nicht
 	 */
 	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, Ship ship){
-		xVal++;
-		yVal++;
 		int length = ship.getShipSize();
 
 		int yIndex = yVal;
@@ -321,8 +304,6 @@ public class MatrixTools implements Serializable{
 
 		int x = coordinates[0];
 		int y = coordinates[1];
-		x--;
-		y--;
 		boolean shipIsSwimming = true;
 		int hitWater = 0;
 		int hitShip = 0;
