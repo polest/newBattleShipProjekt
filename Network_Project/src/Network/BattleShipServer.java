@@ -36,12 +36,12 @@ public class BattleShipServer {
 	public final static int DEFAULT_CLIENTS = 2;
 
 	protected int port;
-	protected int clientZahl;
-	protected int destroyer;
-	protected int frigate;
-	protected int corvette;
-	protected int submarine;
-	protected int fieldSize;
+	protected int clientZahl = 3;
+	protected int destroyer = 1;
+	protected int frigate = 1;
+	protected int corvette = 1;
+	protected int submarine = 1;
+	protected int fieldSize = 10;
 
 	protected ServerSocket serverSocket;
 	private ClientRequestProcessor[] crp;
@@ -79,7 +79,8 @@ public class BattleShipServer {
 		this.corvette = corvette;
 		this.submarine = submarine;
 		this.fieldSize = fieldSize;
-
+		this.crp = new ClientRequestProcessor[clientZahl];
+		
 		try {
 			// Server-Socket anlegen
 			serverSocket = new ServerSocket(port, clientZahl);
@@ -125,9 +126,10 @@ public class BattleShipServer {
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
 				crp[i] = new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
-				Thread t = new Thread((Runnable) crp[i]);
-				t.start();
+//				Thread t = new Thread((Runnable) crp[i]);
+//				t.start();
 				i++;
+				System.out.println(i);
 			}
 		} catch (IOException e) {
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);

@@ -33,10 +33,10 @@ public class InitGame_View {
 	private int cellSize;
 	private JButton nextPlayer;
 
-	public InitGame_View(int width, int height, int playerLength){
+	public InitGame_View(int playerLength){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
-		this.width = width;
-		this.height = height;
+		this.width = 600;
+		this.height = 800;
 
 		this.cards = new JPanel(new CardLayout());
 		this.cards.setBounds(30,30, 510, 510);
