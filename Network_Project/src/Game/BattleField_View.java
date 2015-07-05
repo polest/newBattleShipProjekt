@@ -36,23 +36,17 @@ public class BattleField_View implements Serializable{
 	private int cellSize;
 	private ImageIcon empty;
 	private JLabel background;
-
-	
-<<<<<<< HEAD
-//	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
-//		this.panel = panel;
-//		this.width = width;
-//		this.height = width;
-//		this.startX = startX;
-//		this.startY = startY;
-//		this.fieldSize = fieldSize;
-//		this.empty = new ImageIcon("Resources/empty.png");
-//		initField();
-//	}
 	
 	public BattleField_View(ImagePanel panel, int fieldSize, int width, int startX, int startY){
-=======
-	
+		this.panel = panel;
+		this.width = width;
+		this.height = width;
+		this.startX = startX;
+		this.startY = startY;
+		this.fieldSize = fieldSize;
+		this.empty = new ImageIcon("Resources/empty.png");
+		initField();
+	}
 	/**
 	 * @param panel
 	 * @param fieldSize
@@ -66,7 +60,6 @@ public class BattleField_View implements Serializable{
 	 */
 	
 	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
->>>>>>> origin/master
 		this.panel = panel;
 		this.width = width;
 		this.height = width;
@@ -77,33 +70,6 @@ public class BattleField_View implements Serializable{
 		initField();
 	}
 	
-	
-
-<<<<<<< HEAD
-//	public BattleField_View() {
-//		for(int i = 0; i < this.fieldSize; i++){
-//			for(int j = 0; j < this.fieldSize; j++){
-//				this.field[i][j].setIcon(empty);
-//				this.field[i][j].setOpaque(false);
-//				this.field[i][j].setEnabled(true);
-//			}
-//		}
-//	}
-=======
-	/**
-	 * Konstruktor ohne Parametererwartungen
-	 * erstellt ein leeres Spielfeld (Buttons mit einem leeren Icon)
-	 */
-	public BattleField_View() {
-		for(int i = 0; i < this.fieldSize; i++){
-			for(int j = 0; j < this.fieldSize; j++){
-				this.field[i][j].setIcon(empty);
-				this.field[i][j].setOpaque(false);
-				this.field[i][j].setEnabled(true);
-			}
-		}
-	}
->>>>>>> origin/master
 
 
 	/**

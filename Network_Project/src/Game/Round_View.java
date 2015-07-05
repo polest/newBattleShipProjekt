@@ -298,8 +298,8 @@ public class Round_View implements Serializable{
 		String oldName = shownFieldPlayerName.getText();
 
 
-		//		shownField = selectedPlayer;
-		//		enemies[selectedIndex-1] = oldPlayerField;
+//				shownField = selectedPlayer;
+//				enemies[selectedIndex-1] = oldPlayerField;
 
 		enemiesName[selectedIndex-1].setText(oldName);
 		shownFieldPlayerName.setText(selectedName);
@@ -313,6 +313,7 @@ public class Round_View implements Serializable{
 		playerGroup[order[0]].setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
 		playerGroup[order[0]].getView().repaint();
 		playerGroup[order[0]].getView().revalidate();
+		
 		roundPan.repaint();
 		roundPan.revalidate();
 	}
