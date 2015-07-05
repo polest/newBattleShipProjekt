@@ -115,7 +115,7 @@ public class BattleShipServer implements Runnable{
 				//c.verarbeiteAnfragen();
 				Thread s = new Thread(crp[i] =  new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize) );
 				s.start();
-				
+	
 				i++;
 				wait.setText("Spieler " + i + " ist beigetreten...");
 				System.out.println("Spieler " + i + " ist beigetreten...");

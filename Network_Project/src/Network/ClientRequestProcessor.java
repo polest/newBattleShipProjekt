@@ -64,6 +64,7 @@ public class ClientRequestProcessor implements Runnable{
 
 	public void verarbeiteAnfragen(BattleShipServer server){
 		this.server = server;
+		System.out.println("schicke nachrichten");
 		out.println("changeInitView");
 		out.println(clientZahl);
 		out.println(destroyer);
@@ -71,6 +72,7 @@ public class ClientRequestProcessor implements Runnable{
 		out.println(corvette);
 		out.println(submarine);
 		out.println(fieldSize);
+		out.flush();
 	}
 
 
@@ -82,7 +84,7 @@ public class ClientRequestProcessor implements Runnable{
 		String input = "";
 
 		// Begr��ungsnachricht an den Client senden
-		out.println("Server bereit");
+		//out.println("Server bereit");
 
 		// Hauptschleife zur wiederholten Abwicklung der Kommunikation
 

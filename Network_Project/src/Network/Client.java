@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 import javax.swing.JButton;
 
 import Game.InitGame_Client;
 import Game.InitGame_View_Client;
-import Game.Player;
 import Main.Main_Controler;
 import Ships.Corvette;
 import Ships.Destroyer;
@@ -70,6 +68,7 @@ public class Client implements Runnable{
 		// Verbindung erfolgreich hergestellt: IP-Adresse und Port ausgeben
 		System.err.println("Verbunden mit Server " 
 				+ socket.getInetAddress() + ":" + socket.getPort());
+		run();
 	}
 
 	public void setReady(){
@@ -112,9 +111,15 @@ public class Client implements Runnable{
 		//this.mainControler.ChangeShipsView();
 
 		String message = "lalalala";
-		while( !(message.equals("dead") ) ){
-			System.out.println("client run");
-
+		
+		try {
+			message = in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		while(!(message.equals("dead") ) ){
+			System.out.println(message);
 			if(message.equals("changeInitView") ){
 				initGameOptionsAndView();
 
@@ -139,15 +144,6 @@ public class Client implements Runnable{
 		}
 		if(message.equals("setShips")){
 			try {
-				//							this.player = Integer.parseInt(in.readLine());
-				//							this.destroyer = Integer.parseInt(in.readLine());
-				//							this.frigate = Integer.parseInt(in.readLine());
-				//							this.corvette = Integer.parseInt(in.readLine());
-				//							this.submarine = Integer.parseInt(in.readLine());
-				//							this.fieldSize = Integer.parseInt(in.readLine());
-				//
-				//							initGameView = new InitGame_View(this.player, this.destroyer, this.frigate, this.corvette, this.submarine, this.fieldSize);					
-
 
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
