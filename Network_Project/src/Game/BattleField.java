@@ -107,8 +107,8 @@ import Tools.MatrixTools;
 		 * @param orientation - Ausrichtung v oder h
 		 * @return gibt zurück ob das Schiff platziert werden konnte
 		 */
-		public boolean checkFree(Ship ship, int iPos, int jPos, char orientation){
-			return matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship);
+		public boolean checkFree(int length, int iPos, int jPos, char orientation){
+			return matrixTools.checkPrivateFields(iPos, jPos, orientation, field, length);
 		}
 
 
@@ -120,10 +120,10 @@ import Tools.MatrixTools;
 		 * @param orientation - Ausrichtung v oder h
 		 * @return gibt zurück ob das Schiff platziert werden konnte
 		 */
-		public boolean setShips(Ship ship, int iPos, int jPos, char orientation){
+		public boolean setShips(int length, int iPos, int jPos, char orientation){
 			boolean isFree = true;
-			if( (isFree = matrixTools.checkPrivateFields(iPos, jPos, orientation, field, ship)) == true){
-				field = matrixTools.addMatrix(iPos, jPos, orientation, field, ship);
+			if( (isFree = matrixTools.checkPrivateFields(iPos, jPos, orientation, field, length)) == true){
+				field = matrixTools.addMatrix(iPos, jPos, orientation, field, length);
 			}
 			return isFree;
 

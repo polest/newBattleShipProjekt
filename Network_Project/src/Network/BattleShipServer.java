@@ -1,23 +1,16 @@
 package Network;
 
-
-
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Hashtable;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Hashtable;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import Game.InitGame;
+import Game.InitGame_Client;
+import Main.Main_Controler;
 
 
 
@@ -33,7 +26,7 @@ import Game.InitGame;
  * 
  * @author teschke
  */				
-public class BattleShipServer {
+public class BattleShipServer implements Runnable{
 	//	public final static int DEFAULT_PORT = 6789;
 	public final static int DEFAULT_PORT = 4477;
 	public final static int DEFAULT_CLIENTS = 2;
@@ -45,12 +38,14 @@ public class BattleShipServer {
 	protected int corvette = 1;
 	protected int submarine = 1;
 	protected int fieldSize = 10;
+	protected int playerReady = 0;
+	JFrame connection = new JFrame();
+	JLabel wait = new JLabel();
 
 	protected ServerSocket serverSocket;
 	private ClientRequestProcessor[] crp;
-	private JFrame connection = new JFrame();
-	private JLabel wait = new JLabel("Warte auf Spieler...");
-
+	private InitGame initGame;
+	private Main_Controler mainControler;
 
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
@@ -59,19 +54,19 @@ public class BattleShipServer {
 	 * (wenn 0, wird Default-Port verwendet)
 	 */
 
+	public BattleShipServer(int port, int clientZahl, InitGame initGame, int destroyer, int frigate, int corvette, int submarine, int fieldSize, Main_Controler mainControler) {
+		this.mainControler = mainControler;
 
-	public void setClientZahl(int clientZahl) {
-		this.clientZahl = clientZahl;
-	}
+		this.initGame = initGame;
 
-
-	public BattleShipServer(int port, int clientZahl, int destroyer, int frigate, int corvette, int submarine, int fieldSize) {
-
-		connection.setVisible(true);
+		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setSize(200, 200);
-		
-		wait.setBounds(0,0, 100, 30);
+		connection.setVisible(true);
 		connection.add(wait);
+		wait.setText("warten auf Spieler...");
+		wait.setBounds(10,0, 100, 30);
+		wait.setVisible(true);
+		System.out.println("laaabeeel");
 
 		if (port == 0)
 			port = DEFAULT_PORT;
@@ -88,7 +83,7 @@ public class BattleShipServer {
 		this.submarine = submarine;
 		this.fieldSize = fieldSize;
 		this.crp = new ClientRequestProcessor[clientZahl];
-		
+
 		try {
 			// Server-Socket anlegen
 			serverSocket = new ServerSocket(port, clientZahl);
@@ -111,32 +106,48 @@ public class BattleShipServer {
 	 * fuer diese Verbindung erzeugten Client-Socket.
 	 */
 	public void acceptClientConnectRequests() {
+		int i = 0;
 		try {
-			int i = 0;
+
 			while (i < clientZahl) {
 				// Auf Verbindungsw�nsche warten...
 				Socket clientSocket = serverSocket.accept();
 				// ... und dann Verarbeitung von Dienstanfragen starten:
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
-				crp[i] = new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
-				ClientRequestProcessor c = crp[i];
-				Thread s = new Thread(c);
+				Thread s = new Thread(crp[i] =  new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize) );
 				s.start();
+				
 				i++;
 				wait.setText("Spieler " + i + " ist beigetreten...");
-				System.out.println(i);
+				System.out.println("Spieler " + i + " ist beigetreten...");
+
+
 			}
 		} catch (IOException e) {
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);
 			System.exit(1);
 		}
-		for(int i = 0; i < clientZahl; i++){
-			crp[i].verarbeiteAnfragen();
+
+	}
+
+	public void setShipsToPlayer(String ship, String pos, ClientRequestProcessor crp){
+		for(int i = 0; i < this.clientZahl; i++){
+			if(this.crp[i] == crp){
+				this.initGame.setShipToField(ship, i, pos);
+			}
 		}
 
 	}
 
+	public void setPlayerReadyToPlay(ClientRequestProcessor crp) {
+		playerReady++;
+		if(playerReady >= clientZahl){
+			for(int i = 0; i < this.clientZahl; i++){
+				this.crp[i].startGame();
+			}
+		}
+	}
 
 	/**
 	 * main()-Methode zum Starten des Servers
@@ -154,10 +165,23 @@ public class BattleShipServer {
 				port = 0;
 			}
 		}
-		BattleShipServer server = new BattleShipServer(port, clientZahl, 1, 0, 0, 1, 5);
+		BattleShipServer server = new BattleShipServer(port, clientZahl, null, 1, 0, 0, 1, 5, null);
 		//		 Ab jetzt auf eingehende Verbindungsw�nsche von Clients warten
-		server.acceptClientConnectRequests();
+
 	}
+
+
+	@Override
+	public void run() {
+		acceptClientConnectRequests();
+		System.out.println("alle clients nun da");
+		for(int j = 0; j < clientZahl; j++){
+			crp[j].verarbeiteAnfragen(this);
+		}
+		//mainControler.ChangeShipsView();
+	}
+
+
 }
 
 

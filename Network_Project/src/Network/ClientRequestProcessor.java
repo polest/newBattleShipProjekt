@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Hashtable;
 
 public class ClientRequestProcessor implements Runnable{
 
@@ -23,6 +22,7 @@ public class ClientRequestProcessor implements Runnable{
 	private int corvette;
 	private int submarine;
 	private int fieldSize;
+	private BattleShipServer server;
 
 
 	/**
@@ -55,7 +55,6 @@ public class ClientRequestProcessor implements Runnable{
 
 		System.out.println("Verbunden mit Client " 
 				+ clientSocket.getInetAddress() + ":" + clientSocket.getPort());
-
 	}
 
 	/**
@@ -63,65 +62,59 @@ public class ClientRequestProcessor implements Runnable{
 	 * vorgebenen Kommunikationsprotokoll.
 	 */
 
-	public void verarbeiteAnfragen(){
-		System.out.println("Verbindung zu " + clientSocket.getInetAddress()
-				+ ":" + clientSocket.getPort() + " durch Client abgebrochen");
+	public void verarbeiteAnfragen(BattleShipServer server){
+		this.server = server;
+		out.println("changeInitView");
+		out.println(clientZahl);
+		out.println(destroyer);
+		out.println(frigate);
+		out.println(corvette);
+		out.println(submarine);
+		out.println(fieldSize);
+	}
 
-		out.println("setShips");
-		out.println(this.clientZahl);
-		out.println(this.destroyer);
-		out.println(this.frigate);
-		out.println(this.corvette);
-		out.println(this.submarine);
-		out.println(this.fieldSize);
 
-		
+	public void startGame(){
+		out.println("startGame");
 	}
 
 	public void run() {
-
 		String input = "";
 
 		// Begr��ungsnachricht an den Client senden
 		out.println("Server bereit");
 
 		// Hauptschleife zur wiederholten Abwicklung der Kommunikation
-		do {
-			// Beginn der Benutzerinteraktion:
-			// Aktion vom Client einlesen [dann ggf. weitere Daten einlesen ...]
+
+		do{
 			try {
 				input = in.readLine();
-			} catch (Exception e) {
-				System.out.println("--->Fehler beim Lesen vom Client (Aktion): ");
-				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 				continue;
 			}
-
-			// Eingabe bearbeiten:
-			if (input == null) {
-				// input wird von readLine() auf null gesetzt, wenn Client Verbindung abbricht
-				// Einfach behandeln wie ein "quit"
+			if(input == null){
 				input = "quit";
+			}else if(input.equals("fertig")){
+				server.setPlayerReadyToPlay(this);
 			}
-			else if (input.equals("quit")) {
-				// nichts tun, Schleifenende
-			} else if (input.equals("suchen")){
-			
-			} else if(input.equals("ueberprüfen")){
-			
-			} else if(input.equals("Spielerzahl")){
-				//BattleShipServer s = new BattleShipServer();
-				//s.setClientZahl(5);
+			//Wenn der Client 
+			else if(input.equals("setShipsFromClient")){
+				
+				try {
+					String ship = in.readLine();
+					String koords = in.readLine();
+					server.setShipsToPlayer(ship, koords, this);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
-		} while (!(input.equals("quit")));
 
-		System.out.println("Verbindung zu " + clientSocket.getInetAddress()
-				+ ":" + clientSocket.getPort() + " durch Client abgebrochen");
-
-		try {
-			clientSocket.close();
-		} catch (IOException e2) {
-		}
+		}while(!(input.equals("quit")));
 	}
 
 

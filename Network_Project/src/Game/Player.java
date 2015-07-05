@@ -47,6 +47,11 @@ public class Player implements Serializable{
 	private ImageIcon[] submarineIconV;
 	private BattleField_View battleFieldView;
 	private BattleField_View publicBattleFieldView;
+	private int destroyerIndex;
+	private int frigateIndex;
+	private int corvetteIndex;
+	private int submarineIndex;
+
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -63,6 +68,10 @@ public class Player implements Serializable{
 		this.playerName = playerName;
 		this.colorPrint = new ColoredPrint();
 		this.isBot = isKi;
+		this.destroyerIndex = 0;
+		this.frigateIndex = 0;
+		this.corvetteIndex = 0;
+		this.submarineIndex = 0;
 		//this.battleFieldView;
 
 		this.destroyer = new Destroyer[destroyer];
@@ -180,7 +189,7 @@ public class Player implements Serializable{
 	public void setBattleFieldView(BattleField_View battlefield){
 		this.battleFieldView = battlefield;
 	}
-	
+
 	public void setPublicBattleFieldView(BattleField_View battlefield){
 		this.publicBattleFieldView = battlefield;
 	}
@@ -188,7 +197,7 @@ public class Player implements Serializable{
 	public BattleField_View getBattleFieldView(){
 		return battleFieldView;
 	}
-	
+
 	public BattleField_View getPublicBattleFieldView(){
 		return publicBattleFieldView;
 	}
@@ -499,8 +508,7 @@ public class Player implements Serializable{
 	 */
 
 
-	public void saveShipCoordinatesH(int x, int y, Ship ship){
-		int length = ship.getShipSize();
+	public void saveShipCoordinatesH(int x, int y, int length){
 		int[][] coordinates = new int[2][length];
 		int[] startCoordsAndOrientation = new int[]{x, y, 0};
 
@@ -508,8 +516,29 @@ public class Player implements Serializable{
 			coordinates[0][i] = x+i;
 			coordinates[1][i] = y;
 		}
-		ship.setCoordinates(coordinates);
-		ship.setStartCoordsAndOrientation(startCoordsAndOrientation);
+
+		if(length == Destroyer.length){
+			destroyer[destroyerIndex].setCoordinates(coordinates);
+			destroyer[destroyerIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			destroyerIndex++;
+		}
+		else if(length == Frigate.length){
+			frigate[frigateIndex].setCoordinates(coordinates);
+			frigate[frigateIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			frigateIndex++;
+		}
+		else if(length == Corvette.length){
+			corvette[corvetteIndex].setCoordinates(coordinates);
+			corvette[corvetteIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			corvetteIndex++;
+		}
+		else if(length == Submarine.length){
+			submarine[submarineIndex].setCoordinates(coordinates);
+			submarine[submarineIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			submarineIndex++;
+		}
+
+
 	}
 
 	/**
@@ -520,8 +549,7 @@ public class Player implements Serializable{
 	 * @param shipNumber
 	 */
 
-	public void saveShipCoordinatesV(int x, int y, Ship ship){
-		int length = ship.getShipSize();
+	public void saveShipCoordinatesV(int x, int y, int length){
 		int[][] coordinates = new int[2][length];
 		int[] startCoordsAndOrientation = new int[]{x, y, 1};
 
@@ -529,8 +557,26 @@ public class Player implements Serializable{
 			coordinates[0][i] = x;
 			coordinates[1][i] = y+i;
 		}
-		ship.setCoordinates(coordinates);
-		ship.setStartCoordsAndOrientation(startCoordsAndOrientation);
+		if(length == Destroyer.length){
+			destroyer[destroyerIndex].setCoordinates(coordinates);
+			destroyer[destroyerIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			destroyerIndex++;
+		}
+		else if(length == Frigate.length){
+			frigate[frigateIndex].setCoordinates(coordinates);
+			frigate[frigateIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			frigateIndex++;
+		}
+		else if(length == Corvette.length){
+			corvette[corvetteIndex].setCoordinates(coordinates);
+			corvette[corvetteIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			corvetteIndex++;
+		}
+		else if(length == Submarine.length){
+			submarine[submarineIndex].setCoordinates(coordinates);
+			submarine[submarineIndex].setStartCoordsAndOrientation(startCoordsAndOrientation);
+			submarineIndex++;
+		}
 	}
 
 	/**
@@ -613,16 +659,14 @@ public class Player implements Serializable{
 		return false;
 	}
 
-	public void printShipOnField(Ship ship, BattleField_View battleFieldView){
+	public void printShipOnField(Ship ship, BattleField_View battleFieldView, int[] coords, int orientation){
 		int length = ship.getShipSize();
-		int[] coords = ship.getStartCoordsAndOrientation();
 		int x = coords[0];
 		int y = coords[1];
-		int orientation = coords[2];
 		JButton[][] field = battleFieldView.getBattleField();
 		initShipIconH(battleFieldView.getCellSize());
 		initShipIconV(battleFieldView.getCellSize());
-		
+
 		if(orientation == 0){
 			if(ship instanceof Destroyer){
 				for(int i = 0; i < length; i++){
@@ -668,7 +712,7 @@ public class Player implements Serializable{
 					field[x-1][y+i-1].setIcon(submarineIconV[i]);
 				}
 			}
-			
+
 		}
 		privateField.printPrivateField(playerName);
 	}

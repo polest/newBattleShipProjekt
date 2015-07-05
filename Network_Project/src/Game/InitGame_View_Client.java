@@ -1,6 +1,5 @@
 package Game;
 
-
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -11,18 +10,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import Ships.Ship;
 import Tools.ImagePanel;
 
-public class InitGame_View {
+public class InitGame_View_Client {
 
 	private ImagePanel initGamePan;
 	private int width;
 	private int height;
 	private JLabel playerName;
-	private JPanel cards;
 	private int fieldSize;
-	private BattleField_View[] battleFieldView;
-	private BattleField_View[] publicBattleFieldView;
+	private BattleField_View battleFieldView;
 	private int destroyer;
 	private int frigate;
 	private int corvette;
@@ -34,20 +32,13 @@ public class InitGame_View {
 	private int cellSize;
 	private JButton nextPlayer;
 
-	public InitGame_View(int playerLength){
+	public InitGame_View_Client(int playerLength){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = 600;
 		this.height = 800;
-
-		this.cards = new JPanel(new CardLayout());
-		this.cards.setBounds(30,30, 510, 510);
-		this.cards.setVisible(true);
-		this.cards.setOpaque(false);
-		this.battleFieldView =  new BattleField_View[playerLength];
-		this.publicBattleFieldView =  new BattleField_View[playerLength];
+		this.battleFieldView =  new BattleField_View();
 
 		initPan();
-		this.initGamePan.add(this.cards);
 		this.initGamePan.repaint();
 	}
 
@@ -99,33 +90,14 @@ public class InitGame_View {
 
 	}
 
-	private void addPanel(JPanel panel, String name){
-		this.cards.add(panel, name);
+	public JButton[][] getBattleField(){
+		return this.battleFieldView.getBattleField();
 	}
 
-	public void changeShownPan(String cardName){
-		CardLayout cardLayout = (CardLayout) cards.getLayout();
-		cardLayout.show(cards, cardName);
-		cards.revalidate();
-
+	public BattleField_View getBattleFieldView(){
+		return this.battleFieldView;
 	}
 
-	public void nextBattleField(){
-		CardLayout cardLayout = (CardLayout) cards.getLayout();
-		cardLayout.next(cards);
-	}
-
-	public JButton[][] getBattleField(int i){
-		return this.battleFieldView[i].getBattleField();
-	}
-
-	public BattleField_View getBattleFieldView(int i){
-		return this.battleFieldView[i];
-	}
-
-	public BattleField_View getPublicBattleFieldView(int i){
-		return this.publicBattleFieldView[i];
-	}
 
 	public void setFieldSize(int fieldSize){
 		this.fieldSize = fieldSize;
@@ -152,14 +124,11 @@ public class InitGame_View {
 	}
 
 	public void setBattleFieldMouseListener(MouseListener l){
-		for(int i = 0; i < this.battleFieldView.length; i++){
-			this.battleFieldView[i].setBattleFieldMouseListener(l);
-		}
+		this.battleFieldView.setBattleFieldMouseListener(l);
 	}
+
 	public void setBattleFieldMouseMotionListener(MouseMotionListener l){
-		for(int i = 0; i < this.battleFieldView.length; i++){
-			this.battleFieldView[i].setBattleFieldMouseMotionListener(l);
-		}
+		this.battleFieldView.setBattleFieldMouseMotionListener(l);
 	}
 
 	public int getCellSize(){
@@ -244,15 +213,9 @@ public class InitGame_View {
 		this.nextPlayer.setEnabled(true);
 	}
 
-	public void initFields(int length){
-		for(int i = 0; i < length; i++){
-			this.battleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
-			addPanel(this.battleFieldView[i].getView(), ("field"+i) );
-		}
-
-		for(int i = 0; i < length; i++){
-			this.publicBattleFieldView[i] = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
-		}
+	public void initFields(){
+		this.battleFieldView = new BattleField_View(this.initGamePan, this.fieldSize, 510, 30, 30);
+		initGamePan.add(this.battleFieldView.getView());
 	}
 
 

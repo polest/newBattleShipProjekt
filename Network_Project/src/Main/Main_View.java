@@ -15,6 +15,7 @@ public class Main_View{
 
 	private JLabel welcome_text;
 	private JButton newGame;
+	private JButton join;
 	private JButton loadGame;
 	private JButton instructions;
 	private MenuBar menubar;
@@ -61,7 +62,7 @@ public class Main_View{
 
 		//TODO Frame Icon hinzufügen
 	}
-	
+
 	private void initMenu(){
 		this.menubar = new MenuBar();
 		this.datei = new Menu("Datei");
@@ -137,10 +138,22 @@ public class Main_View{
 		this.newGame.setVisible(true);
 
 		//Button um ein Spiel zu laden
+		this.join = new JButton();
+		//this.loadGame.setText("Spiel Laden");
+		this.join.setIcon(new ImageIcon("Resources/loadGame.png"));
+		this.join.setBounds((this.width-buttonWidth)/2, 275, buttonWidth, 100);
+		//this.loadGame.setForeground(Color.BLUE);
+		this.join.setOpaque(false);
+		this.join.setContentAreaFilled(false);
+
+		this.join.setBorderPainted(false);
+		this.join.setVisible(true);
+
+		//Button um ein Spiel zu laden
 		this.loadGame = new JButton();
 		//this.loadGame.setText("Spiel Laden");
 		this.loadGame.setIcon(new ImageIcon("Resources/loadGame.png"));
-		this.loadGame.setBounds((this.width-buttonWidth)/2, 275, buttonWidth, 100);
+		this.loadGame.setBounds((this.width-buttonWidth)/2, 350, buttonWidth, 100);
 		//this.loadGame.setForeground(Color.BLUE);
 		this.loadGame.setOpaque(false);
 		this.loadGame.setContentAreaFilled(false);
@@ -150,13 +163,14 @@ public class Main_View{
 
 		this.instructions = new JButton();
 		this.instructions.setIcon(new ImageIcon("Resources/instructions.png"));
-		this.instructions.setBounds((this.width-buttonWidth)/2, 350, buttonWidth, 100);
+		this.instructions.setBounds((this.width-buttonWidth)/2, 425, buttonWidth, 100);
 		this.instructions.setOpaque(false);
 		this.instructions.setContentAreaFilled(false);
 		this.instructions.setBorderPainted(false);
 		this.instructions.setVisible(true);
 
 		this.welcomePan.add(this.newGame);
+		this.welcomePan.add(this.join);
 		this.welcomePan.add(this.loadGame);
 		this.welcomePan.add(this.instructions);
 
@@ -210,16 +224,20 @@ public class Main_View{
 	public void setLoadSelectionListener(ActionListener l){
 		this.loadGame.addActionListener(l);
 	}
+	
+	public void setJoinSelectionListener(ActionListener l){
+		this.join.addActionListener(l);
+	}
 
 	public void setInstructionsSelectionListener(ActionListener l){
 		this.instructions.addActionListener(l);
 		this.anleitung.addActionListener(l);
 	}
-	
+
 	public void setSaveSelectionListener(ActionListener l){
 		this.save.addActionListener(l);
 	}
-	
+
 	public void setExitSelectionListener(ActionListener l){
 		this.exit.addActionListener(l);
 	}

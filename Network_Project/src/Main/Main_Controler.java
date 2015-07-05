@@ -7,21 +7,21 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Game.InitGame;
-import Game.InitGame_View;
+import Game.InitGame_Client;
+import Game.InitGame_View_Client;
 import Game.Options;
 import Game.Options_View;
-import Game.Player;
 import Game.Round;
 import Game.Round_View;
 import Network.BattleShipServer;
 import Network.Client;
 import SaveGame.Load;
 import SaveGame.Save;
+import Tools.ImagePanel;
 
 public class Main_Controler implements Serializable{
 
@@ -32,12 +32,14 @@ public class Main_Controler implements Serializable{
 	private Main_View main_view;
 	private int width;
 	private int height;
+	private InitGame_Client initGameClient;
 	private InitGame initGame;
 	private Options gameOptions;
 	private Options_View gameOptionsView;
-	private InitGame_View initGameView;
+	private InitGame_View_Client initGameView;
 	private Round round;
-
+	private Client client;
+	private BattleShipServer server;
 
 	public Main_Controler(){
 
@@ -55,6 +57,7 @@ public class Main_Controler implements Serializable{
 	 */
 	private void addMainViewListener(){
 		this.main_view.setNewGameSelectionListener(new StartNewGameListener());
+		this.main_view.setJoinSelectionListener(new JoinGameListener());
 		this.main_view.setLoadSelectionListener(new LoadGameListener());
 		this.main_view.setInstructionsSelectionListener(new InstructionsListener());
 		this.main_view.setSaveSelectionListener(new SaveGameListener());
@@ -64,6 +67,50 @@ public class Main_Controler implements Serializable{
 	private void addOptionsListener(){
 		this.gameOptions.getView().setOkSelectionListener(new SetOptionsOkListener());
 		this.gameOptions.getView().setBackSelectionListener(new SetOptionsBackListener());
+	}
+
+	public void ChangeShipsView(){
+
+		main_view.changeShownPan("placeShipsPan");
+		initGameView.setNextSelectionListener(new NextPlayerListener());
+		main_view.getSave().setEnabled(true);
+
+	}
+
+	public void startServerAndGame(){
+		int player = gameOptions.getPlayer();
+		int destroyer = gameOptions.getDestroyer();
+		int frigate = gameOptions.getFrigate();
+		int corvette = gameOptions.getCorvette();
+		int submarine = gameOptions.getSubmarine();
+		int size = gameOptions.getBattlefieldSize();
+
+		initGameView =  new InitGame_View_Client(player);
+		initGameClient = new InitGame_Client(destroyer, frigate, corvette, submarine, size, initGameView);
+		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, size);
+		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
+
+		server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, size, this);
+		Thread t = new Thread(server);
+		t.start();
+
+		client = new Client("localhost", 4477, this);
+	}
+	
+	public void startInitGameView(ImagePanel initGameViewPan){
+		main_view.addPanel(initGameViewPan, "placeShipsPan");
+	}
+
+	public void addClientToGame(){
+		client = new Client("localhost", 4477, this);
+	}
+	
+	public void changeToRoundView(){
+		int fieldSize = initGame.getFieldSize();
+		round = new Round(initGame.getPlayer(), fieldSize);
+		Round_View roundView = round.getRoundView();
+		main_view.addPanel(roundView.getPanel(), "roundView"); 
+		main_view.changeShownPan("roundView");
 	}
 
 	/**
@@ -78,6 +125,12 @@ public class Main_Controler implements Serializable{
 		}
 	}
 	
+	private class JoinGameListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			addClientToGame();
+		}
+	}
+
 	private class ExitGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			System.exit(-1);
@@ -123,26 +176,7 @@ public class Main_Controler implements Serializable{
 
 	private class SetOptionsOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			int player = gameOptions.getPlayer();
-			int destroyer = gameOptions.getDestroyer();
-			int frigate = gameOptions.getFrigate();
-			int corvette = gameOptions.getCorvette();
-			int submarine = gameOptions.getSubmarine();
-			int size = gameOptions.getBattlefieldSize();
-			
-			BattleShipServer server = new BattleShipServer(4477, player, destroyer, frigate, corvette, submarine, size);
-			Thread t = new Thread((Runnable) server);
-			t.start();
-			server.acceptClientConnectRequests();
-			
-			Client client1 = new Client("localhost", 4477);
-			
-			initGameView =  new InitGame_View(gameOptions.getPlayer());
-			initGame = new InitGame(gameOptionsView, gameOptions, initGameView);
-			main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
-			main_view.changeShownPan("placeShipsPan");
-			initGameView.setNextSelectionListener(new NextPlayerListener());
-			main_view.getSave().setEnabled(true);
+			startServerAndGame();
 		}
 	}
 
@@ -150,35 +184,11 @@ public class Main_Controler implements Serializable{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			initGame.incrementPlayerId();
-			int playerId = initGame.getPlayerId();
-			Player[] player = initGame.getPlayer();
-
-
-			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView( (playerId-1) ) );
-			player[playerId-1].setPublicBattleFieldView(initGameView.getPublicBattleFieldView( (playerId-1) ) );
-			player[playerId-1].getBattleFieldView().clearBorder();
-			//			player[playerId-1].setBattleFieldView(initGameView.getBattleFieldView());
-
-
-			if(playerId < player.length){
-				//initGameView.clearField();
-				initGame.initPlayerBattleShip();
-				initGameView.setPlayerName(player[playerId].getPlayerName());
-				initGameView.disableNext();
-			}
-			else{
-				//start Game
-
-				int fieldSize = initGame.getFieldSize();
-				round = new Round(player, fieldSize);
-				Round_View roundView = round.getRoundView();
-				main_view.addPanel(roundView.getPanel(), "roundView"); 
-				main_view.changeShownPan("roundView");
-			}
-
+			client.setReady();
 		}
+
 	}
+
 
 	private class SaveGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -195,5 +205,6 @@ public class Main_Controler implements Serializable{
 				System.out.println("Es wurde keine Datei ausgewählt.");
 			}
 		}
+
 	}
 }

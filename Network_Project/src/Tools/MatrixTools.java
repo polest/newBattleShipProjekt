@@ -139,24 +139,22 @@ public class MatrixTools implements Serializable{
 	 * @param ship - ausgewählte Schiff
 	 * @return Gibt das mit dem ausgewähltem Schiff positionierte Spielfeld zurück 
 	 */
-	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, Ship ship ){	
+	public int[][] addMatrix(int xVal, int yVal, char orientation, int[][]matrix, int length ){	
 
 		int shipSymbol = 0;
-		int length = ship.getShipSize();
-
 		/*Je nach ausgewähltem Schiffstyp 
 		 *ein Kennzeichnungssymbol sowie die Schiffslänge setze
 		 */
-		if(ship instanceof Destroyer){
+		if(length == Destroyer.length){
 			shipSymbol = 1;
 		}
-		else if(ship instanceof Frigate){
+		else if(length == Frigate.length){
 			shipSymbol = 2;
 		}
-		else if(ship instanceof Corvette){
+		else if(length == Corvette.length){
 			shipSymbol = 3;
 		}
-		else if(ship instanceof Submarine){
+		else if(length == Submarine.length){
 			shipSymbol = 4;
 		}
 
@@ -189,9 +187,7 @@ public class MatrixTools implements Serializable{
 	 * @return Ein boolschen Wert, ob das Schiff an der ausgewählten Position und Ausrichtung
 	 * basierend auf den Spielregeln positioniert werden kann oder nicht
 	 */
-	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, Ship ship){
-		int length = ship.getShipSize();
-
+	public boolean checkPrivateFields(int xVal, int yVal, char orientation, int[][]matrix, int length){
 		int yIndex = yVal;
 		int xIndex = xVal;
 		int yMarginTop = 1;
