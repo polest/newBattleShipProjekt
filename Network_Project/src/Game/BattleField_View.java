@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import Ships.Ship;
 
 
+
 public class BattleField_View implements Serializable{
 
 	/**
@@ -36,6 +37,19 @@ public class BattleField_View implements Serializable{
 	private JLabel background;
 
 	
+	
+	/**
+	 * @param panel
+	 * @param fieldSize
+	 * @param width
+	 * @param startX
+	 * @param startY
+	 * 
+	 * Konstruktor von BattleField_View
+	 * ruft initField auf
+	 * setzt Parameter
+	 */
+	
 	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
 		this.panel = panel;
 		this.width = width;
@@ -46,7 +60,13 @@ public class BattleField_View implements Serializable{
 		this.empty = new ImageIcon("Resources/empty.png");
 		initField();
 	}
+	
+	
 
+	/**
+	 * Konstruktor ohne Parametererwartungen
+	 * erstellt ein leeres Spielfeld (Buttons mit einem leeren Icon)
+	 */
 	public BattleField_View() {
 		for(int i = 0; i < this.fieldSize; i++){
 			for(int j = 0; j < this.fieldSize; j++){
@@ -58,20 +78,41 @@ public class BattleField_View implements Serializable{
 	}
 
 
+	/**
+	 * @param ship
+	 * @param coords
+	 * @param orientation
+	 * Methode um auf ein Feld (x,y) zu schießen
+	 * 
+	 */
 	public void shootOnField(Ship ship, int[] coords, char orientation){
 		int length = ship.getShipSize();
 		int x = coords[0];
 		int y = coords[1];
 	}
+	
+	
 
+	/**
+	 * JPanel Getter
+	 * @return battleFieldViewPanel
+	 */
 	public JPanel getView(){
 		return battleFieldViewPanel;
 	}
 
+	
+	/**
+	 * JButton[][] Getter
+	 * @return ButtonField
+	 */
 	public JButton[][] getField(){
 		return this.field;
 	}
 
+	/**
+	 * Methode um den Rand aller Buttons auf grau zu setzen
+	 */
 	public void clearBorder(){
 		for(int i = 0; i < this.fieldSize; i++){
 			for(int j = 0; j < this.fieldSize; j++){
@@ -80,6 +121,13 @@ public class BattleField_View implements Serializable{
 		}
 	}
 
+	
+	/**
+	 * Methode um die Listener einer Koordinate zu entfernen
+	 * ActionListener wird entfernt
+	 * MouseListener wird entfernt
+	 * MousMotionListener wird entfernt
+	 */
 	public void removeListener(){
 		for(int i = 0; i < this.fieldSize; i++){
 			for(int j = 0; j < this.fieldSize; j++){
@@ -104,6 +152,13 @@ public class BattleField_View implements Serializable{
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * @param width
+	 * Setzt die Größe des BattleField Hintergrundes
+	 * 
+	 */
 	public void setSize(int x, int y, int width){
 		this.battleFieldViewPanel.setBounds(x, y, width, width);
 		this.cellSize = width/this.fieldSize;
@@ -124,6 +179,13 @@ public class BattleField_View implements Serializable{
 	}
 
 
+	/**
+	 * Getter
+	 * field
+	 * cellSize
+	 * startX
+	 * startY
+	 */
 	public JButton[][] getBattleField(){
 		return this.field;
 	}
@@ -140,6 +202,15 @@ public class BattleField_View implements Serializable{
 		return this.startY;
 	}
 
+	/**
+	 * initialisiert das Feld
+	 * fügt jeder Koordinate des battleFieldViewPanels 
+	 * einen leeren Button hinzu.
+	 * 
+	 * fügt dem BattleFieldViewPanel das Background Image hinzu
+	 * 
+	 * added dem Panel das battleFieldViewPanel hinzu
+	 */
 	private void initField(){
 		cellSize = this.width/this.fieldSize;
 		int size = this.fieldSize*this.cellSize;
@@ -186,6 +257,10 @@ public class BattleField_View implements Serializable{
 	}
 
 
+	/**
+	 * @param l
+	 * added jeder Koordinate des Spielfeldes den MousListener
+	 */
 	public void setBattleFieldMouseListener(MouseListener l){
 		//vertical 
 		for(int i = 0; i < this.fieldSize; i++){
@@ -196,6 +271,10 @@ public class BattleField_View implements Serializable{
 		}
 	}
 
+	/**
+	 * @param l
+	 * added jeder Koordinate des Spielfeldes den MousMotionListener
+	 */
 	public void setBattleFieldMouseMotionListener(MouseMotionListener l){
 		//		//vertical 
 		for(int i = 0; i < this.fieldSize; i++){
@@ -208,6 +287,14 @@ public class BattleField_View implements Serializable{
 
 	}
 
+	/**
+	 * @param ship
+	 * @param koords
+	 * @param orientation
+	 * 
+	 * ändert anhand der Koordinaten, dem Schiff und der Orientierung
+	 * das ImageIcon zu getroffenem Wasser Bild.
+	 */
 	public void setAttack(Ship ship, int[] koords, char orientation){
 		int x = koords[0];
 		int y = koords[1];

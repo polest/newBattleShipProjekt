@@ -35,6 +35,20 @@ public class InitGame_View {
 	private int cellSize;
 	private JButton nextPlayer;
 
+	/**
+	 * @param playerLength - wie viele Spieler
+	 * @param destroyer - wie viele Zerstörer
+	 * @param frigate - wie viele Frigatten
+	 * @param corvette - wie viele Korvetten
+	 * @param submarine - wie viele U-Boote
+	 * @param fieldsize - wie groß das Spielfeld sein soll
+	 * Konstruktor von initGame_View setzt alle Parameter
+	 * erstellt eine neues JPanel CardLayout
+	 * erstellt eine Spielfeld pro Spieler (privat und öffentlich)
+	 * ruft initPan auf
+	 * added das initGamePanel dem cardLayout
+	 */
+	
 	public InitGame_View(int playerLength, int destroyer, int frigate, int corvette, int submarine, int fieldsize){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = 600;
@@ -58,6 +72,11 @@ public class InitGame_View {
 		this.initGamePan.repaint();
 	}
 
+	/**
+	 * richtet das Panel ein
+	 * erstellt ein Label playerName und übergibt es dem Panel
+	 * erstellt die ToggleBUttons für die Schiffe und übergibt sie dem Panel
+	 */
 	private void initPan(){
 		this.initGamePan.setVisible(true);
 		this.initGamePan.setLayout(null);

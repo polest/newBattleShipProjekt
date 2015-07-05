@@ -24,10 +24,7 @@ import Tools.ColoredPrint.EPrintColor;
 
 public class InitGame implements Serializable{
 
-	/**
-	 * @author ML
-	 * @version 21.03.15
-	 */
+
 	private static final long serialVersionUID = 988834907748712441L;
 
 	private Load load = new Load();

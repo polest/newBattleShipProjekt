@@ -14,10 +14,7 @@ import javax.swing.event.DocumentListener;
 
 
 public class Options implements Serializable{
-	/**
-	 * * @author ML
-	 * @version 21.03.15
-	 */
+	
 	private static final long serialVersionUID = 6599149630474669593L;
 	private int player;
 	private boolean[] playerIsKi;
@@ -30,6 +27,13 @@ public class Options implements Serializable{
 	private int battlefieldSize;
 	private Options_View optionsView;
 
+	/**
+	 * @param width
+	 * @param height
+	 * speichert die Namen der Spieler in einem String Array
+	 * ruft optionsView auf
+	 * ruft add Listener auf
+	 */
 	public Options(int width,int height){
 		this.totalShips = 0;
 		this.playerNames = new String[6];
@@ -40,6 +44,20 @@ public class Options implements Serializable{
 		addListener();
 	}
 
+	/**
+	 * Getter
+	 * player
+	 * playerNames
+	 * destroyer
+	 * frigate
+	 * corvette
+	 * submarine
+	 * totalShips
+	 * battleFieldSize
+	 * optionsViewPanel
+	 * ki
+	 * optionsView
+	 */
 	public int getPlayer() {
 		return player;
 	}
@@ -83,10 +101,13 @@ public class Options implements Serializable{
 	public Options_View getView(){
 		return this.optionsView;
 	}
+	
 	/**
 	 * Einstellungen der Spieleranzahl
+	 * speichert die Spieleranzahl
+	 * initialiert dementsprechend Ki Bools
+	 * setzt die Spieler Buttons in initView auf "number"
 	 */
-
 	private void setPlayer(String number){
 		int count = Integer.parseInt(number); 
 		this.player = count;
@@ -95,6 +116,12 @@ public class Options implements Serializable{
 		this.optionsView.setPlayerToggle(count);
 	}
 
+	
+	
+	/**
+	 * @param chkbx
+	 * je nachdem wie viele Ki Checkboxes ausgewählt sind werden Spieler auf isKi true gesetzt.
+	 */
 	private void setKi(JCheckBox chkbx){
 		optionsView.setKi(chkbx);
 		playerIsKi = new boolean[this.player];
@@ -105,6 +132,11 @@ public class Options implements Serializable{
 	}
 
 
+	/**
+	 * @param cmbbox
+	 * liest die comboBox aktion des Nutzers aus und speichert die Schiffsanzahl
+	 * 
+	 */
 	private void setShips(JComboBox cmbbox){
 		if(cmbbox.getActionCommand() == "destroyer"){
 			this.destroyer = Integer.parseInt( cmbbox.getSelectedItem().toString() );
@@ -124,6 +156,11 @@ public class Options implements Serializable{
 		this.optionsView.setSize(minSize);
 	}
 
+	/**
+	 * @param preferredSize
+	 * übergibt die minimale Spielfeldgröße an optionsView
+	 * speichert minimale Spielfeldgröße in battleFieldSize
+	 */
 	private void setSize(int preferredSize){
 		int minSize = setBattleFieldSize();
 		if(minSize > preferredSize){
@@ -135,7 +172,12 @@ public class Options implements Serializable{
 			this.battlefieldSize = preferredSize;
 		}
 	}
+	
 
+	/**
+	 * @param name
+	 * Speichert die einzelnen SpielerNamen die in Optionsview im NamensFeld gespeichert sind.
+	 */
 	private void setName(JTextField name){
 		JTextField[] textFields = this.optionsView.getNamesFields();
 		for(int i = 0; i < textFields.length; i++){
