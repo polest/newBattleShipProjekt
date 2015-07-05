@@ -187,7 +187,7 @@ public class Main_Controler implements Serializable{
 			ipLabel.setBounds(10, 20, 80, 30);
 			ipLabel.setVisible(true);
 		
-			ipField.setText("188.96.182.216");
+			ipField.setText("localhost");
 			ipField.setBounds(100, 20, 150, 30);
 			ipField.setVisible(true);
 			
