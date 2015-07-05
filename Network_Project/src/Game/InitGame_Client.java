@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import Network.Client;
 import SaveGame.Load;
 import Ships.Corvette;
 import Ships.Destroyer;
@@ -54,6 +55,7 @@ public class InitGame_Client implements Serializable{
 	private int oldBtnY;
 	private Ship choosenShip;
 	private boolean shipCanBePlaced;
+	private Client client;
 
 
 
@@ -166,6 +168,7 @@ public class InitGame_Client implements Serializable{
 	private void addListener(){
 		this.initGameView.getBattleFieldView().setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
 		this.initGameView.setShipsSelectionListener(new ShipsListener());
+		this.initGameView.getBattleFieldView().setBattleFieldMouseListener(new BattleFieldMouseListener());
 	}
 
 	public boolean setShipToField(Ship ship, String pos) {
@@ -189,6 +192,10 @@ public class InitGame_Client implements Serializable{
 			return false;
 		}
 
+	}
+	
+	public void addClient(Client client){
+		this.client = client;
 	}
 
 	/**
@@ -222,6 +229,7 @@ public class InitGame_Client implements Serializable{
 		}
 		return null;
 	}
+
 
 
 	private void setShipsOrientation(int x, int y){
@@ -276,7 +284,114 @@ public class InitGame_Client implements Serializable{
 		shipCanBePlaced =  this.player.getPrivateField().checkFree(length, x, y, orientation);
 		return shipCanBePlaced;
 	}
+	private class BattleFieldMouseListener implements MouseListener{
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("totalShips: " + totalShips);
+			boolean checked;
+	
+			if(choosenShip != null){
+				if(shipCanBePlaced == true){
+					JButton btn = (JButton)e.getSource();
+					String pos = btn.getActionCommand();
 
+					if(choosenShip instanceof Destroyer){
+						checked = setShipToField(choosenShip, pos);
+
+						if(checked == true){
+							client.sendShipToServer("destroyer; " + pos);
+							
+//							TODO CLIENTREQUESTPROZEESOR!
+//							out.println("setShipFromClient");
+//							out.println("destroyer");
+//							out.println(pos);
+							destroyerCount--;
+							initGameView.decrementDestroyer(destroyerCount);
+							if(destroyerCount <= 0){
+								initGameView.setDestroyerDisabled();
+								choosenShip = null;
+							}
+						}
+					}
+					else if(choosenShip instanceof Frigate){
+//						checked = initGame.setShipToField(choosenShip, pos);
+//
+//						if(checked == true){
+//							out.println("setShipFromClient");
+//							out.println("frigate");
+//							out.println(pos);
+//							frigateCount--;
+//							initGameView.decrementFrigate(frigateCount);
+//							if(frigateCount <= 0){
+//								initGameView.setFrigateDisabled();
+//								choosenShip = null;
+//							}
+//						}
+					}
+					else if(choosenShip instanceof Corvette){
+//						checked = initGame.setShipToField(choosenShip, pos);
+//
+//						if(checked == true){
+//							out.println("setShipFromClient");
+//							out.println("corvette");
+//							out.println(pos);
+//
+//							corvetteCount--;
+//							initGameView.decrementCorvette(corvetteCount);
+//							if(corvetteCount <= 0){
+//								initGameView.setCorvetteDisabled();
+//								choosenShip = null;
+//							}
+//						}
+					}
+
+					else if(choosenShip instanceof Submarine){
+//						checked = initGame.setShipToField(choosenShip, pos);
+//						if(checked == true){
+//							out.println("setShipFromClient");
+//							out.println("destroyer");
+//							out.println(pos);
+//
+//							submarineCount--;
+//							initGameView.decrementSubmarine(submarineCount);
+//							if(submarineCount <= 0){
+//								initGameView.setSubmarineDisabled();
+//								choosenShip = null;
+//							}
+//						}
+					}
+					totalShips--;
+					System.out.println("totalShips: " + totalShips);
+					if(totalShips <= 0){
+						initGameView.enableFinish();
+					}
+				}
+			}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
 	private class BattleFieldMouseMotionListener implements MouseMotionListener{
 
 		@Override

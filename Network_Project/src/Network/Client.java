@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import Game.InitGame_Client;
 import Game.InitGame_View_Client;
@@ -24,18 +25,9 @@ public class Client implements Runnable{
 	private Socket socket = null;
 	private BufferedReader in; // server-input stream
 	private PrintStream out; // server-output stream
-	private Ship choosenShip;
-	private int destroyerCount;
-	private int frigateCount;
-	private int corvetteCount;
-	private int submarineCount;
-	private boolean shipCanBePlaced;
-	private int totalShips;
-	private InitGame_Client initGame;
-	private InitGame_View_Client initGameView;
 	private Main_Controler mainControler;
 
-	
+
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 	 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
@@ -68,9 +60,13 @@ public class Client implements Runnable{
 		// Verbindung erfolgreich hergestellt: IP-Adresse und Port ausgeben
 		System.err.println("Verbunden mit Server " 
 				+ socket.getInetAddress() + ":" + socket.getPort());
-		run();
 	}
 
+	public void sendShipToServer(String ship){
+		out.println("sendShipToServer");
+		out.println(ship);
+	}
+	
 	public void setReady(){
 		out.println("fertig");
 	}
@@ -110,8 +106,8 @@ public class Client implements Runnable{
 	public void run() {
 		//this.mainControler.ChangeShipsView();
 
-		String message = "lalalala";
-		
+		String message = "";
+
 		try {
 			message = in.readLine();
 		} catch (IOException e) {
@@ -119,11 +115,25 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
 		while(!(message.equals("dead") ) ){
-			System.out.println(message);
 			if(message.equals("changeInitView") ){
-				initGameOptionsAndView();
+				String values = "";
+				try {
+					values = in.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String attributes[] = values.split(";");
+				System.out.println("values = " + values);
+				int player = Integer.parseInt(attributes[0]);
+				int	destroyer = Integer.parseInt(attributes[1]);
+				int frigate = Integer.parseInt(attributes[2]);
+				int corvette = Integer.parseInt(attributes[3]);
+				int submarine = Integer.parseInt(attributes[4]);
+				int fieldSize = Integer.parseInt(attributes[5]);
 
-				mainControler.startInitGameView(initGameView.getPanel());
+				mainControler.startInitGameView(player, destroyer, frigate, corvette, submarine, fieldSize);
+				message = "";
 			}
 			else if(message.equals("startGame") ){
 				mainControler.changeToRoundView();
@@ -131,6 +141,7 @@ public class Client implements Runnable{
 		}
 
 		//TODO Quit
+
 	}
 
 
@@ -149,145 +160,6 @@ public class Client implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void initGameOptionsAndView(){
-		int player = 0;
-		int fieldSize = 0;
-		try {
-			player = Integer.parseInt( in.readLine() );
-			this.destroyerCount = Integer.parseInt( in.readLine() );
-			this.frigateCount = Integer.parseInt( in.readLine() );
-			this.corvetteCount =  Integer.parseInt( in.readLine() );
-			this.submarineCount = Integer.parseInt( in.readLine() );
-			fieldSize = Integer.parseInt( in.readLine() );
-
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		this.totalShips = this.destroyerCount + this.frigateCount + this.corvetteCount + this.submarineCount;
-
-		initGameView =  new InitGame_View_Client(player);
-		initGame = new InitGame_Client(this.destroyerCount, this.frigateCount, this.corvetteCount, this.submarineCount, fieldSize, initGameView);
-
-		this.initGameView.getBattleFieldView().setBattleFieldMouseListener(new BattleFieldMouseListener());
-
-	}
-
-
-	private class BattleFieldMouseListener implements MouseListener{
-		public void mouseClicked(MouseEvent e) {
-			System.out.println("totalShips: " + totalShips);
-			boolean checked;
-			choosenShip = initGame.getChoosenShip();
-			shipCanBePlaced = initGame.getCanBePlaced();
-
-			if(choosenShip != null){
-				if(shipCanBePlaced == true){
-					JButton btn = (JButton)e.getSource();
-					String pos = btn.getActionCommand();
-
-					if(choosenShip instanceof Destroyer){
-						checked = initGame.setShipToField(choosenShip, pos);
-
-						if(checked == true){
-							//TODO CLIENTREQUESTPROZEESOR!
-							out.println("setShipFromClient");
-							out.println("destroyer");
-							out.println(pos);
-
-							destroyerCount--;
-							initGameView.decrementDestroyer(destroyerCount);
-							if(destroyerCount <= 0){
-								initGameView.setDestroyerDisabled();
-								choosenShip = null;
-							}
-						}
-					}
-					else if(choosenShip instanceof Frigate){
-						checked = initGame.setShipToField(choosenShip, pos);
-
-						if(checked == true){
-							out.println("setShipFromClient");
-							out.println("frigate");
-							out.println(pos);
-							frigateCount--;
-							initGameView.decrementFrigate(frigateCount);
-							if(frigateCount <= 0){
-								initGameView.setFrigateDisabled();
-								choosenShip = null;
-							}
-						}
-					}
-					else if(choosenShip instanceof Corvette){
-						checked = initGame.setShipToField(choosenShip, pos);
-
-						if(checked == true){
-							out.println("setShipFromClient");
-							out.println("corvette");
-							out.println(pos);
-
-							corvetteCount--;
-							initGameView.decrementCorvette(corvetteCount);
-							if(corvetteCount <= 0){
-								initGameView.setCorvetteDisabled();
-								choosenShip = null;
-							}
-						}
-					}
-
-					else if(choosenShip instanceof Submarine){
-						checked = initGame.setShipToField(choosenShip, pos);
-						if(checked == true){
-							out.println("setShipFromClient");
-							out.println("destroyer");
-							out.println(pos);
-
-							submarineCount--;
-							initGameView.decrementSubmarine(submarineCount);
-							if(submarineCount <= 0){
-								initGameView.setSubmarineDisabled();
-								choosenShip = null;
-							}
-						}
-					}
-					totalShips--;
-					System.out.println("totalShips: " + totalShips);
-					if(totalShips <= 0){
-						initGameView.enableFinish();
-					}
-				}
-			}
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 }

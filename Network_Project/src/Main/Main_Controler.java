@@ -1,13 +1,19 @@
 package Main;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Game.InitGame;
@@ -40,6 +46,16 @@ public class Main_Controler implements Serializable{
 	private Round round;
 	private Client client;
 	private BattleShipServer server;
+	private String ipAdress;
+	private int port;
+	
+	private JFrame connection;
+	private JLabel portLabel;
+	private JTextField portField;
+	private JLabel ipLabel;
+	private JTextField ipField;
+	private JButton button;
+	
 
 	public Main_Controler(){
 
@@ -72,37 +88,57 @@ public class Main_Controler implements Serializable{
 	public void ChangeShipsView(){
 
 		main_view.changeShownPan("placeShipsPan");
-		initGameView.setNextSelectionListener(new NextPlayerListener());
+		initGameView.setNextSelectionListener(new StartRoundListener());
 		main_view.getSave().setEnabled(true);
 
 	}
 
 	public void startServerAndGame(){
 		int player = gameOptions.getPlayer();
+		System.out.println(player);
 		int destroyer = gameOptions.getDestroyer();
+		System.out.println(destroyer);
 		int frigate = gameOptions.getFrigate();
+		System.out.println(frigate);
 		int corvette = gameOptions.getCorvette();
+		System.out.println(corvette);
 		int submarine = gameOptions.getSubmarine();
+		System.out.println(submarine);
 		int size = gameOptions.getBattlefieldSize();
-
+		System.out.println(size);
+		
 		initGameView =  new InitGame_View_Client(player);
 		initGameClient = new InitGame_Client(destroyer, frigate, corvette, submarine, size, initGameView);
 		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, size);
 		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 
-		server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, size, this);
-		Thread t = new Thread(server);
+		Thread t = new Thread(server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, size, this) );
 		t.start();
-
-		client = new Client("localhost", 4477, this);
+		
+		Thread s = new Thread(client = new Client("localhost", 4477, this) );
+		s.start();
+		initGameClient.addClient(client);
 	}
 	
-	public void startInitGameView(ImagePanel initGameViewPan){
-		main_view.addPanel(initGameViewPan, "placeShipsPan");
+	public void startInitGameView(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize){
+		System.out.println("auswerten fertig!");
+		int totalShips;
+
+		totalShips = destroyer + frigate + corvette + submarine;
+
+		 initGameView =  new InitGame_View_Client(player);
+	     initGameClient = new InitGame_Client(destroyer, frigate, corvette, submarine, fieldSize, initGameView);
+
+	     initGameClient.addClient(client);
+	     main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
+	     ChangeShipsView();
+		
 	}
 
 	public void addClientToGame(){
-		client = new Client("localhost", 4477, this);
+		
+		Thread s = new Thread(client = new Client(ipAdress, port, this) );
+		s.start();
 	}
 	
 	public void changeToRoundView(){
@@ -127,7 +163,63 @@ public class Main_Controler implements Serializable{
 	
 	private class JoinGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			addClientToGame();
+			connection = new JFrame("Anmelden");
+			JPanel pan = new JPanel();
+			pan.setLayout(null);
+			portLabel = new JLabel();
+			portField = new JTextField();
+			ipLabel = new JLabel();
+			ipField = new JTextField();
+			button = new JButton("OK");
+			
+			connection.setLocationRelativeTo(null);
+			connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			connection.setSize(300, 200);
+			connection.setVisible(true);
+			connection.add(pan);
+			pan.setBounds(0,0,300,200);
+			pan.add(portLabel);
+			pan.add(portField);
+			pan.add(ipLabel);
+			pan.add(ipField);
+			
+			ipLabel.setText("Ip Adresse");
+			ipLabel.setBounds(10, 20, 80, 30);
+			ipLabel.setVisible(true);
+		
+			ipField.setText("188.96.182.216");
+			ipField.setBounds(100, 20, 150, 30);
+			ipField.setVisible(true);
+			
+			portLabel.setText("Port");
+			portLabel.setBounds(10, 50, 80, 30);
+			portLabel.setVisible(true);
+		
+			portField.setText("4477");
+			portField.setBounds(100, 50, 100, 30);
+			portField.setVisible(true);
+			
+			button.setBounds(150, 100, 50, 50);
+			pan.add(button);
+			button.addActionListener(new AddressOkListener());
+			
+		}
+	}
+	
+	private class AddressOkListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			ipAdress = ipField.getText();
+			String portS = portField.getText();
+			try{
+				port = Integer.parseInt(portS);
+				connection.dispose();
+				System.out.println("" + ipAdress + ", " + portS);
+				addClientToGame();
+			}
+			catch(Exception f){
+				portField.setBorder(BorderFactory.createLineBorder(Color.red));
+			}
+			
 		}
 	}
 
@@ -180,7 +272,7 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
-	private class NextPlayerListener implements ActionListener{
+	private class StartRoundListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -188,7 +280,6 @@ public class Main_Controler implements Serializable{
 		}
 
 	}
-
 
 	private class SaveGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -207,4 +298,6 @@ public class Main_Controler implements Serializable{
 		}
 
 	}
+	
+	
 }

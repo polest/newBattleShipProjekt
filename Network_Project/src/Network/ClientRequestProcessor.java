@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+
 public class ClientRequestProcessor implements Runnable{
 
 	// Referenz auf das serverseitige Adressbuch
@@ -23,6 +27,8 @@ public class ClientRequestProcessor implements Runnable{
 	private int submarine;
 	private int fieldSize;
 	private BattleShipServer server;
+	private JFrame connection = new JFrame();
+	private JLabel status = new JLabel();
 
 
 	/**
@@ -33,13 +39,22 @@ public class ClientRequestProcessor implements Runnable{
 		//Verbindungsdaten �bernehmen
 		clientSocket = socket;
 
-		this.clientZahl = clientZahl;
+		this.clientZahl = player;
 		this.destroyer = destroyer;
 		this.frigate = frigate;
 		this.corvette = corvette;
 		this.submarine = submarine;
 		this.fieldSize = fieldSize;
-
+		
+		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		connection.setSize(200, 200);
+		connection.setVisible(true);
+		connection.add(status);
+		status.setText("angemeldet... warten auf weitere Spieler");
+		status.setBounds(10,0, 100, 30);
+		status.setVisible(true);
+	
+		System.out.println("Daten sind: " + this.clientZahl + "," + this.destroyer  + "," + this.frigate   + "," + this.corvette   + "," + this.submarine   + "," + this.fieldSize) ; 		
 		// I/O-Streams initialisieren:
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -66,12 +81,9 @@ public class ClientRequestProcessor implements Runnable{
 		this.server = server;
 		System.out.println("schicke nachrichten");
 		out.println("changeInitView");
-		out.println(clientZahl);
-		out.println(destroyer);
-		out.println(frigate);
-		out.println(corvette);
-		out.println(submarine);
-		out.println(fieldSize);
+		String values = clientZahl + ";" + destroyer + ";" + frigate + ";" + corvette + ";" + submarine + ";" + fieldSize + ";";
+		System.out.println("Sending: " + values);
+		out.println("" + values);
 		out.flush();
 	}
 
@@ -80,7 +92,7 @@ public class ClientRequestProcessor implements Runnable{
 		out.println("startGame");
 	}
 
-	public void run() {
+	public void start() {
 		String input = "";
 
 		// Begr��ungsnachricht an den Client senden
@@ -102,12 +114,13 @@ public class ClientRequestProcessor implements Runnable{
 				server.setPlayerReadyToPlay(this);
 			}
 			//Wenn der Client 
-			else if(input.equals("setShipsFromClient")){
+			else if(input.equals("sendShipToServer")){
 
 				try {
-					String ship = in.readLine();
-					String koords = in.readLine();
-					server.setShipsToPlayer(ship, koords, this);
+					String values = in.readLine();
+					String[] splitted = values.split(";");
+					
+					server.setShipsToPlayer(splitted[0], splitted[1], this);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -115,12 +128,20 @@ public class ClientRequestProcessor implements Runnable{
 				}
 
 			}
+			else if(input.equals("fertig")){
+				server.setReady();
+			}
 		}while(!(input.equals("quit")));
 		try {
 			clientSocket.close();
 		} catch (IOException e2) {
 
 		}
+	}
+
+	@Override
+	public void run() {
+		
 	}
 
 
