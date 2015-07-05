@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import Game.InitGame;
-import Game.InitGame_Client;
 import Main.Main_Controler;
 
 
@@ -181,10 +179,7 @@ public class BattleShipServer implements Runnable{
 		//mainControler.ChangeShipsView();
 	}
 
-
 }
-
-
 
 //// in gesondertem Thread starten:
 //ClientAdressRequestProcessor c 

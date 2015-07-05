@@ -37,6 +37,7 @@ public class Client implements Runnable{
 	private InitGame_View_Client initGameView;
 	private Main_Controler mainControler;
 
+	
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 	 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
@@ -113,27 +114,47 @@ public class Client implements Runnable{
 		String message = "lalalala";
 		while( !(message.equals("dead") ) ){
 			System.out.println("client run");
-			try {
-				message = in.readLine();
-				System.out.println(message);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
 			if(message.equals("changeInitView") ){
 				initGameOptionsAndView();
-				
+
 				mainControler.startInitGameView(initGameView.getPanel());
 			}
 			else if(message.equals("startGame") ){
 				mainControler.changeToRoundView();
 			}
 		}
-		
+
 		//TODO Quit
 	}
 
+
+	private void verarbeiteServerAufgabe(){
+		String message = "";
+		try {
+			message = in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(message.equals("setShips")){
+			try {
+				//							this.player = Integer.parseInt(in.readLine());
+				//							this.destroyer = Integer.parseInt(in.readLine());
+				//							this.frigate = Integer.parseInt(in.readLine());
+				//							this.corvette = Integer.parseInt(in.readLine());
+				//							this.submarine = Integer.parseInt(in.readLine());
+				//							this.fieldSize = Integer.parseInt(in.readLine());
+				//
+				//							initGameView = new InitGame_View(this.player, this.destroyer, this.frigate, this.corvette, this.submarine, this.fieldSize);					
+
+
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private void initGameOptionsAndView(){
 		int player = 0;

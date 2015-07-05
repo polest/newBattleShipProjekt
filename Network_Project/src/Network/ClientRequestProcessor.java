@@ -101,20 +101,24 @@ public class ClientRequestProcessor implements Runnable{
 			}
 			//Wenn der Client 
 			else if(input.equals("setShipsFromClient")){
-				
+
 				try {
 					String ship = in.readLine();
 					String koords = in.readLine();
 					server.setShipsToPlayer(ship, koords, this);
-					
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-			}
 
+			}
 		}while(!(input.equals("quit")));
+		try {
+			clientSocket.close();
+		} catch (IOException e2) {
+
+		}
 	}
 
 
