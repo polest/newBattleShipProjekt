@@ -27,7 +27,8 @@ public class Round_View implements Serializable{
 	//private BattleField_View[] enemies;
 	//private BattleField_View shownField;
 	private JButton[][] clickButtons;
-	private Player[] player;
+	//private Player[] playerGroup;
+	private int playerLength;
 	private JLabel[] clickLabel;
 	private JLabel[] enemiesName;
 	private JLabel shownFieldPlayerName;
@@ -38,18 +39,25 @@ public class Round_View implements Serializable{
 	private JToggleButton corvette;
 	private JToggleButton submarine;
 	private JLabel messages;
+	private Player player;
+	private String[] playerNames;
+	private BattleField_View[] playerGroup;
 
-
-	public Round_View(int fieldSize, Player[] player){
+	public Round_View(Player player, int fieldSize, int playerLength, String[] playerNames){
 		this.roundPan = new ImagePanel("Resources/unterwasser.jpg");
 		this.roundPan.setLayout(null);
 		this.fieldSize = fieldSize;
+		this.playerLength = playerLength;
+		this.playerNames = playerNames;
 		this.player = player;
+		this.playerGroup = new BattleField_View[playerLength];
+		//		this.player = player;
 		initRoundView();
 	}
 
 	private void initRoundView(){
-
+		this.playerGroup[0] = this.player.getBattleFieldView();
+		
 		int cellSize = 400/this.fieldSize;
 		this.clickButtons = new JButton[this.fieldSize][this.fieldSize];
 		for(int i = 0; i < this.fieldSize; i++){
@@ -68,7 +76,7 @@ public class Round_View implements Serializable{
 		}
 
 		//Restlichen Spieler in klein
-		int enemysCount = player.length - 1;
+		int enemysCount = playerLength - 1;
 
 
 		int miniFieldSize;
@@ -85,9 +93,9 @@ public class Round_View implements Serializable{
 		int xx = 530;
 		int yy = 100;
 
-		this.clickLabel = new JLabel[player.length];
+		this.clickLabel = new JLabel[playerLength];
 
-		for(int k = 1; k < player.length; k++){
+		for(int k = 1; k < playerLength; k++){
 			if(k == 4){
 				xx = 530 + miniFieldSize + 50;
 				yy = 100;
@@ -98,30 +106,23 @@ public class Round_View implements Serializable{
 			yy += miniFieldSize  + 30;
 		}
 
-		this.order = new int[player.length];
-		for(int o = 0; o < player.length; o++){
+		this.order = new int[playerLength];
+		for(int o = 0; o < playerLength; o++){
 			this.order[o] = o;
 		}
 		this.choosen = 0;
 		//Erster Spieler in groß anzeigen
-		shownFieldPlayerName = new JLabel(player[0].getPlayerName());
+		shownFieldPlayerName = new JLabel(player.getPlayerName());
 
 		shownFieldPlayerName.setBounds(30, 70, 200, 30);
 		this.roundPan.add(shownFieldPlayerName);
 
-		//this.shownField =  new BattleField_View();
-		//this.shownField = player[0].getBattleFieldView();
-		//this.roundPan.add(shownField.getView());
-		this.roundPan.add(player[0].getBattleFieldView().getView());
-		this.roundPan.add(player[0].getPublicBattleFieldView().getView());
+		this.roundPan.add(playerGroup[0].getView());
+		this.roundPan.add(playerGroup[0].getView());
 
-		player[0].getBattleFieldView().setSize(30,100, 400);
-		player[0].getBattleFieldView().getView().setVisible(true);
-		player[0].getBattleFieldView().removeListener();
-
-		player[0].getPublicBattleFieldView().setSize(30,100, 400);
-		player[0].getPublicBattleFieldView().getView().setVisible(false);
-		player[0].getPublicBattleFieldView().removeListener();
+		playerGroup[0].setSize(30,100, 400);
+		playerGroup[0].getView().setVisible(true);
+		playerGroup[0].removeListener();
 
 
 		//this.enemies = new BattleField_View[enemysCount];
@@ -132,31 +133,27 @@ public class Round_View implements Serializable{
 		int fieldY = 100;
 
 		for(int i = 1; i <= enemysCount; i++){
+			
 			if(i == 4){
 				x = 530 + miniFieldSize + 50;
 				labelY = 70;
 				fieldY = 100;
 			}
 
-			enemiesName[i-1] = new JLabel(player[i].getPlayerName());
+			enemiesName[i-1] = new JLabel(playerNames[i]);
 
 			enemiesName[i-1].setBounds(x, labelY, 200, 30);
+			
+			this.playerGroup[i] = new BattleField_View(roundPan, fieldSize, miniFieldSize, x, fieldY);
+			
 			this.roundPan.add(enemiesName[i-1]);
+			this.roundPan.add(playerGroup[i].getView());
 
-			//enemies[i-1] = player[i].getPublicBattleFieldView();
-			this.roundPan.add(player[i].getPublicBattleFieldView().getView());
-			this.roundPan.add(player[i].getBattleFieldView().getView());
-
-			player[i].getPublicBattleFieldView().setSize(x, fieldY, miniFieldSize);
-			player[i].getPublicBattleFieldView().getView().setBounds(x, fieldY, miniFieldSize, miniFieldSize);
-			player[i].getPublicBattleFieldView().getView().setVisible(true);
-
-			player[i].getBattleFieldView().setSize(x, fieldY, miniFieldSize);
-			player[i].getBattleFieldView().getView().setBounds(x, fieldY, miniFieldSize, miniFieldSize);
-			player[i].getBattleFieldView().getView().setVisible(false);
-
-
-			player[i].getBattleFieldView().removeListener();
+			playerGroup[i].setSize(x, fieldY, miniFieldSize);
+			playerGroup[i].getView().setBounds(x, fieldY, miniFieldSize, miniFieldSize);
+			playerGroup[i].getView().setVisible(true);
+			
+			playerGroup[i].removeListener();
 
 			labelY = fieldY + miniFieldSize;
 			fieldY = labelY + 30;
@@ -183,7 +180,7 @@ public class Round_View implements Serializable{
 		this.roundPan.add(this.submarine);
 
 		this.messages = new JLabel();
-		this.messages.setText("Spieler " + player[0].getPlayerName() + " ist an der Reihe");
+		this.messages.setText("Spieler " + player.getPlayerName() + " ist an der Reihe");
 		this.messages.setForeground(Color.red);
 		this.messages.setBounds(30, 20, 500, 60);
 		this.roundPan.add(messages);
@@ -234,11 +231,11 @@ public class Round_View implements Serializable{
 	}
 
 	public int getShownPanCellSize(){
-		return this.player[order[0]].getBattleFieldView().getCellSize();
+		return playerGroup[order[0]].getCellSize();
 	}
 
 	public JButton[][] getShownPanField(){
-		return this.player[order[0]].getBattleFieldView().getField();
+		return this.playerGroup[order[0]].getField();
 	}
 
 	public JButton[][] getClickField(){
@@ -251,21 +248,14 @@ public class Round_View implements Serializable{
 
 	public void setPlayerDead(int i){
 		//this.player[i].getBattleFieldView().getView().setEnabled(false);
-		for(int k = 0; k < this.player[i].getBattleFieldView().getField().length; k++){
-			for(int j = 0; j < this.player[i].getBattleFieldView().getField().length; j++){
-				this.player[i].getBattleFieldView().getField()[k][j].setEnabled(false);
+		for(int k = 0; k < this.playerGroup[i].getField().length; k++){
+			for(int j = 0; j < this.playerGroup[i].getField().length; j++){
+				this.playerGroup[i].getField()[k][j].setEnabled(false);
 			}
 		}
 	}
 
 	public void setActive(int i){
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		for(int j = 0; j < order.length; j++){
 			if(order[j] == i){
 				nextRound(j);
@@ -301,16 +291,10 @@ public class Round_View implements Serializable{
 		System.out.println("Vorheriger spieler: " + oldId);
 		this.order[0] = selectedPlayerId;
 		this.order[selectedIndex] = oldId;
-		System.out.println("Reihenfolge: " + this.order[0] + ", " + this.order[1] + ", " + this.order[2]);
 		this.choosen = selectedPlayerId;
 		System.out.println("Gegner ist: "+choosen);
 
-
-		//		BattleField_View selectedPlayer = enemies[selectedIndex-1];
-		//		BattleField_View oldPlayerField = shownField;
-
-
-		String selectedName = player[this.order[0]].getPlayerName();
+		String selectedName = playerNames[this.order[0]];
 		String oldName = shownFieldPlayerName.getText();
 
 
@@ -321,42 +305,14 @@ public class Round_View implements Serializable{
 		shownFieldPlayerName.setText(selectedName);
 
 
-		if(player[order[selectedIndex]].getIsActive()){
-			player[order[selectedIndex]].getPublicBattleFieldView().getView().setVisible(false);
-			player[order[selectedIndex]].getBattleFieldView().getView().setVisible(true);
+		playerGroup[order[selectedIndex]].setSize(smallBounds[0], smallBounds[1], smallBounds[2]);
+		playerGroup[order[selectedIndex]].getView().repaint();
+		playerGroup[order[selectedIndex]].getView().revalidate();
 
-			player[order[selectedIndex]].getBattleFieldView().setSize(smallBounds[0], smallBounds[1], smallBounds[2]);
-			player[order[selectedIndex]].getBattleFieldView().getView().repaint();
-			player[order[selectedIndex]].getBattleFieldView().getView().revalidate();
-
-		}
-		else{
-			player[order[selectedIndex]].getPublicBattleFieldView().getView().setVisible(true);
-			player[order[selectedIndex]].getBattleFieldView().getView().setVisible(false);
-
-			player[order[selectedIndex]].getPublicBattleFieldView().setSize(smallBounds[0], smallBounds[1], smallBounds[2]);
-			player[order[selectedIndex]].getPublicBattleFieldView().getView().repaint();
-			player[order[selectedIndex]].getPublicBattleFieldView().getView().revalidate();
-
-		}
-
-		if(player[order[0]].getIsActive()){
-			player[order[0]].getPublicBattleFieldView().getView().setVisible(false);
-			player[order[0]].getBattleFieldView().getView().setVisible(true);
-
-			player[order[0]].getBattleFieldView().setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
-			player[order[0]].getBattleFieldView().getView().repaint();
-			player[order[0]].getBattleFieldView().getView().revalidate();
-		}
-		else{
-			player[order[0]].getPublicBattleFieldView().getView().setVisible(true);
-			player[order[0]].getBattleFieldView().getView().setVisible(false);
-
-
-			player[order[0]].getPublicBattleFieldView().setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
-			player[order[0]].getPublicBattleFieldView().getView().repaint();
-			player[order[0]].getPublicBattleFieldView().getView().revalidate();
-		}
+	
+		playerGroup[order[0]].setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
+		playerGroup[order[0]].getView().repaint();
+		playerGroup[order[0]].getView().revalidate();
 		roundPan.repaint();
 		roundPan.revalidate();
 	}
@@ -385,34 +341,26 @@ public class Round_View implements Serializable{
 
 
 		int index = order[selectedIndex];
-		//		shownField = player[index].getBattleFieldView();
-		//		shownField.getView().repaint();
-		//		shownField.getView().revalidate();
-
-
-		shownFieldPlayerName.setText(player[index].getPlayerName() );
+		
+		shownFieldPlayerName.setText(playerNames[index] );
 		order[0] = index;
-		player[index].getBattleFieldView().setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
-		player[index].getBattleFieldView().getView().setVisible(true);
-		player[index].getPublicBattleFieldView().getView().setVisible(false);
+		playerGroup[index].setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
+		
 
-
-		this.setMessage("Spieler " + player[index].getPlayerName() + " ist an der Reihe!");
+		this.setMessage("Spieler " + playerNames[index] + " ist an der Reihe!");
 
 		int counter = 0;
 		int orderCounter = 1;
 
-		for(int i = 0; i < player.length; i++){
+		for(int i = 0; i < playerLength; i++){
 			if(i != index){
 				order[orderCounter] = i;
 
-				player[i].getPublicBattleFieldView().setSize(smallBoundsX[counter], smallBoundsY[counter], smallWidth);
-				player[i].getPublicBattleFieldView().getView().setVisible(true);
-				player[i].getBattleFieldView().getView().setVisible(false);
-				enemiesName[counter].setText(player[i].getPlayerName() );
-				System.out.println("c: "+ counter + " name: "+player[i].getPlayerName());
-				//				enemies[counter].setSize(smallBoundsX[0], smallBoundsY[counter], smallWidth);
-				//				enemies[counter].getView().setVisible(true);
+				playerGroup[i].setSize(smallBoundsX[counter], smallBoundsY[counter], smallWidth);
+				playerGroup[i].getView().setVisible(true);
+				playerGroup[i].getView().setVisible(false);
+				enemiesName[counter].setText(playerNames[i] );
+				System.out.println("c: "+ counter + " name: "+playerNames[i]);
 				counter++;
 				orderCounter++;
 

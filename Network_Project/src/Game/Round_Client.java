@@ -14,17 +14,21 @@ import javax.swing.BorderFactory;
 import java.io.Serializable;
 
 import javax.swing.BorderFactory;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
+
 import SaveGame.Save;
+import Ships.Corvette;
+import Ships.Destroyer;
+import Ships.Frigate;
 import Ships.Ship;
+import Ships.Submarine;
 import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
 
 
-public class Round implements Serializable{
+public class Round_Client implements Serializable{
 
 	/**
 	 * 
@@ -34,7 +38,7 @@ public class Round implements Serializable{
 	 * * @author ML, JL
 	 * @version 25.03.15
 	 */
-	private Player[] player;
+	private Player player;
 	private ColoredPrint colorPrint;
 	private int fieldSize;
 	private Round_View roundView;
@@ -45,34 +49,38 @@ public class Round implements Serializable{
 	private int mouseY;
 	private int oldBtnY;
 	private int alivePlayer;
+	private int playerLength;
+	private String[] playerNames;
 
-	public Round(Player[] player, int fieldSize){
+	public Round_Client(Player player, int fieldSize, int playerLength, String[] playerNames){
 		this.player = player;
 		this.playerOnTurn = 0;
-		this.alivePlayer = player.length;
+		this.alivePlayer = playerLength;
 		this.gegner = 0;
 		this.schiff = 0;
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.orientation = 'h';
-		this.roundView = new Round_View(this.fieldSize, player);
+		this.playerLength = playerLength;
+		this.playerNames = playerNames;
+		this.roundView = new Round_View(player, this.fieldSize, playerLength, playerNames);
 		//this.play();
 		addListener();
 		setShipText();
 	}
 
-	public Round(){
+	public Round_Client(){
 	}
 
 	public Round_View getRoundView(){
 		return this.roundView;
 	}
 
-	public Player[] getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Player[] player) {
+	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
@@ -84,48 +92,43 @@ public class Round implements Serializable{
 	}
 
 	private void setShipText(){
-		roundView.setDestroyer(player[0].getDestroyer().length);
-		roundView.setFrigate(player[0].getFrigate().length);
-		roundView.setCorvette(player[0].getCorvette().length);
-		roundView.setSubmarine(player[0].getSubmarine().length);
+		roundView.setDestroyer(player.getDestroyer().length);
+		roundView.setFrigate(player.getFrigate().length);
+		roundView.setCorvette(player.getCorvette().length);
+		roundView.setSubmarine(player.getSubmarine().length);
 	}
 
 	public void play(){
-		char orientation = 'h';
-		String eingabe;
-		int gegner = 0;
-		int schiff = 0;
-		int counter = 1;
-
-		while(ende() > 1){
-			for(int i = 0; i < player.length; i++){
-				if(player[i].getIsActive()){
-
-					if(player[i].getIsAlive()){
-
-						if(player[i].checkIfAnyShipIsReady()){
-
-
-							//TODO in den Event einbauen
-							//						
-						}else{
-							player[i+1].setActive(true);
-						}
-					}
-				}
-			}
-		}
-		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-		for(int j = 0; j < player.length; j++){
-			player[j].reloadTimeCountdown();
-		}
+//		char orientation = 'h';
+//		String eingabe;
+//		int gegner = 0;
+//		int schiff = 0;
+//		int counter = 1;
+//
+//		while(ende() > 1){
+//			for(int i = 0; i < playerLength; i++){
+//				if(player[i].getIsActive()){
+//
+//					if(player[i].getIsAlive()){
+//
+//						if(player[i].checkIfAnyShipIsReady()){
+//
+//
+//							//TODO in den Event einbauen
+//							//						
+//						}else{
+//							player[i+1].setActive(true);
+//						}
+//					}
+//				}
+//			}
+//		}
+//		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
+//		for(int j = 0; j < player.length; j++){
+//			player[j].reloadTimeCountdown();
+//		}
 
 	}
-
-
-
-
-
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
 	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
@@ -157,17 +160,6 @@ public class Round implements Serializable{
 
 		}
 		return null;
-	}
-
-
-	public int ende(){
-		int counter = 0;
-		for(int i = 0; i < player.length; i++){
-			if(player[i].getIsAlive()){
-				counter++;
-			}
-		}
-		return counter;
 	}
 
 	private class ShipListener implements ActionListener{
@@ -208,16 +200,16 @@ public class Round implements Serializable{
 			if(schiff != 0){
 
 				if(schiff == 1){
-					length = player[0].getDestroyer()[0].getShootArea();
+					length = Destroyer.shootArea;
 				}
 				else if(schiff == 2){
-					length = player[0].getFrigate()[0].getShootArea();
+					length = Frigate.shootArea;
 				}
 				else if(schiff == 3){
-					length = player[0].getCorvette()[0].getShootArea();
+					length = Corvette.shootArea;
 				}
 				else if(schiff == 4){
-					length = player[0].getSubmarine()[0].getShootArea();
+					length = Submarine.shootArea;
 				}
 
 				if(orientation == 'h'){
@@ -243,7 +235,8 @@ public class Round implements Serializable{
 
 	private class PositionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			int index = playerOnTurn % player.length;
+			int index = 0;
+			//playerOnTurn % player.length;
 			if(gegner != index){
 				JButton btn = (JButton)e.getSource();
 
@@ -253,61 +246,61 @@ public class Round implements Serializable{
 				Ship ship = null;
 
 				if(schiff == 1){
-					ship = player[index].getAvailableDestroyer();
+					ship = player.getAvailableDestroyer();
 				}
 				else if(schiff == 2){
-					ship = player[index].getAvailableFrigate();
+					ship = player.getAvailableFrigate();
 				}
 				else if(schiff == 3){
-					ship = player[index].getAvailableCorvette();
+					ship = player.getAvailableCorvette();
 				}
 				else if(schiff == 4){
-					ship = player[index].getAvailableSubmarine();
+					ship = player.getAvailableSubmarine();
 				}
 				else{
 					roundView.setMessage("Schiff muss ausgewählt werden!");
 				}
 
 				if(ship != null){
-					player[gegner].getPrivateField().setAttack(ship, koords,orientation, player[gegner]);
-					player[gegner].getPublicBattleFieldView().setAttack(ship, koords,orientation);
-					roundView.getPanel().repaint();
-					roundView.getPanel().revalidate();
-
-					player[index].setShipIsntReady(ship);
-
-
-					//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-					if(player[gegner].getIsAlive() == false){
-						roundView.setMessage("GEGNER WURDE BESIEGT!!!");
-						roundView.setPlayerDead(gegner);
-						alivePlayer--;
-						if(alivePlayer == 1){
-							roundView.setMessage("Spieler " + player[playerOnTurn].getPlayerName() + "hat gewonnen!");
-						}
-					}
-					//			
-					//			if(ende() == 1){
-					//				this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-					//				System.exit(-1);
-					//			}
-
-					player[index].setActive(false);
-					System.out.println("playerOnTurn: " + playerOnTurn);
-					playerOnTurn++;	
-					index = playerOnTurn % player.length;
-
-					while(player[index].getIsAlive() == false){
-						if(player[index].checkIfAnyShipIsReady() == false){
-							roundView.setMessage("Spieler " + player[index].getPlayerName() + "hat keine geladenen Schiffe!");
-							playerOnTurn++;
-							index = playerOnTurn % player.length;
-						}
-					}
-					player[index].setActive(true);
-					roundView.setActive(index);
-
-					System.out.println("playerOnTurn: " + playerOnTurn);
+//					player[gegner].getPrivateField().setAttack(ship, koords,orientation, player[gegner]);
+//					player[gegner].getPublicBattleFieldView().setAttack(ship, koords,orientation);
+//					roundView.getPanel().repaint();
+//					roundView.getPanel().revalidate();
+//
+//					player[index].setShipIsntReady(ship);
+//
+//
+//					//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
+//					if(player[gegner].getIsAlive() == false){
+//						roundView.setMessage("GEGNER WURDE BESIEGT!!!");
+//						roundView.setPlayerDead(gegner);
+//						alivePlayer--;
+//						if(alivePlayer == 1){
+//							roundView.setMessage("Spieler " + player[playerOnTurn].getPlayerName() + "hat gewonnen!");
+//						}
+//					}
+//					//			
+//					//			if(ende() == 1){
+//					//				this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
+//					//				System.exit(-1);
+//					//			}
+//
+//					player[index].setActive(false);
+//					System.out.println("playerOnTurn: " + playerOnTurn);
+//					playerOnTurn++;	
+//					index = playerOnTurn % player.length;
+//
+//					while(player[index].getIsAlive() == false){
+//						if(player[index].checkIfAnyShipIsReady() == false){
+//							roundView.setMessage("Spieler " + player[index].getPlayerName() + "hat keine geladenen Schiffe!");
+//							playerOnTurn++;
+//							index = playerOnTurn % player.length;
+//						}
+//					}
+//					player[index].setActive(true);
+//					roundView.setActive(index);
+//
+//					System.out.println("playerOnTurn: " + playerOnTurn);
 
 
 				}
@@ -397,3 +390,4 @@ public class Round implements Serializable{
 	}
 
 }
+

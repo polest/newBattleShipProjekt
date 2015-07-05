@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import Game.InitGame;
+import Game.Round;
 import Main.Main_Controler;
 
 
@@ -41,11 +42,14 @@ public class BattleShipServer implements Runnable{
 	protected int playerReady = 0;
 	private JFrame connection = new JFrame();
 	private JLabel status = new JLabel();
-
+	private String playerNames;
 	protected ServerSocket serverSocket;
 	private ClientRequestProcessor[] crp;
 	private InitGame initGame;
 	private Main_Controler mainControler;
+	private Round round;
+	private int loggedPlayer;
+
 
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
@@ -56,8 +60,9 @@ public class BattleShipServer implements Runnable{
 
 	public BattleShipServer(int port, int clientZahl, InitGame initGame, int destroyer, int frigate, int corvette, int submarine, int fieldSize, Main_Controler mainControler) {
 		this.mainControler = mainControler;
-
 		this.initGame = initGame;
+		this.playerNames = "";
+		this.loggedPlayer = 0;
 
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setSize(200, 200);
@@ -75,7 +80,7 @@ public class BattleShipServer implements Runnable{
 		if(clientZahl == 0){
 			clientZahl = DEFAULT_CLIENTS;
 		}
-		
+
 		this.clientZahl = clientZahl;
 		this.destroyer = destroyer;
 		this.frigate = frigate;
@@ -106,28 +111,29 @@ public class BattleShipServer implements Runnable{
 	 * fuer diese Verbindung erzeugten Client-Socket.
 	 */
 	public void acceptClientConnectRequests() {
-		int i = 0;
 		try {
-			while (i < clientZahl) {
+			while (loggedPlayer < clientZahl) {
 				// Auf Verbindungsw�nsche warten...
 				Socket clientSocket = serverSocket.accept();
 				// ... und dann Verarbeitung von Dienstanfragen starten:
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
-				crp[i] =  new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
-				Thread s = new Thread(crp[i]);
+				crp[loggedPlayer] =  new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
+				Thread s = new Thread(crp[loggedPlayer]);
 				s.start();
-				i++;
-				status.setText("Spieler " + i + " ist beigetreten...");
-				System.out.println("Spieler " + i + " ist beigetreten...");
-
+				loggedPlayer++;
+				status.setText("Spieler " + loggedPlayer + " ist beigetreten...");
 			}
 		} catch (IOException e) {
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);
 			System.exit(1);
 		}
-		System.out.println("beendet Keine weiteren Clients werden mehr angenommen");
 		start();
+	}
+
+	public void addRound(Round round){
+		this.round = round;
+		
 	}
 
 	public void setShipsToPlayer(String ship, String pos, ClientRequestProcessor crp){
@@ -139,11 +145,13 @@ public class BattleShipServer implements Runnable{
 
 	}
 
-	public void setReady(){
+	public void setPlayerReadyToPlay(ClientRequestProcessor crp, String name) {
 		
-	}
-	
-	public void setPlayerReadyToPlay(ClientRequestProcessor crp) {
+		if(name.equals("")){
+			name = "Spieler" + ( playerReady + 1 );
+		}
+		
+		playerNames = playerNames.concat(";" + name);
 		playerReady++;
 		if(playerReady >= clientZahl){
 			for(int i = 0; i < this.clientZahl; i++){
@@ -152,45 +160,25 @@ public class BattleShipServer implements Runnable{
 		}
 	}
 
-	/**
-	 * main()-Methode zum Starten des Servers
-	 * 
-	 * @param args kann optional Portnummer enthalten, auf der Verbindungen entgegengenommen werden sollen
-	 */
-	public static void main(String[] args) {
-//		int port = 0;
-//		int clientZahl = 0;
-//		if (args.length == 2) {
-//			try {
-//				port = Integer.parseInt(args[0]);
-//				clientZahl = Integer.parseInt(args[1]);
-//			} catch (NumberFormatException e) {
-//				port = 0;
-//			}
-//		}
-//		BattleShipServer server = new BattleShipServer(port, clientZahl, null, 1, 0, 0, 1, 5, null);
-//		//		 Ab jetzt auf eingehende Verbindungsw�nsche von Clients warten
-
+	public String getPlayerNames(){
+		return playerNames;
 	}
-
-
+	
+	
 	@Override
 	public void run() {
 		acceptClientConnectRequests();
 	}
 
 	public void start(){
-		System.out.println("alle clients nun da");
 		for(int j = 0; j < clientZahl; j++){
+			if(j > 0){
+				this.initGame.incrementPlayerId();
+				this.initGame.initPlayerBattleShip();
+			}
 			crp[j].verarbeiteAnfragen(this);
 		}
-		status.setText("Spieler platzieren ihre Schiffe");
+		connection.dispose();
 		//mainControler.ChangeShipsView();
 	}
 }
-
-//// in gesondertem Thread starten:
-//ClientAdressRequestProcessor c 
-//	= new ClientAdressRequestProcessor(clientSocket, adressen);
-//Thread t = new Thread(c);
-//t.start();

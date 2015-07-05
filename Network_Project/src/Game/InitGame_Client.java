@@ -56,10 +56,11 @@ public class InitGame_Client implements Serializable{
 	private Ship choosenShip;
 	private boolean shipCanBePlaced;
 	private Client client;
+	private int playerLength;
 
 
-
-	public InitGame_Client(int destroyer, int frigate, int corvette, int submarine, int fieldSize, InitGame_View_Client initGameView){
+	public InitGame_Client(int playerLength, int destroyer, int frigate, int corvette, int submarine, int fieldSize, InitGame_View_Client initGameView){
+		this.playerLength = playerLength;
 		this.destroyerCount = destroyer;
 		this.frigateCount =  frigate;
 		this.corvetteCount = corvette;
@@ -81,6 +82,10 @@ public class InitGame_Client implements Serializable{
 		return player;
 	}
 
+	public int getPlayerLength(){
+		return this.playerLength;
+	}
+	
 	public int getFieldSize(){
 		return this.fieldSize;
 	}
@@ -128,15 +133,11 @@ public class InitGame_Client implements Serializable{
 	}
 	
 	public void initPlayerBattleShip(){
-
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
-		//TODO ALS VARIABLEN ERSETZEN STATT VON OPTIONS ZIEHEN
 		player = new Player(false, this.totalShips, this.destroyerCount, 
 				this.frigateCount, this.corvetteCount,this.submarineCount, this.playerName, battlefield, false);
 		addListener();
-		//TODO JEDEM CLIENT SEINE VIEW ANZEIGEN LASSEN UND SCHIFFE PLATZIEREM
-		///this.initGameView.changeShownPan(panelName);
 		this.initShips();
 	}
 

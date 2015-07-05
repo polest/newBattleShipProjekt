@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import Ships.Ship;
@@ -31,12 +32,13 @@ public class InitGame_View_Client {
 	private JToggleButton submarineBtn;
 	private int cellSize;
 	private JButton nextPlayer;
-
-	public InitGame_View_Client(int playerLength){
+	private JTextField name;
+	
+	public InitGame_View_Client(){
 		this.initGamePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.width = 600;
 		this.height = 800;
-		this.battleFieldView =  new BattleField_View();
+		//this.battleFieldView = new BattleField_View();
 
 		initPan();
 		this.initGamePan.repaint();
@@ -87,7 +89,19 @@ public class InitGame_View_Client {
 		this.nextPlayer.setEnabled(false);
 		this.nextPlayer.setActionCommand("next");
 		this.initGamePan.add(this.nextPlayer);
-
+		
+		JLabel nameLabel = new JLabel("Spieler Name");
+		nameLabel.setBounds(550, 300, 150, 30);
+		nameLabel.setVisible(true);
+		nameLabel.setEnabled(true);
+		this.initGamePan.add(nameLabel);
+		
+		this.name = new JTextField("");
+		this.name.setBounds(550, 350, 150, 50);
+		this.name.setVisible(true);
+		this.name.setEnabled(true);
+		this.initGamePan.add(this.name);
+		
 	}
 
 	public JButton[][] getBattleField(){
@@ -98,11 +112,14 @@ public class InitGame_View_Client {
 		return this.battleFieldView;
 	}
 
+	public void setBattleFieldView(BattleField_View battleFieldView){
+		this.battleFieldView = battleFieldView;
+	}
 
 	public void setFieldSize(int fieldSize){
 		this.fieldSize = fieldSize;
 	}
-
+	
 	public void setPlayerName(String name){
 		this.playerName.setText("Spieler "+ name + " ist an der Reihe");
 	}
@@ -131,6 +148,9 @@ public class InitGame_View_Client {
 		this.battleFieldView.setBattleFieldMouseMotionListener(l);
 	}
 
+	public String getName(){
+		return this.name.getText();
+	}
 	public int getCellSize(){
 		return this.width/this.fieldSize;
 	}

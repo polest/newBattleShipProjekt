@@ -72,7 +72,7 @@ public class Player implements Serializable{
 		this.frigateIndex = 0;
 		this.corvetteIndex = 0;
 		this.submarineIndex = 0;
-		//this.battleFieldView;
+		//this.battleFieldView = new BattleField_View();
 
 		this.destroyer = new Destroyer[destroyer];
 		for(int i = 0; i < destroyer; i++){

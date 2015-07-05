@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Ships.Ship;
+import Tools.ImagePanel;
 
 
 public class BattleField_View implements Serializable{
@@ -36,7 +37,18 @@ public class BattleField_View implements Serializable{
 	private JLabel background;
 
 	
-	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
+//	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
+//		this.panel = panel;
+//		this.width = width;
+//		this.height = width;
+//		this.startX = startX;
+//		this.startY = startY;
+//		this.fieldSize = fieldSize;
+//		this.empty = new ImageIcon("Resources/empty.png");
+//		initField();
+//	}
+	
+	public BattleField_View(ImagePanel panel, int fieldSize, int width, int startX, int startY){
 		this.panel = panel;
 		this.width = width;
 		this.height = width;
@@ -47,15 +59,15 @@ public class BattleField_View implements Serializable{
 		initField();
 	}
 
-	public BattleField_View() {
-		for(int i = 0; i < this.fieldSize; i++){
-			for(int j = 0; j < this.fieldSize; j++){
-				this.field[i][j].setIcon(empty);
-				this.field[i][j].setOpaque(false);
-				this.field[i][j].setEnabled(true);
-			}
-		}
-	}
+//	public BattleField_View() {
+//		for(int i = 0; i < this.fieldSize; i++){
+//			for(int j = 0; j < this.fieldSize; j++){
+//				this.field[i][j].setIcon(empty);
+//				this.field[i][j].setOpaque(false);
+//				this.field[i][j].setEnabled(true);
+//			}
+//		}
+//	}
 
 
 	public void shootOnField(Ship ship, int[] coords, char orientation){
@@ -174,13 +186,6 @@ public class BattleField_View implements Serializable{
 		battleFieldViewPanel.setVisible(true);
 		this.battleFieldViewPanel.add(background);
 
-		//		ImageIcon icon = new ImageIcon("Resources/Meer.jpg");
-		//		//int size = this.fieldSize*this.cellSize;
-		//		icon.setImage(icon.getImage().getScaledInstance( size ,size, Image.SCALE_DEFAULT)); 
-		//		iconLabel = new JLabel(icon);
-		//		iconLabel.setBounds(startX,startY,size,size);
-		//		this.battleFieldViewPanel.add(iconLabel);
-		//		this.battleFieldViewPanel.setBorder(BorderFactory.createLineBorder(Color.pink));
 		this.battleFieldViewPanel.setBounds(30,30,size,size);
 		this.panel.add(this.battleFieldViewPanel);
 	}

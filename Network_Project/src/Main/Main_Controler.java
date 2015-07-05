@@ -21,7 +21,9 @@ import Game.InitGame_Client;
 import Game.InitGame_View_Client;
 import Game.Options;
 import Game.Options_View;
+import Game.Player;
 import Game.Round;
+import Game.Round_Client;
 import Game.Round_View;
 import Network.BattleShipServer;
 import Network.Client;
@@ -41,21 +43,20 @@ public class Main_Controler implements Serializable{
 	private InitGame_Client initGameClient;
 	private InitGame initGame;
 	private Options gameOptions;
-	private Options_View gameOptionsView;
 	private InitGame_View_Client initGameView;
+	private Round_Client roundClient;
 	private Round round;
 	private Client client;
 	private BattleShipServer server;
 	private String ipAdress;
 	private int port;
-	
 	private JFrame connection;
 	private JLabel portLabel;
 	private JTextField portField;
 	private JLabel ipLabel;
 	private JTextField ipField;
 	private JButton button;
-	
+
 
 	public Main_Controler(){
 
@@ -86,11 +87,9 @@ public class Main_Controler implements Serializable{
 	}
 
 	public void ChangeShipsView(){
-
 		main_view.changeShownPan("placeShipsPan");
 		initGameView.setNextSelectionListener(new StartRoundListener());
 		main_view.getSave().setEnabled(true);
-
 	}
 
 	public void startServerAndGame(){
@@ -104,49 +103,59 @@ public class Main_Controler implements Serializable{
 		System.out.println(corvette);
 		int submarine = gameOptions.getSubmarine();
 		System.out.println(submarine);
-		int size = gameOptions.getBattlefieldSize();
-		System.out.println(size);
-		
-		initGameView =  new InitGame_View_Client(player);
-		initGameClient = new InitGame_Client(destroyer, frigate, corvette, submarine, size, initGameView);
-		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, size);
+		int fieldSize = gameOptions.getBattlefieldSize();
+		System.out.println(fieldSize);
+
+		initGameView =  new InitGame_View_Client();
+		initGameClient = new InitGame_Client(player, destroyer, frigate, corvette, submarine, fieldSize, initGameView);
+
+		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, fieldSize);
+
 		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 
-		Thread t = new Thread(server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, size, this) );
+		Thread t = new Thread(server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, fieldSize, this) );
 		t.start();
-		
+
 		Thread s = new Thread(client = new Client("localhost", 4477, this) );
 		s.start();
 		initGameClient.addClient(client);
+
 	}
-	
+
 	public void startInitGameView(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize){
-		System.out.println("auswerten fertig!");
-		int totalShips;
+		initGameView =  new InitGame_View_Client();
+		initGameClient = new InitGame_Client(player, destroyer, frigate, corvette, submarine, fieldSize, initGameView);
 
-		totalShips = destroyer + frigate + corvette + submarine;
+		initGameClient.addClient(client);
+		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
+		ChangeShipsView();
 
-		 initGameView =  new InitGame_View_Client(player);
-	     initGameClient = new InitGame_Client(destroyer, frigate, corvette, submarine, fieldSize, initGameView);
-
-	     initGameClient.addClient(client);
-	     main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
-	     ChangeShipsView();
-		
 	}
 
 	public void addClientToGame(){
-		
 		Thread s = new Thread(client = new Client(ipAdress, port, this) );
 		s.start();
 	}
-	
+
 	public void changeToRoundView(){
-		int fieldSize = initGame.getFieldSize();
-		round = new Round(initGame.getPlayer(), fieldSize);
-		Round_View roundView = round.getRoundView();
+		client.getPlayerNames();
+	}
+
+	public void startRoundView(String[] names){
+		int fieldSize = initGameClient.getFieldSize();
+		Player player = initGameClient.getPlayer();
+		player.setBattleFieldView(initGameView.getBattleFieldView() );
+		int playerLength = initGameClient.getPlayerLength();
+
+		roundClient = new Round_Client(player, fieldSize, playerLength, names);
+		Round_View roundView = roundClient.getRoundView();
 		main_view.addPanel(roundView.getPanel(), "roundView"); 
 		main_view.changeShownPan("roundView");
+		
+		if(server != null){
+			round = new Round(this.initGame.getPlayer(), fieldSize);
+			server.addRound(round);
+		}
 	}
 
 	/**
@@ -160,7 +169,7 @@ public class Main_Controler implements Serializable{
 			main_view.changeShownPan("optionsPanel");
 		}
 	}
-	
+
 	private class JoinGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			connection = new JFrame("Anmelden");
@@ -171,7 +180,7 @@ public class Main_Controler implements Serializable{
 			ipLabel = new JLabel();
 			ipField = new JTextField();
 			button = new JButton("OK");
-			
+
 			connection.setLocationRelativeTo(null);
 			connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			connection.setSize(300, 200);
@@ -182,30 +191,31 @@ public class Main_Controler implements Serializable{
 			pan.add(portField);
 			pan.add(ipLabel);
 			pan.add(ipField);
-			
+
 			ipLabel.setText("Ip Adresse");
 			ipLabel.setBounds(10, 20, 80, 30);
 			ipLabel.setVisible(true);
-		
+
 			ipField.setText("localhost");
 			ipField.setBounds(100, 20, 150, 30);
 			ipField.setVisible(true);
-			
+
 			portLabel.setText("Port");
 			portLabel.setBounds(10, 50, 80, 30);
 			portLabel.setVisible(true);
-		
+
 			portField.setText("4477");
 			portField.setBounds(100, 50, 100, 30);
 			portField.setVisible(true);
-			
+
+
 			button.setBounds(150, 100, 50, 50);
 			pan.add(button);
 			button.addActionListener(new AddressOkListener());
-			
+
 		}
 	}
-	
+
 	private class AddressOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			ipAdress = ipField.getText();
@@ -213,13 +223,14 @@ public class Main_Controler implements Serializable{
 			try{
 				port = Integer.parseInt(portS);
 				connection.dispose();
+
 				System.out.println("" + ipAdress + ", " + portS);
 				addClientToGame();
 			}
 			catch(Exception f){
 				portField.setBorder(BorderFactory.createLineBorder(Color.red));
 			}
-			
+
 		}
 	}
 
@@ -242,7 +253,7 @@ public class Main_Controler implements Serializable{
 				Load load = new Load();
 				load.loadGame(file.getPath());
 				round = load.getRound();
-				Round_View roundView = round.getRoundView();
+				Round_View roundView = roundClient.getRoundView();
 				main_view.addPanel(roundView.getPanel(), "roundView"); 
 				main_view.changeShownPan("roundView");
 			}else if(returnVal == JFileChooser.CANCEL_OPTION){
@@ -276,7 +287,7 @@ public class Main_Controler implements Serializable{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			client.setReady();
+			client.setReady(initGameView.getName());
 		}
 
 	}
@@ -298,6 +309,6 @@ public class Main_Controler implements Serializable{
 		}
 
 	}
-	
-	
+
+
 }

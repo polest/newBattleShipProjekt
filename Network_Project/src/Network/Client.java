@@ -1,24 +1,12 @@
 package Network;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import javax.swing.JButton;
-import javax.swing.SwingUtilities;
-
-import Game.InitGame_Client;
-import Game.InitGame_View_Client;
 import Main.Main_Controler;
-import Ships.Corvette;
-import Ships.Destroyer;
-import Ships.Frigate;
-import Ships.Ship;
-import Ships.Submarine;
 
 public class Client implements Runnable{
 	// Datenstrukturen f�r die Kommunikation
@@ -26,7 +14,7 @@ public class Client implements Runnable{
 	private BufferedReader in; // server-input stream
 	private PrintStream out; // server-output stream
 	private Main_Controler mainControler;
-
+	private String[] playerNames;
 
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
@@ -66,9 +54,10 @@ public class Client implements Runnable{
 		out.println("sendShipToServer");
 		out.println(ship);
 	}
-	
-	public void setReady(){
-		out.println("fertig");
+
+	public void setReady(String name){
+		out.println("readyToPlay");
+		out.println(name);
 	}
 
 	private void quit() {
@@ -82,39 +71,26 @@ public class Client implements Runnable{
 		}
 	}
 
-	/**
-	 * main()-Methode zum Starten des Clients
-	 * 
-	 * @param args kann optional Host und Portnummer enthalten, auf der Verbindungen entgegengenommen werden sollen
-	 */
-	public static void main(String[] args) {
-		String host = "localhost";
-		int port = 4477;
-		if (args.length == 2) {
-			host = args[0];
-			try {
-				port = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				port = 0;
-			}
-		}
-		// Client starten und mit Server verbinden:
-		//Client client = new Client(host, port,);
+	public void getPlayerNames(){
+		out.println("getPlayerNames");
 	}
 
+	
 	@Override
 	public void run() {
 		//this.mainControler.ChangeShipsView();
 
 		String message = "";
 
-		try {
-			message = in.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		while(!(message.equals("dead") ) ){
+			try {
+				message = in.readLine();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 			if(message.equals("changeInitView") ){
 				String values = "";
 				try {
@@ -124,42 +100,32 @@ public class Client implements Runnable{
 					e.printStackTrace();
 				}
 				String attributes[] = values.split(";");
-				System.out.println("values = " + values);
 				int player = Integer.parseInt(attributes[0]);
 				int	destroyer = Integer.parseInt(attributes[1]);
 				int frigate = Integer.parseInt(attributes[2]);
 				int corvette = Integer.parseInt(attributes[3]);
 				int submarine = Integer.parseInt(attributes[4]);
 				int fieldSize = Integer.parseInt(attributes[5]);
-
 				mainControler.startInitGameView(player, destroyer, frigate, corvette, submarine, fieldSize);
-				message = "";
+
 			}
 			else if(message.equals("startGame") ){
 				mainControler.changeToRoundView();
 			}
+			else if(message.equals("setPlayerNames") ){
+				try {
+					String txt = in.readLine();
+					String[] names = txt.split(";");
+					this.playerNames = names; 
+					this.mainControler.startRoundView(this.playerNames);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 		}
 
 		//TODO Quit
-
-	}
-
-
-	private void verarbeiteServerAufgabe(){
-		String message = "";
-		try {
-			message = in.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(message.equals("setShips")){
-			try {
-
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 }
