@@ -115,6 +115,10 @@ public class Player implements Serializable{
 		return playerName;
 	}
 
+	/**
+	 * Getter für isPlayerBot bool
+	 * @return
+	 */
 	public boolean isPlayerBot(){
 		return this.isBot;
 	}
@@ -147,15 +151,14 @@ public class Player implements Serializable{
 		this.isAlive = isAlive;
 	}
 
+	/**
+	 * Setter für Spieler ist KI
+	 * @param state
+	 */
 	public void setPlayerBot(boolean state){
 		this.isBot = state;
 	}
 
-
-	/**
-	 * getter für ein openField
-	 * @return
-	 */
 
 	/**
 	 * @return Gibt das öffentliche Spielfeld des Spielers zurück
@@ -186,18 +189,34 @@ public class Player implements Serializable{
 	}
 
 
+	/**
+	 * Setter für BattleFieldView (private)
+	 * @param battlefield
+	 */
 	public void setBattleFieldView(BattleField_View battlefield){
 		this.battleFieldView = battlefield;
 	}
-
+	
+	/**
+	 * Setter für BattleFieldView (öffentlich)
+	 * @param battlefield
+	 */
 	public void setPublicBattleFieldView(BattleField_View battlefield){
 		this.publicBattleFieldView = battlefield;
 	}
 
+	/**
+	 * getter private BattleFieldView
+	 * @return
+	 */
 	public BattleField_View getBattleFieldView(){
 		return battleFieldView;
 	}
 
+	/**
+	 * Setter public BattleFieldView
+	 * @return
+	 */
 	public BattleField_View getPublicBattleFieldView(){
 		return publicBattleFieldView;
 	}
@@ -300,7 +319,13 @@ public class Player implements Serializable{
 			}
 		}
 	}
+	
 
+	
+	/**
+	 * initialisiert alle Schiffsicons horizontal
+	 * @param cellSize
+	 */
 	private void initShipIconH(int cellSize){
 		setDestroyerIconsH(cellSize);
 		setCorvetteIconsH(cellSize);
@@ -308,6 +333,10 @@ public class Player implements Serializable{
 		setSubmarineIconsH(cellSize);
 	}
 
+	/**
+	 * weist jeder Zelle eines Schiffes ein Bild zu horizontal
+	 * @param cellSize
+	 */
 	private void setDestroyerIconsH(int cellSize){
 		this.destroyerIconH = new ImageIcon[5];
 		this.destroyerIconH[0] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer5.png", "Resources/ShipsNeu/Destroyer/destroyer5.png");
@@ -363,13 +392,20 @@ public class Player implements Serializable{
 	}
 
 
+	/**
+	 * initialisiert alle Schiffsicons vertical
+	 * @param cellSize
+	 */
 	private void initShipIconV(int cellSize){
 		setDestroyerIconsV(cellSize);
 		setCorvetteIconsV(cellSize);
 		setFrigateIconsV(cellSize);
 		setSubmarineIconsV(cellSize);
 	}
-
+	/**
+	 * weist jeder Zelle eines Schiffes ein Bild zu vertikal
+	 * @param cellSize
+	 */
 	private void setDestroyerIconsV(int cellSize){
 		this.destroyerIconV = new ImageIcon[5];
 		this.destroyerIconV[0] = new ImageIcon("Resources/ShipsNeu/Destroyer/destroyer1_verti.png", "Resources/ShipsNeu/Destroyer/destroyer1_verti.png");
@@ -424,10 +460,10 @@ public class Player implements Serializable{
 		this.submarineIconV[1].setImage(this.submarineIconV[1].getImage().getScaledInstance(cellSize,cellSize,Image.SCALE_DEFAULT)); 
 	}
 
+	
 	/**
-	 * überprüft, ob ein Schiff verfügbar ist.
-	 * @param whichShip
-	 * @return true wenn whichShip isReady
+	 * return ein Schiff, was verfügbar ist
+	 * @return
 	 */
 	public Destroyer getAvailableDestroyer(){
 		for(int i = 0; i < destroyer.length; i++){
@@ -468,7 +504,11 @@ public class Player implements Serializable{
 	}
 
 
-
+	/**
+	 * überprüft, ob ein Schiff verfügbar ist.
+	 * @param whichShip
+	 * @return true wenn whichShip isReady
+	 */
 	public boolean isAvailable(int whichShip){
 		if(whichShip == 1){
 			for(int i = 0; i < destroyer.length; i++){
@@ -659,6 +699,14 @@ public class Player implements Serializable{
 		return false;
 	}
 
+	
+	/**
+	 * @param ship
+	 * @param battleFieldView
+	 * @param coords
+	 * @param orientation
+	 * setzt die einzelnen Bilder des Schiffs auf das Spielfeld
+	 */
 	public void printShipOnField(Ship ship, BattleField_View battleFieldView, int[] coords, int orientation){
 		int length = ship.getShipSize();
 		int x = coords[0];
@@ -721,6 +769,11 @@ public class Player implements Serializable{
 		publicField.printPublicField(playerName);
 	}
 
+	/**
+	 * @param shipSymbol
+	 * überprüft, ob der Spieler überhaupt noch ein Schiff zur Verfügung hat
+	 * @return true wenn schiff verfügbar
+	 */
 	public boolean checkIfShipIsReady(String shipSymbol){
 
 		switch(shipSymbol){

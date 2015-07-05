@@ -127,7 +127,7 @@ public class Main_View{
 
 		//Button um ein neues Spiel zu starten
 		this.newGame = new JButton();
-		this.newGame.setIcon(new ImageIcon("Resources/newGame.png"));
+		this.newGame.setIcon(new ImageIcon("Resources/Spiel/newGame.png"));
 		this.newGame.setBounds((this.width-buttonWidth)/2, 200, buttonWidth, 100);
 		//this.newGame.setText("Neues Spiel");
 		this.newGame.setOpaque(false);
@@ -140,8 +140,8 @@ public class Main_View{
 		//Button um ein Spiel zu laden
 		this.join = new JButton();
 		//this.loadGame.setText("Spiel Laden");
-		this.join.setIcon(new ImageIcon("Resources/loadGame.png"));
-		this.join.setBounds((this.width-buttonWidth)/2, 275, buttonWidth, 100);
+		this.join.setIcon(new ImageIcon("Resources/Spiel/joinGame.png"));
+		this.join.setBounds((this.width-buttonWidth)-320, 275, buttonWidth + 100, 100);
 		//this.loadGame.setForeground(Color.BLUE);
 		this.join.setOpaque(false);
 		this.join.setContentAreaFilled(false);
@@ -152,7 +152,7 @@ public class Main_View{
 		//Button um ein Spiel zu laden
 		this.loadGame = new JButton();
 		//this.loadGame.setText("Spiel Laden");
-		this.loadGame.setIcon(new ImageIcon("Resources/loadGame.png"));
+		this.loadGame.setIcon(new ImageIcon("Resources/Spiel/loadGame.png"));
 		this.loadGame.setBounds((this.width-buttonWidth)/2, 350, buttonWidth, 100);
 		//this.loadGame.setForeground(Color.BLUE);
 		this.loadGame.setOpaque(false);
@@ -162,7 +162,7 @@ public class Main_View{
 		this.loadGame.setVisible(true);
 
 		this.instructions = new JButton();
-		this.instructions.setIcon(new ImageIcon("Resources/instructions.png"));
+		this.instructions.setIcon(new ImageIcon("Resources/Spiel/instructions.png"));
 		this.instructions.setBounds((this.width-buttonWidth)/2, 425, buttonWidth, 100);
 		this.instructions.setOpaque(false);
 		this.instructions.setContentAreaFilled(false);

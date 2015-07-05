@@ -38,12 +38,26 @@ public class Options_View {
 		
 	}
 
+	/**
+	 * Initialisiert das Options Panel
+	 */
 	private void initOptionsPan(){
 		this.optionsView.setVisible(true);
 		this.optionsView.setLayout(null);
 		this.optionsView.setSize(this.width, this.height);
 	}
 
+	
+	/**
+	 * Getter
+	 * optionsPanel
+	 * playerNames
+	 */
+	/**
+	 * Setter
+	 * PlayerCount
+	 */
+	
 	public JPanel getPanel(){
 		return this.optionsView;
 	}
@@ -56,6 +70,13 @@ public class Options_View {
 		this.playerCount = i;
 	}
 	
+	
+	/**
+	 * @param count
+	 * setzt die PlayerToggleButtons auf nicht ausgewählt, je nachdem wie viele Spieler ausgewählt sind.
+	 * setzt die KI CheckBoxes auf disabled, je nachdem wie viele Spieler ausgewählt sind
+	 * dasselbe für die Textfelder der Namen
+	 */
 	public void setPlayerToggle(int count){
 		for(int i = 2; i <= ( this.player.length + 1 ); i++){
 			int arrIndex = i - 2;
@@ -84,6 +105,10 @@ public class Options_View {
 		}
 	}
 	
+	/**
+	 * @param chkbx
+	 * setzt die ausgewählte Checkbox auf ausgewählt
+	 */
 	public void setKi(JCheckBox chkbx){
 		for(int i = 0; i < this.kiBox.length; i++){
 			if(chkbx == this.kiBox[i]){
@@ -92,11 +117,20 @@ public class Options_View {
 		}
 	}
 	
+	
+	
+	/**
+	 * @return KI checkbox
+	 */
 	public JCheckBox[] getKiBox(){
 		return this.kiBox;
 	}
 	
 	
+	/**
+	 * @param cmbbox
+	 * speichert die gesamte Schiffsanzahl
+	 */
 	public void setShips(JComboBox cmbbox){
 		for(int s = 0; s < this.ships.length; s++){
 			if(cmbbox == this.ships[s]){
@@ -105,6 +139,11 @@ public class Options_View {
 		}
 	}
 	 
+	
+	/**
+	 * @param minSize - Mindestspielfeldgröße
+	 * aktualisiert die Spielfeldgrößenauswahl
+	 */
 	public void setSize(int minSize){
 		
 		this.size.setSelectedIndex( (minSize-1) );
@@ -113,6 +152,16 @@ public class Options_View {
 	}
 
 
+	/**
+	 * initialisiert die Optionen
+	 * füllt das optionsView Panel mit allen Elementen
+	 * Labels - Anzahl Spieler, Namen der Spieler, Computer, Anzahl der Schiffe, Größe des Spielfelds, Schiffe
+	 * ToggleButtons - Spieleranzahl
+	 * Textfelder - Spielernamen
+	 * Checkboxes - Ki
+	 * ComboBoxes - einzelnen Schiffe (0-10 p Schiff), Spielfeldgröße
+	 * 
+	 */
 	private void initOptions(){
 
 		JLabel playerlb = new JLabel("Anzahl der Spieler");
@@ -162,8 +211,7 @@ public class Options_View {
 		shipslb.setBounds(420, 70, 150, 30);
 		this.optionsView.add(shipslb);
 
-		JLabel[] shipsLabel = {new JLabel("Zerstörer"),
-				new JLabel("Fregatten"), new JLabel("Corvetten"), new JLabel("UBoote")};
+		JLabel[] shipsLabel = {new JLabel("Zerstörer"), new JLabel("Fregatten"), new JLabel("Corvetten"), new JLabel("UBoote")};
 
 		this.ships =  new JComboBox[4];
 		String[] count = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};

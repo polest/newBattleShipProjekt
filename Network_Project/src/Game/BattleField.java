@@ -64,21 +64,22 @@ import Tools.MatrixTools;
 		}
 
 		/**
-		 * @return gibt zurück, ob das Spielfeld 
+		 * @return gibt zurück, ob das Spielfeld blockiert ist oder nicht
 		 */
 		public boolean isBlocked() {
 			return this.isBlocked;
 		}
 
 		/**
-		 * @return
+		 * @return gibt zurück, ob ein Feld frei ist, also ob 
+		 * auf den umliegenden Feldern ein Schiff ist oder nicht.
 		 */
 		public boolean isFree() {
 			return this.isFree;
 		} 
 
 		/**
-		 * Druckt das Spielfeld auf der Konsole aus
+		 * Druckt das private Spielfeld auf der Konsole aus
 		 */
 		public void printPrivateField(String name){
 			matrixTools.printPrivateField(this.field,name);
@@ -86,7 +87,7 @@ import Tools.MatrixTools;
 		}
 
 		/**
-		 * Druckt das Spielfeld auf der Konsole aus
+		 * Druckt das öffentliche Spielfeld auf der Konsole aus
 		 */
 		public void printPublicField(String name){
 			matrixTools.printPublicField(this.field, name);
@@ -101,7 +102,7 @@ import Tools.MatrixTools;
 		
 		/**
 		 * Setzen der Schiffe auf dem Spielfeld, sofern möglich
-		 * @param ship - Schifftyp (ENUM - EShipType)
+		 * @param ship - Schifftyp
 		 * @param iPos - X-Koordinaten des Startfeldes
 		 * @param jPos - Y-Koordinate des Startfeldes
 		 * @param orientation - Ausrichtung v oder h
@@ -114,7 +115,7 @@ import Tools.MatrixTools;
 
 		/**
 		 * Setzen der Schiffe auf dem Spielfeld, sofern möglich
-		 * @param ship - Schifftyp (ENUM - EShipType)
+		 * @param ship - Schifftyp
 		 * @param iPos - X-Koordinaten des Startfeldes
 		 * @param jPos - Y-Koordinate des Startfeldes
 		 * @param orientation - Ausrichtung v oder h
@@ -128,7 +129,16 @@ import Tools.MatrixTools;
 			return isFree;
 
 		}
+		
+		
 
+		/**
+		 * Attacke auf ein Spielfeld
+		 * @param ship - Schiffstyp
+		 * @param coordinates - X und Y Koordinaten des Startfeldes
+		 * @param orientation - h oder v ausrichtung
+		 * @param player - anzugreifender Spieler
+		 */
 		public void setAttack(Ship ship, int[] coordinates, char orientation, Player player){
 			matrixTools.attackField(ship, coordinates, orientation, player);
 
