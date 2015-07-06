@@ -102,7 +102,7 @@ public class InitGame implements Serializable{
 		boolean isActive;
 		boolean isKi = false;
 
-		if(i > (this.player.length - this.ki) ) {
+		if((this.player.length - this.ki) <= i) {
 			isKi = true;
 		}
 
