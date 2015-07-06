@@ -94,7 +94,6 @@ public class BattleShipServer implements Runnable{
 		try {
 			// Server-Socket anlegen
 			serverSocket = new ServerSocket(port, clientZahl);
-
 			// Serverdaten ausgeben
 			InetAddress ia = InetAddress.getLocalHost();
 			System.out.println("Host: " + ia.getHostName());
@@ -117,10 +116,8 @@ public class BattleShipServer implements Runnable{
 			while (loggedPlayer < clientZahl) {
 				// Auf Verbindungsw�nsche warten...
 				Socket clientSocket = serverSocket.accept();
-				// ... und dann Verarbeitung von Dienstanfragen starten:
-				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
-				//c.verarbeiteAnfragen();
 				crp[loggedPlayer] =  new ClientRequestProcessor(clientSocket, player, destroyer, frigate, corvette, submarine, fieldSize);
+				System.out.println(loggedPlayer + ": " + crp[loggedPlayer].toString());
 				Thread s = new Thread(crp[loggedPlayer]);
 				s.start();
 				loggedPlayer++;

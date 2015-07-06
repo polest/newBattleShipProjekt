@@ -144,6 +144,7 @@ public class Round_Client implements Serializable{
 			if(shipBtn.getActionCommand().equals("destroyer") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 1;
+					ship = player.getAvailableDestroyer();
 					roundView.setFrigateSelected(false);
 					roundView.setCorvetteSelected(false);
 					roundView.setSubmarineSelected(false);
@@ -155,6 +156,7 @@ public class Round_Client implements Serializable{
 			else if(shipBtn.getActionCommand().equals("frigate") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 2;
+					ship = player.getAvailableFrigate();
 					roundView.setDestroyerSelected(false);
 					roundView.setCorvetteSelected(false);
 					roundView.setSubmarineSelected(false);
@@ -166,6 +168,7 @@ public class Round_Client implements Serializable{
 			else if(shipBtn.getActionCommand().equals("corvette") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 3;
+					ship = player.getAvailableCorvette();
 					roundView.setFrigateSelected(false);
 					roundView.setDestroyerSelected(false);
 					roundView.setSubmarineSelected(false);
@@ -177,6 +180,7 @@ public class Round_Client implements Serializable{
 			else if(shipBtn.getActionCommand().equals("submarine") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 4;
+					ship = player.getAvailableSubmarine();
 					roundView.setFrigateSelected(false);
 					roundView.setCorvetteSelected(false);
 					roundView.setSubmarineSelected(false);
@@ -322,6 +326,11 @@ public class Round_Client implements Serializable{
 
 				if(ship != null){
 					client.setAttack(shipString, (""+gegner), pos, (""+orientation) );
+					ship = null;
+					roundView.setDestroyerSelected(false);
+					roundView.setFrigateSelected(false);
+					roundView.setCorvetteSelected(false);
+					roundView.setSubmarineSelected(false);
 				}
 			}
 		}
