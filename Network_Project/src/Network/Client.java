@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import Game.Round_Client;
 import Main.Main_Controler;
 
@@ -17,7 +20,7 @@ public class Client implements Runnable{
 	private Main_Controler mainControler;
 	private String[] playerNames;
 	private Round_Client roundClient;
-
+	
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 	 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
