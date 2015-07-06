@@ -291,6 +291,14 @@ public class MatrixTools implements Serializable{
 
 	}
 
+	/**
+	 * @param ship
+	 * @param coordinates
+	 * @param orientation
+	 * @param player
+	 * Setzt den Inhalt einer Zelle je nachdem ob ein Schiff auf dem privaten Feld ist oder nicht
+	 * auf getroffenes Wasser oder getroffenes Schiff
+	 */
 	public void attackField(Ship ship, int[] coordinates, char orientation, Player player){
 		int[][] publicField = player.getPublicField().getField();
 		int[][] privateField = player.getPrivateField().getField();
@@ -453,6 +461,13 @@ public class MatrixTools implements Serializable{
 		System.out.println(hitShip + "x Schiff getroffen\n" + hitWater + "x Wasser getroffen\n");
 	}
 
+	/**
+	 * @param player
+	 * @param ship
+	 * @param x
+	 * @param y
+	 * überprüft, on ein Schiff gesunken ist oder nicht
+	 */
 	private void checkShipIsSunk(Player player, Ship ship, int x, int y){
 		boolean shipIsSwimming = ship.setCoordinatesIfHitted(x, y);
 
@@ -462,6 +477,11 @@ public class MatrixTools implements Serializable{
 		}
 	}
 
+	/**
+	 * @param player
+	 * @param ship
+	 * Setzt entsprechende Zahl für ein gesunkenes Schiff eines Spielers auf dem öffentlichen Feld
+	 */
 	private void setPublicFieldSunkenShip(Player player, Ship ship){
 		int[][] publicField = player.getPublicField().getField();
 
@@ -587,6 +607,11 @@ public class MatrixTools implements Serializable{
 	}
 
 
+	/**
+	 * @param publicField
+	 * @param name
+	 * druckt das öffentliche Spielfeld in der Konsole aus
+	 */
 	public void printPublicField(int[][] publicField, String name){
 
 		int[][] printMatrix = new int[publicField.length][publicField.length];

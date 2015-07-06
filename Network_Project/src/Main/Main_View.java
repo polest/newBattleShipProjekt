@@ -42,6 +42,13 @@ public class Main_View{
 		//doStartAnim();
 	}
 
+	/**
+	 * Getter
+	 * welcome Panel
+	 * Setter 
+	 * welcome Panel
+	 * @return
+	 */
 	public ImagePanel getWelcomePan() {
 		return welcomePan;
 	}
@@ -50,6 +57,9 @@ public class Main_View{
 		this.welcomePan = welcomePan;
 	}
 
+	/**
+	 *Frame wird initialisiert 
+	 */
 	private void initFrame(){
 		this.frame = new JFrame("BattleShip Galactica");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,10 +69,11 @@ public class Main_View{
 		this.frame.setResizable(false);
 		this.frame.setVisible(true);
 		this.frame.add(this.cards);
-
-		//TODO Frame Icon hinzufügen
 	}
 
+	/**
+	 * Menu wird initialisiert und dem Frame hinzugefügt
+	 */
 	private void initMenu(){
 		this.menubar = new MenuBar();
 		this.datei = new Menu("Datei");
@@ -77,10 +88,18 @@ public class Main_View{
 		this.frame.setMenuBar(this.menubar);
 	}
 
+	/**
+	 * Getter save
+	 * @return
+	 */
 	public MenuItem getSave() {
 		return save;
 	}
 
+	/**
+	 * initialisert Startpanel
+	 * wird cardPanel geaddet
+	 */
 	private void initStartPanel(){
 		this.welcomePan = new ImagePanel("Resources/unterwasser.jpg");
 		this.welcomePan.setSize(this.width, this.height);
@@ -93,10 +112,20 @@ public class Main_View{
 		this.cards.add(this.welcomePan);
 	}
 
+	
+	/**
+	 * @param panel
+	 * @param name
+	 * Methode um ein Panel dem CardPanel zu adden
+	 */
 	public void addPanel(JPanel panel, String name){
 		this.cards.add(panel, name);
 	}
 
+	/**
+	 * wechselt das Panel zu dem übergegebenen Panel
+	 * @param cardName
+	 */
 	public void changeShownPan(String cardName){
 		CardLayout cardLayout = (CardLayout) cards.getLayout();
 		cardLayout.show(cards, cardName);
@@ -104,6 +133,10 @@ public class Main_View{
 
 	}
 
+	
+	/**
+	 * setzt den Willkommenstext und added ihn dem welcome Panel
+	 */
 	private void setWelcomeText(){
 
 		this.welcome_text = new JLabel("", SwingConstants.CENTER);
@@ -122,6 +155,9 @@ public class Main_View{
 		this.welcomePan.add(welcome_text);
 	}
 
+	/**
+	 * Setzt alle Buttons auf das Panel
+	 */
 	private void setButtons(){
 		int buttonWidth = 250;
 
@@ -176,39 +212,6 @@ public class Main_View{
 
 	}
 
-	private void doStartAnim(){
-		//increase the opacity and repaint
-		int sizeX = 80;
-		while(sizeX <= 800) {
-			sizeX += 4;
-			//this.welcome_text.setSize();
-			ImageIcon img = new ImageIcon(""+welcomeTextIcon);
-			Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
-			ImageIcon icon = new ImageIcon(newimg);
-			this.welcome_text.setIcon(icon);
-			this.frame.repaint();
-
-			//			//sleep for a bit
-			//			try {
-			//				Thread.sleep(10);
-			//			} catch (InterruptedException e) {
-			//
-			//				e.printStackTrace();
-			//			}
-		}
-		while(sizeX >= 700) {
-			sizeX -= 3;
-			ImageIcon img = new ImageIcon(""+welcomeTextIcon);
-			Image newimg = img.getImage().getScaledInstance(sizeX, 100, java.awt.Image.SCALE_SMOOTH);  
-			ImageIcon icon = new ImageIcon(newimg);
-			this.welcome_text.setIcon(icon); 
-
-			this.frame.repaint();
-		}
-
-
-	}
-
 	/**
 	 * Funktionen bereitstellen, mit denen man später aus
 	 * dem Controller die nötigen Listener hinzufügen kann
@@ -217,10 +220,6 @@ public class Main_View{
 		this.newGame.addActionListener(l);
 	}
 
-	/**
-	 * Funktionen bereitstellen, mit denen man später aus
-	 * dem Controller die nötigen Listener hinzufügen kann
-	 */
 	public void setLoadSelectionListener(ActionListener l){
 		this.loadGame.addActionListener(l);
 	}

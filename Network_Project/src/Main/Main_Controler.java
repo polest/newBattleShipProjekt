@@ -32,10 +32,6 @@ import SaveGame.Save;
 import Tools.ImagePanel;
 
 public class Main_Controler implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2959797632378263001L;
 	private Main_View main_view;
 	private int width;
@@ -91,7 +87,12 @@ public class Main_Controler implements Serializable{
 		initGameView.setNextSelectionListener(new StartRoundListener());
 		main_view.getSave().setEnabled(true);
 	}
-
+	
+	
+	/**
+	 * holt sich alle informationen aus gameOptions um diese später an alle Clients zu übergeben
+	 * Startet den Server und verbindet den 1. Client automatisch mit dem Server
+	 */
 	public void startServerAndGame(){
 		int player = gameOptions.getPlayer();
 		System.out.println(player);
@@ -121,6 +122,17 @@ public class Main_Controler implements Serializable{
 		initGameClient.addClient(client);
 
 	}
+	
+	/**
+	 * @param player
+	 * @param destroyer
+	 * @param frigate
+	 * @param corvette
+	 * @param submarine
+	 * @param fieldSize
+	 * Wenn alle Clients angemeldet sind,
+	 * wird initGamePanel angezeigt und alle clients können ihre Schiffe platzieren
+	 */
 
 	public void startInitGameView(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize){
 		initGameView =  new InitGame_View_Client();
@@ -132,11 +144,18 @@ public class Main_Controler implements Serializable{
 
 	}
 
+	
+	/**
+	 * Methode um einen Client dem Spiel hinzuzufügen
+	 */
 	public void addClientToGame(){
 		Thread s = new Thread(client = new Client(ipAdress, port, this) );
 		s.start();
 	}
 
+	/**
+	 * Methode um das ROund Panel anzuzeigen
+	 */
 	public void changeToRoundView(){
 		client.getPlayerNames();
 	}
@@ -169,6 +188,13 @@ public class Main_Controler implements Serializable{
 			main_view.changeShownPan("optionsPanel");
 		}
 	}
+
+	
+	/**
+	 * erstellt ein kleines Frame, in dem der Client
+	 * eine IP ADresse und einen Port eingeben kann um diesem Spiel beizutreten
+	 *
+	 */
 
 	private class JoinGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -234,12 +260,22 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
+	
+	/**
+	 * beendet das Spiel und schließt es
+	 *
+	 */
 	private class ExitGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			System.exit(-1);
 		}
 	}
 
+	/**
+	 * öffnet einen FileChooser, mit dem eine Datei ausgewählt werden kann,
+	 * die geladen werden soll
+	 * alle Datein außer .save werden ausgeblendet
+	 */
 	private class LoadGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser jfc = new JFileChooser();
@@ -262,6 +298,10 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
+	/**
+	 * öffnet die Instructions in einem neuen Frame
+	 *
+	 */
 	private class InstructionsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			Instructions ins = new Instructions();
@@ -269,6 +309,9 @@ public class Main_Controler implements Serializable{
 
 	}
 
+	/**
+	 *blendet das welcomPanel wieder ein
+	 */
 	private class SetOptionsBackListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			main_view.addPanel(main_view.getWelcomePan(), "welcomePan");
@@ -277,12 +320,19 @@ public class Main_Controler implements Serializable{
 
 	}
 
+	/**
+	 * ruft die Methode startServerAndGame auf.
+	 * Startet ein Netzwerkspiel
+	 */
 	private class SetOptionsOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			startServerAndGame();
 		}
 	}
 
+	/**
+	 *setzt den Client auf Bereit
+	 */
 	private class StartRoundListener implements ActionListener{
 
 		@Override
@@ -292,6 +342,11 @@ public class Main_Controler implements Serializable{
 
 	}
 
+	/**
+	 * öffnet einen SpeicherDialog
+	 * in dem ein Directory ausgewählt werden kannm, wo das Spiel gespeichert werden soll.
+	 *
+	 */
 	private class SaveGameListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser jfc = new JFileChooser();

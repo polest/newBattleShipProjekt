@@ -1,12 +1,19 @@
 package Game;
 
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 
-import javax.swing.*;
-import javax.swing.event.DocumentListener;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import Tools.ImagePanel;
 
@@ -165,8 +172,11 @@ public class Options_View {
 	private void initOptions(){
 
 		JLabel playerlb = new JLabel("Anzahl der Spieler");
+		Font schrift = new Font("Times New Roman", Font.BOLD, 15);
+		playerlb.setForeground(Color.WHITE);
+		playerlb.setFont(schrift);
 		//playerlb.setIcon(new ImageIcon("Resources/countPlayer.png"));
-		playerlb.setBounds(40,70, 120,30);
+		playerlb.setBounds(40,70, 130,30);
 		this.optionsView.add(playerlb);
 
 		this.player = new JToggleButton[5];
@@ -181,10 +191,14 @@ public class Options_View {
 		this.kiBox = new JCheckBox[5];
 
 		JLabel playerNameslb = new JLabel("Namen der Spieler");
-		playerNameslb.setBounds(190, 70, 120, 30);
+		playerNameslb.setBounds(190, 70, 130, 30);
+		playerNameslb.setForeground(Color.WHITE);
+		playerNameslb.setFont(schrift);
 		this.optionsView.add(playerNameslb);
 
 		JLabel kilb = new JLabel("Computer");
+		kilb.setFont(schrift);
+		kilb.setForeground(Color.WHITE);
 		kilb.setBounds(320, 70, 100, 30);
 		this.optionsView.add(kilb);
 
@@ -208,16 +222,20 @@ public class Options_View {
 
 
 		JLabel shipslb = new JLabel("Anzahl der Schiffe");
+		shipslb.setForeground(Color.WHITE);
+		shipslb.setFont(schrift);
 		shipslb.setBounds(420, 70, 150, 30);
 		this.optionsView.add(shipslb);
 
-		JLabel[] shipsLabel = {new JLabel("Zerstörer"), new JLabel("Fregatten"), new JLabel("Corvetten"), new JLabel("UBoote")};
+		JLabel[] shipsLabel = {new JLabel("Zerstörer"), new JLabel("Fregatten"), new JLabel("Korvetten"), new JLabel("UBoote")};
 
 		this.ships =  new JComboBox[4];
-		String[] count = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+		String[] count = {"0", "1", "2", "3", "4", "5"};
 		
 		for(int s = 0; s < this.ships.length; s++){
 			shipsLabel[s].setBounds(420 ,( 110+ (45*s) ), 90, 35);
+			shipsLabel[s].setForeground(Color.WHITE);
+			shipsLabel[s].setFont(schrift);
 		    this.optionsView.add(shipsLabel[s]);
 		    
 		    this.ships[s] = new JComboBox(count);
@@ -243,12 +261,14 @@ public class Options_View {
 		
 	
 		JLabel sizeOfGame = new JLabel("Größe des Spielfeldes");
+		sizeOfGame.setForeground(Color.white);
+		sizeOfGame.setFont(schrift);
 		sizeOfGame.setBounds(610, 70, 150, 30);
 		this.optionsView.add(sizeOfGame);
 		
-		String[] sizeVal = new String[15];
+		String[] sizeVal = new String[20];
 		
-		for(int i = 0; i < 15; i++){
+		for(int i = 0; i < 20; i++){
 			int val = i+1;
 			sizeVal[i] = ""+val;
 		}

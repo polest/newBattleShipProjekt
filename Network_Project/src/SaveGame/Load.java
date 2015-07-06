@@ -18,6 +18,10 @@ public class Load {
 	}
 	
 	
+	/**
+	 * @param path
+	 * Lädt ein Spiel aus dem übergegebenen Path
+	 */
 	public void loadGame(String path){
 		ObjectInputStream input = null;
 		

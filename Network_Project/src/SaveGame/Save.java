@@ -12,6 +12,13 @@ public class Save {
 
 
 	
+	/**
+	 * @param fileName
+	 * @param round
+	 * 
+	 * Speichert ein Spiel unter dem übergegebenen Path incl. Namen
+	 * Speichert ein Object von Round
+	 */
 	public void saveGame(String fileName, Round round){
 		ObjectOutputStream output = null;
 		
