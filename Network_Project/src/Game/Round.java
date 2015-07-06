@@ -8,8 +8,6 @@ import KI.ArtificialIntelligence;
 import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
-import Tools.ColoredPrint;
-import Tools.ColoredPrint.EPrintColor;
 
 
 public class Round implements Serializable{
@@ -23,7 +21,6 @@ public class Round implements Serializable{
 	 * @version 25.03.15
 	 */
 	private Player[] player;
-	private ColoredPrint colorPrint;
 	private int fieldSize;
 	private int gegner;
 	private int playerOnTurn;
@@ -40,7 +37,6 @@ public class Round implements Serializable{
 		this.playerOnTurn = 0;
 		this.alivePlayer = player.length;
 		this.gegner = 0;
-		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.orientation = 'h';
 		this.player[0].setActive(true);
@@ -113,10 +109,8 @@ public class Round implements Serializable{
 			return iKoordinaten;
 		}
 		catch(Exception e){
-			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
-
-		}
 		return null;
+		}
 	}
 
 

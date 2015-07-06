@@ -72,10 +72,8 @@ public class ClientRequestProcessor implements Runnable{
 		this.server = server;
 		out.println("changeInitView");
 		String values = clientZahl + ";" + destroyer + ";" + frigate + ";" + corvette + ";" + submarine + ";" + fieldSize + ";";
-		out.println("" + values);
-		out.flush();
+		out.println(values);
 	}
-
 
 	public void startGame(){
 		out.println("startGame");

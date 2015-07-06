@@ -22,8 +22,6 @@ import Ships.Destroyer;
 import Ships.Frigate;
 import Ships.Ship;
 import Ships.Submarine;
-import Tools.ColoredPrint;
-import Tools.ColoredPrint.EPrintColor;
 
 
 public class Round_Client implements Serializable{
@@ -37,7 +35,6 @@ public class Round_Client implements Serializable{
 	 * @version 25.03.15
 	 */
 	private Player player;
-	private ColoredPrint colorPrint;
 	private int fieldSize;
 	private Round_View roundView;
 	private int gegner;
@@ -58,7 +55,6 @@ public class Round_Client implements Serializable{
 		this.alivePlayer = playerLength;
 		this.gegner = 0;
 		this.schiff = 0;
-		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.orientation = 'h';
 		this.playerLength = playerLength;
@@ -130,10 +126,8 @@ public class Round_Client implements Serializable{
 			return iKoordinaten;
 		}
 		catch(Exception e){
-			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
-
+			return null;
 		}
-		return null;
 	}
 
 	private class ShipListener implements ActionListener{

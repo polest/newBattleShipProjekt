@@ -10,7 +10,6 @@ import Ships.Destroyer;
 import Ships.Frigate;
 import Ships.Ship;
 import Ships.Submarine;
-import Tools.ColoredPrint;
 /**
  * Write a description of class MatrixTools here.
  * 
@@ -35,7 +34,6 @@ public class Player implements Serializable{
 	private String playerName;
 	private BattleField privateField;
 	private BattleField publicField;
-	private ColoredPrint colorPrint;
 	private boolean isBot;
 	private ImageIcon[] destroyerIconH;
 	private ImageIcon[] frigateIconH;
@@ -67,7 +65,6 @@ public class Player implements Serializable{
 		this.isActive = isActive;
 		this.totalShips = totalShips;
 		this.playerName = playerName;
-		this.colorPrint = new ColoredPrint();
 		this.isBot = isKi;
 		this.enemyNumber = -1;
 		this.destroyerIndex = 0;

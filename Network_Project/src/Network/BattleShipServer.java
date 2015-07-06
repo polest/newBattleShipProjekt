@@ -166,7 +166,7 @@ public class BattleShipServer implements Runnable{
 		boolean found = false;
 		for(int i = 0; i < this.clientZahl; i++){
 			if(found == false){
-				if(this.crp[playerReady] == this.crp[i]){
+				if(crp == this.crp[i]){
 					sortedNames[i] = name;
 					this.crp[i].setPlayerId(i);
 					found = true;
@@ -183,7 +183,7 @@ public class BattleShipServer implements Runnable{
 			if(playerReady < player){
 				int counter = 1;
 				for(int i = playerReady; i < player; i++){
-					playerNames = playerNames.concat("Comuter" + counter + ";");
+					playerNames = playerNames.concat("Computer" + counter + ";");
 				}
 			}
 			for(int i = 0; i < this.clientZahl; i++){
@@ -220,11 +220,10 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void start(){
+		//Jeden Spieler und Spielfelder anlegen
 		for(int j = 0; j < player; j++){
-			if(j > 0){
-				this.initGame.incrementPlayerId();
-			}
 			this.initGame.initPlayerBattleShip();
+			this.initGame.incrementPlayerId();
 			if(j < clientZahl){
 				crp[j].verarbeiteAnfragen(this);
 			}

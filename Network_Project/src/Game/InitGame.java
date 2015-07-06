@@ -20,8 +20,6 @@ import Ships.Destroyer;
 import Ships.Frigate;
 import Ships.Ship;
 import Ships.Submarine;
-import Tools.ColoredPrint;
-import Tools.ColoredPrint.EPrintColor;
 
 public class InitGame implements Serializable{
 
@@ -30,7 +28,6 @@ public class InitGame implements Serializable{
 
 	private Load load = new Load();
 	private Player[] player;
-	private ColoredPrint colorPrint = new ColoredPrint();
 	private int fieldSize;
 	String[] listFileNames;
 	private Round rounds;
@@ -102,7 +99,7 @@ public class InitGame implements Serializable{
 		boolean isActive;
 		boolean isKi = false;
 
-		if((this.player.length - this.ki) <= i) {
+		if(i >= (this.player.length - this.ki) ) {
 			isKi = true;
 		}
 
@@ -119,7 +116,7 @@ public class InitGame implements Serializable{
 		if(player[i].isPlayerBot()){
 			setShipsToFieldForAI(i);
 		}
-		
+
 		this.initShips();
 	}
 
@@ -136,7 +133,7 @@ public class InitGame implements Serializable{
 
 			boolean checked;
 			checked = false;
-		
+
 			while(!(checked)){
 				String pos;
 				pos = ai.setShip(this.fieldSize);
@@ -150,13 +147,13 @@ public class InitGame implements Serializable{
 
 			boolean checked;
 			checked = false;
-		
+
 			while(!(checked)){
 				String pos;
 				pos = ai.setShip(this.fieldSize);
 				orientation = ai.setShipOrientation();
 				checked = setShipToField("frigate", i, pos);
-				
+
 			}
 
 		}
@@ -166,23 +163,23 @@ public class InitGame implements Serializable{
 
 			boolean checked;
 			checked = false;
-		
+
 			while(!(checked)){
 				String pos;
 				pos = ai.setShip(this.fieldSize);
 				orientation = ai.setShipOrientation();
 				checked = setShipToField("corvette", i, pos);
-				
+
 			}
 
 		}
 
 		//UBOOT
 		for(int s = 0; s < submarine.length; s++){
-			
+
 			boolean checked;
 			checked = false;
-		
+
 			while(!(checked)){
 				String pos;
 				pos = ai.setShip(this.fieldSize);
@@ -193,7 +190,7 @@ public class InitGame implements Serializable{
 		}
 	}
 	// AI ÄNDERUNG ENDE
-	
+
 	/**
 	 *  Positionierung der Schiffe von jedem Spieler (nacheinander)
 	 */
@@ -211,11 +208,6 @@ public class InitGame implements Serializable{
 		this.totalShips = this.destroyerCount + this.frigateCount + this.corvetteCount + this.submarineCount;
 
 		String name = player[playerId].getPlayerName();
-		boolean start = true;
-
-		if(playerId > 0){
-			start = false;
-		}
 	}
 
 	public boolean setShipToField(String shipName, int i, String pos) {
@@ -242,17 +234,12 @@ public class InitGame implements Serializable{
 			else{
 				player[i].saveShipCoordinatesV(koordinaten[0], koordinaten[1], length);
 			}
-			System.out.println("Schiff gesetzt!!!");
 			return true;
 		}
-		else{
-			if(!player[i].isPlayerBot()){
-				this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
-			}
-			return false;
-		}
 
+		return false;
 	}
+
 
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
@@ -282,10 +269,8 @@ public class InitGame implements Serializable{
 			return iKoordinaten;
 		}
 		catch(Exception e){
-			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
-
+			return null;
 		}
-		return null;
 	}
 
 }

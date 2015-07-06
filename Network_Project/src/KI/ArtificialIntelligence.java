@@ -9,7 +9,6 @@ import Ships.Destroyer;
 import Ships.Frigate;
 import Ships.Ship;
 import Ships.Submarine;
-import Tools.ColoredPrint.EPrintColor;
 
 public class ArtificialIntelligence {
 	
