@@ -184,6 +184,7 @@ public class BattleShipServer implements Runnable{
 				int counter = 1;
 				for(int i = playerReady; i < player; i++){
 					playerNames = playerNames.concat("Computer " + counter + ";");
+					counter++;
 				}
 			}
 			for(int i = 0; i < this.clientZahl; i++){

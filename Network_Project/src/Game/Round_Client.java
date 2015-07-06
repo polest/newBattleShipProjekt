@@ -211,9 +211,6 @@ public class Round_Client implements Serializable{
 	public void setAttackReply(String gegner, String[] values, String pos, String orientation) {
 		int[] coords = checkPos(pos);	
 		roundView.setAttackReply(gegner, values, coords, orientation);
-//		if(this.ship != 0){
-//			this.player.setShipIsntReady(this.ship);
-//		}
 		this.ship = 0;
 		setShipReadyOrNot();
 	}
