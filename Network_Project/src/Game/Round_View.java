@@ -19,18 +19,13 @@ import Tools.ImagePanel;
 
 public class Round_View implements Serializable{
 
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2275181958920926173L;
 	private ImagePanel roundPan;
 	private int fieldSize;
-	//private JPanel enemyFieldsPan;
-	//private BattleField_View[] enemies;
-	//private BattleField_View shownField;
 	private JButton[][] clickButtons;
-	//private Player[] playerGroup;
 	private int playerLength;
 	private JLabel[] clickLabel;
 	private JLabel[] enemiesName;
@@ -204,9 +199,9 @@ public class Round_View implements Serializable{
 		this.messages.setBounds(30, 20, 500, 60);
 		this.roundPan.add(messages);
 		//Alle der reihe nach sortiert, nun den eigenen Spieler in groß anzeigen lassen
-		if(id != 0){
-			setActive(id);
-		}
+//		if(id != 0){
+//			setActive(id);
+//		}
 	}
 
 	public void setDestroyer(int count){
@@ -339,55 +334,6 @@ public class Round_View implements Serializable{
 		roundPan.revalidate();
 	}
 
-
-	//	public void nextRound(int selectedIndex){
-	//
-	//		int[] smallBoundsY = new int[clickLabel.length-1];
-	//		for(int i = 1; i <= smallBoundsY.length; i++){
-	//			smallBoundsY[i-1] = clickLabel[i].getY();
-	//		}
-	//
-	//		int[] smallBoundsX = new int[clickLabel.length-1];
-	//		for(int i = 1; i <= smallBoundsX.length; i++){
-	//			smallBoundsX[i-1] = clickLabel[i].getX();
-	//		}
-	//
-	//		int smallWidth = clickLabel[1].getWidth();
-	//
-	//		int[] bigBounds = new int[4];
-	//
-	//		bigBounds[0] = 30;
-	//		bigBounds[1] = 100;
-	//		bigBounds[2] = 400;
-	//		bigBounds[3] = 400;
-	//
-	//		int first = order[selectedIndex];
-	//
-	//		shownFieldPlayerName.setText(playerNames[first] );
-	//		order[0] = first;
-	//		playerGroup[first].setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
-	//
-	//		this.setMessage("Spieler " + playerNames[first] + " ist an der Reihe!");
-	//
-	//		int counter = 0;
-	//		int orderCounter = 1;
-	//
-	//		for(int i = 0; i < playerLength; i++){
-	//			if(i != first){
-	//				order[orderCounter] = i;
-	//				playerGroup[i].setSize(smallBoundsX[counter], smallBoundsY[counter], smallWidth);
-	//				playerGroup[i].getView().setVisible(true);
-	//				playerGroup[i].getView().setVisible(false);
-	//				enemiesName[counter].setText(playerNames[i] );
-	//				counter++;
-	//				orderCounter++;
-	//			}
-	//		}
-	//
-	//		roundPan.repaint();
-	//		roundPan.revalidate();
-	//	}
-
 	public JLabel[] getSwitchLabel(){
 		return clickLabel;
 	}
@@ -455,12 +401,13 @@ public class Round_View implements Serializable{
 				
 				}
 				else{
-					String desc = "Resources/versenktesMeer.png";
+					String desc = "Resources/versenktesMeer.jpg";
 					newIcon = new ImageIcon(""+desc, ""+desc);
 					newIcon.setImage(newIcon.getImage().getScaledInstance(cellSize,cellSize, Image.SCALE_DEFAULT));
 				}
 
 				playerGroup[gegnerInt].getBattleField()[i][y].setIcon(newIcon);
+				counter++;
 			}
 		}
 		else{
@@ -495,6 +442,22 @@ public class Round_View implements Serializable{
 
 	public void setSubmarineEnabled(boolean b) {
 		this.submarine.setEnabled(b);
+	}
+
+	public void setFrigateSelected(boolean b) {
+		this.frigate.setSelected(b);
+	}
+
+	public void setCorvetteSelected(boolean b) {
+		this.corvette.setSelected(b);
+	}
+
+	public void setSubmarineSelected(boolean b) {
+		this.submarine.setSelected(b);
+	}
+
+	public void setDestroyerSelected(boolean b) {
+		this.destroyer.setSelected(b);
 	}
 
 }

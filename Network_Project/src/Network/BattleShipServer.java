@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import Game.InitGame;
 import Game.Round;
 import Main.Main_Controler;
@@ -48,10 +50,9 @@ public class BattleShipServer implements Runnable{
 	private Round round;
 	private int loggedPlayer;
 	private String[] sortedNames;
-	private ClientRequestProcessor[] sortedPlayerCrp;
 	private int playerOnTurn;
 	private int player;
-	
+
 
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
@@ -65,8 +66,8 @@ public class BattleShipServer implements Runnable{
 		this.initGame = initGame;
 		this.playerNames = "";
 		this.loggedPlayer = 0;
-		this.sortedPlayerCrp = new ClientRequestProcessor[clientZahl];
 		this.player = player;
+		this.sortedNames = new String[player];
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setResizable(false);
 		connection.setSize(200, 200);
@@ -127,13 +128,13 @@ public class BattleShipServer implements Runnable{
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);
 			System.exit(1);
 		}
-		
+
 		start();
 	}
 
 	public void addRound(Round round){
 		this.round = round;
-
+		this.round.addPlayerNames(sortedNames);
 	}
 
 	public void setShipsToPlayer(String ship, String pos, ClientRequestProcessor crp){
@@ -148,46 +149,49 @@ public class BattleShipServer implements Runnable{
 	public void setPlayerMove(int id){
 		this.playerOnTurn = id;
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].setMove(id);
+			this.crp[i].setMove(id, this.sortedNames[i]);
 		}
 	}
 
 	public void setPlayerReadyToPlay(ClientRequestProcessor crp, String name) {
-
 		if(name.equals("")){
-			name = "Spieler " + ( playerReady + 1 );
+			Random rand1 = new Random();
+			int zahl1 = rand1.nextInt(30)+1;
+			Random rand2 = new Random();
+			int zahl2 = rand1.nextInt(30)+1;
+
+			int zahl3 = zahl1*zahl2;
+			name = "Spieler " + zahl3;
 		}
 
-		this.crp[playerReady].setPlayerId(playerReady);
+		boolean found = false;
+		for(int i = 0; i < this.clientZahl; i++){
+			if(found == false){
+				if(this.crp[playerReady] == this.crp[i]){
+					sortedNames[i] = name;
+					this.crp[i].setPlayerId(i);
+					found = true;
+				}
+			}
+		}
 
-		playerNames = playerNames.concat(name + ";");
-		sortCrpToId();
 		playerReady++;
 		if(playerReady >= clientZahl){
+			for(int i = 0; i < clientZahl; i++){
+				playerNames = playerNames.concat(sortedNames[i] + ";");
+			}
+
 			if(playerReady < player){
 				int counter = 1;
 				for(int i = playerReady; i < player; i++){
 					playerNames = playerNames.concat("Comuter" + counter + ";");
 				}
 			}
-			
 			for(int i = 0; i < this.clientZahl; i++){
-				this.sortedPlayerCrp[i].startGame();
+				this.crp[i].startGame();
 			}
 		}
-	
-	}
 
-	public void sortCrpToId(){
-		boolean found = false;
-		for(int i = 0; i < this.clientZahl; i++){
-			if(found == false){
-				if(this.crp[playerReady] == this.crp[i]){
-					this.sortedPlayerCrp[playerReady] = this.crp[i];
-					found = true;
-				}
-			}
-		}
 	}
 
 	public void setAttack(String txt){
@@ -203,7 +207,7 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void attackFailed(){
-		sortedPlayerCrp[playerOnTurn].attackFailed();
+		crp[playerOnTurn].attackFailed();
 	}
 
 	public String getPlayerNames(){
@@ -231,32 +235,37 @@ public class BattleShipServer implements Runnable{
 
 	public void setPlayerIsDead(int gegner) {
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].setDead(gegner);
+			this.crp[i].setDead(gegner);
 		}
 	}
 
 	public void playerWins(int index) {
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].setWinner(index, this.sortedNames[index]);
+			this.crp[i].setWinner(this.sortedNames[index]);
 		}
-
 	}
 
 	public void PlayerHasNoLoadedShips(int index) {
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].playerHasNoLoadedShips(index, this.sortedNames[index]);
+			this.crp[i].playerHasNoLoadedShips(index, this.sortedNames[index]);
 		}
 	}
 
 	public void setActive(int index) {
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].setActive(index);
+			this.crp[i].setActive(index);
 		}
 	}
 
 	public void replyAttack(int gegner, String reply, String coords, char orientation) {
 		for(int i = 0; i < this.clientZahl; i++){
-			this.sortedPlayerCrp[i].setAttackReply(gegner, reply, coords, orientation);
+			this.crp[i].setAttackReply(gegner, reply, coords, orientation);
+		}
+	}
+
+	public void reloadShips() {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.crp[i].reloadShips();
 		}
 	}
 }

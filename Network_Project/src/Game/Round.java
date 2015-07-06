@@ -2,6 +2,7 @@
 package Game;
 
 import java.io.Serializable;
+
 import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
@@ -50,12 +51,12 @@ public class Round implements Serializable{
 	}
 
 	//TODO! KI SCHUSS AUSWAHL
-//	public void setKiShoot(){
-//  out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
-//		server.setAttack(STRING TEXT);
-//	}
-	
-	
+	//	public void setKiShoot(){
+	//  out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
+	//		server.setAttack(STRING TEXT);
+	//	}
+
+
 	public void play(){
 		char orientation = 'h';
 		String eingabe;
@@ -65,7 +66,7 @@ public class Round implements Serializable{
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
-					
+
 					if(player[i].getIsAlive()){
 
 						if(player[i].checkIfAnyShipIsReady()){
@@ -77,14 +78,10 @@ public class Round implements Serializable{
 				}
 			}
 		}
-		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-		for(int j = 0; j < player.length; j++){
-			player[j].reloadTimeCountdown();
-		}
 	}
 
 
-	
+
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
 	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
@@ -132,7 +129,7 @@ public class Round implements Serializable{
 
 	public void setAttack(String shipString, String gegnerString, String pos, String orientationString){
 		int index = playerOnTurn % player.length;
-		
+
 		gegner = Integer.parseInt(gegnerString);
 		orientation = orientationString.charAt(0);
 
@@ -175,28 +172,53 @@ public class Round implements Serializable{
 				System.out.println("playerOnTurn: " + playerOnTurn);
 				playerOnTurn++;	
 				index = playerOnTurn % player.length;
+				boolean nextPlayer = false;
 
-				while(player[index].getIsAlive() == false){
-					if(player[index].checkIfAnyShipIsReady() == false){
-						server.PlayerHasNoLoadedShips(index);
-						playerOnTurn++;
-						index = playerOnTurn % player.length;
+				while(nextPlayer == false){
+					if(player[index].getIsAlive() == true){
+						if(player[index].checkIfAnyShipIsReady() == false){
+							server.PlayerHasNoLoadedShips(index);
+							playerOnTurn++;
+							index = playerOnTurn % player.length;
+							
+							if(index == 0){
+								for(int j = 0; j < player.length; j++){
+									player[j].reloadTimeCountdown();
+									server.reloadShips();
+								}
+							}
+						}
+						else{
+							nextPlayer = true;
+						}
 					}
 				}
+
 				player[index].setActive(true);
-				
+
 				if(player[index].isPlayerBot()){
-					//VORRÜBER GEHEN DIE KI ÜBERSPRINGEN!
+					//VORRÜBERGEHEND DIE KI ÜBERSPRINGEN!
 					playerOnTurn++;
 					index = playerOnTurn % player.length;
 					//TODO! KI
 					//player[index].MACH:KI:METHoDE!!
 				}
-				
-				server.setActive(index);
-				System.out.println("playerOnTurn: " + playerOnTurn);
 
+				server.setActive(index);
+				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
+				if(index == 0){
+					for(int j = 0; j < player.length; j++){
+						player[j].reloadTimeCountdown();
+
+					}
+				}
 			}
+		}
+	}
+
+	public void addPlayerNames(String[] sortedNames) {
+		for(int i = 0; i < player.length; i++){
+			player[i].setPlayerName(sortedNames[i]);
 		}
 	}
 }
