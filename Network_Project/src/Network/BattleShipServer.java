@@ -7,8 +7,6 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
-
 import Game.InitGame;
 import Game.Round;
 import Main.Main_Controler;
@@ -52,7 +50,7 @@ public class BattleShipServer implements Runnable{
 	private String[] sortedNames;
 	private ClientRequestProcessor[] sortedPlayerCrp;
 	private int playerOnTurn;
-
+	private int player;
 
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
@@ -61,12 +59,13 @@ public class BattleShipServer implements Runnable{
 	 * (wenn 0, wird Default-Port verwendet)
 	 */
 
-	public BattleShipServer(int port, int clientZahl, InitGame initGame, int destroyer, int frigate, int corvette, int submarine, int fieldSize, Main_Controler mainControler) {
+	public BattleShipServer(int port, int player, int clientZahl, InitGame initGame, int destroyer, int frigate, int corvette, int submarine, int fieldSize, Main_Controler mainControler) {
 		this.mainControler = mainControler;
 		this.initGame = initGame;
 		this.playerNames = "";
 		this.loggedPlayer = 0;
 		this.sortedPlayerCrp = new ClientRequestProcessor[clientZahl];
+		this.player = player;
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setSize(200, 200);
 		connection.setVisible(true);
@@ -121,7 +120,7 @@ public class BattleShipServer implements Runnable{
 				// ... und dann Verarbeitung von Dienstanfragen starten:
 				//ClientAdressRequestProcessor c = new ClientAdressRequestProcessor(clientSocket, adressen, spielfeld);
 				//c.verarbeiteAnfragen();
-				crp[loggedPlayer] =  new ClientRequestProcessor(clientSocket, clientZahl, destroyer, frigate, corvette, submarine, fieldSize);
+				crp[loggedPlayer] =  new ClientRequestProcessor(clientSocket, player, destroyer, frigate, corvette, submarine, fieldSize);
 				Thread s = new Thread(crp[loggedPlayer]);
 				s.start();
 				loggedPlayer++;
@@ -131,6 +130,7 @@ public class BattleShipServer implements Runnable{
 			System.err.println("Fehler w�hrend des Wartens auf Verbindungen: " + e);
 			System.exit(1);
 		}
+		
 		start();
 	}
 
@@ -152,26 +152,33 @@ public class BattleShipServer implements Runnable{
 		this.playerOnTurn = id;
 		for(int i = 0; i < this.clientZahl; i++){
 			this.sortedPlayerCrp[i].setMove(id);
-
 		}
 	}
 
 	public void setPlayerReadyToPlay(ClientRequestProcessor crp, String name) {
 
 		if(name.equals("")){
-			name = "Spieler" + ( playerReady + 1 );
+			name = "Spieler " + ( playerReady + 1 );
 		}
 
 		this.crp[playerReady].setPlayerId(playerReady);
 
-		playerNames = playerNames.concat(";" + name);
+		playerNames = playerNames.concat(name + ";");
 		sortCrpToId();
 		playerReady++;
 		if(playerReady >= clientZahl){
+			if(playerReady < player){
+				int counter = 1;
+				for(int i = playerReady; i < player; i++){
+					playerNames = playerNames.concat("Comuter" + counter + ";");
+				}
+			}
+			
 			for(int i = 0; i < this.clientZahl; i++){
 				this.sortedPlayerCrp[i].startGame();
 			}
 		}
+	
 	}
 
 	public void sortCrpToId(){

@@ -156,7 +156,8 @@ public class Round_View implements Serializable{
 				fieldY = 100;
 			}
 
-			enemiesName[enemiesCounter] = new JLabel(playerNames[i+1]);
+			String name = playerNames[i];
+			enemiesName[enemiesCounter] = new JLabel(name);
 
 			enemiesName[enemiesCounter].setBounds(x, labelY, 200, 30);
 

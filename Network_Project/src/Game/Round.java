@@ -1,19 +1,7 @@
 
 package Game;
 
-
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import javax.swing.BorderFactory;
 import java.io.Serializable;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-
 import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
@@ -35,11 +23,8 @@ public class Round implements Serializable{
 	private ColoredPrint colorPrint;
 	private int fieldSize;
 	private int gegner;
-	private int schiff;
 	private int playerOnTurn;
 	private char orientation;
-	private int mouseY;
-	private int oldBtnY;
 	private int alivePlayer;
 	private BattleShipServer server;
 
@@ -48,7 +33,6 @@ public class Round implements Serializable{
 		this.playerOnTurn = 0;
 		this.alivePlayer = player.length;
 		this.gegner = 0;
-		this.schiff = 0;
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.orientation = 'h';
@@ -65,6 +49,13 @@ public class Round implements Serializable{
 		this.player = player;
 	}
 
+	//TODO! KI SCHUSS AUSWAHL
+//	public void setKiShoot(){
+//  out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
+//		server.setAttack(STRING TEXT);
+//	}
+	
+	
 	public void play(){
 		char orientation = 'h';
 		String eingabe;
@@ -74,7 +65,7 @@ public class Round implements Serializable{
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
-
+					
 					if(player[i].getIsAlive()){
 
 						if(player[i].checkIfAnyShipIsReady()){
@@ -90,9 +81,10 @@ public class Round implements Serializable{
 		for(int j = 0; j < player.length; j++){
 			player[j].reloadTimeCountdown();
 		}
-
 	}
 
+
+	
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
 	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
@@ -192,6 +184,15 @@ public class Round implements Serializable{
 					}
 				}
 				player[index].setActive(true);
+				
+				if(player[index].isPlayerBot()){
+					//VORRÜBER GEHEN DIE KI ÜBERSPRINGEN!
+					playerOnTurn++;
+					index = playerOnTurn % player.length;
+					//TODO! KI
+					//player[index].MACH:KI:METHoDE!!
+				}
+				
 				server.setActive(index);
 				System.out.println("playerOnTurn: " + playerOnTurn);
 

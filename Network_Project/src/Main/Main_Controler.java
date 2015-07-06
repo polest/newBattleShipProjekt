@@ -108,6 +108,7 @@ public class Main_Controler implements Serializable{
 		System.out.println(fieldSize);
 		int ki = gameOptions.getKi();
 
+		int clients = player - ki;
 		initGameView =  new InitGame_View_Client();
 		initGameClient = new InitGame_Client(player, destroyer, frigate, corvette, submarine, fieldSize, initGameView);
 
@@ -115,7 +116,7 @@ public class Main_Controler implements Serializable{
 
 		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 
-		Thread t = new Thread(server = new BattleShipServer(4477, player, initGame, destroyer, frigate, corvette, submarine, fieldSize, this) );
+		Thread t = new Thread(server = new BattleShipServer(4477, player, clients, initGame, destroyer, frigate, corvette, submarine, fieldSize, this) );
 		t.start();
 
 		Thread s = new Thread(client = new Client("localhost", 4477, this) );
@@ -171,7 +172,7 @@ public class Main_Controler implements Serializable{
 		player.setBattleFieldView(initGameView.getBattleFieldView() );
 		int playerLength = initGameClient.getPlayerLength();
 
-		//		roundClient = new Round_Client(player, fieldSize, playerLength, names, client);
+		roundClient = new Round_Client(player, fieldSize, playerLength, names, client);
 		Round_View roundView = roundClient.getRoundView();
 
 		main_view.addPanel(roundView.getPanel(), "roundView"); 

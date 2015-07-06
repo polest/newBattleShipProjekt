@@ -51,9 +51,13 @@ public class InitGame implements Serializable{
 	private int oldBtnY;
 	private boolean shipCanBePlaced;
 	private int ki;
+<<<<<<< Updated upstream
 	// AI ÄNDERUNG START
 	private ArtificialIntelligence ai = new ArtificialIntelligence(); 
 	// AI ÄNDERUNG ENDE
+=======
+
+>>>>>>> Stashed changes
 
 	public InitGame(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize, int ki){
 		this.playerId = 0;
@@ -101,12 +105,12 @@ public class InitGame implements Serializable{
 		BattleField battlefield = new BattleField(this.fieldSize);
 		boolean isActive;
 		boolean isKi = false;
-		
+
 		if(i > (this.player.length - this.ki) ) {
 			isKi = true;
 		}
-		
-		
+
+
 		if(i == 0){
 			isActive = true;
 		}
