@@ -329,7 +329,6 @@ public class Round_View implements Serializable{
 		playerGroup[order[0]].getView().repaint();
 		playerGroup[order[0]].getView().revalidate();
 
-
 		roundPan.repaint();
 		roundPan.revalidate();
 	}
@@ -395,13 +394,9 @@ public class Round_View implements Serializable{
 					String desc = "Resources/ShipsNeu/getroffenesSchiff.png";
 					newIcon = new ImageIcon(""+desc, ""+desc);
 					newIcon.setImage(newIcon.getImage().getScaledInstance(cellSize,cellSize, Image.SCALE_DEFAULT));
-					if(gegnerInt == this.player.getId()){
-						
-					}
-				
 				}
 				else{
-					String desc = "Resources/versenktesMeer.jpg";
+					String desc = "Resources/versenktesMeer.png";
 					newIcon = new ImageIcon(""+desc, ""+desc);
 					newIcon.setImage(newIcon.getImage().getScaledInstance(cellSize,cellSize, Image.SCALE_DEFAULT));
 				}
