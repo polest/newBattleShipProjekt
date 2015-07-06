@@ -315,6 +315,9 @@ public class BattleField_View implements Serializable{
 
 	}
 
+	/**
+	 * ändert das Hintergrundbild, wenn Spieler tot
+	 */
 	public void setDeadBackground() {
 		int size = this.getView().getWidth();
 		ImageIcon meerTot = new ImageIcon("Resources/MeerTOOOT.jpg");

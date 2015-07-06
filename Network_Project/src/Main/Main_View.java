@@ -151,7 +151,7 @@ public class Main_View{
 		this.welcome_text = new JLabel("", SwingConstants.CENTER);
 		this.welcome_text.setIcon(new ImageIcon("Resources/welcomeText.png"));
 		int labelWidth = 800;
-		this.welcome_text.setBounds((this.width-labelWidth)/2, 100, labelWidth, 100);
+		this.welcome_text.setBounds((this.width-labelWidth)/2, 60, labelWidth, 100);
 		this.welcome_text.setVisible(true);
 		this.frame.repaint();
 		this.welcomePan.add(welcome_text);

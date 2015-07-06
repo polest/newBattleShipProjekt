@@ -92,6 +92,9 @@ public class InitGame implements Serializable{
 		return this.playerId;
 	}
 
+	/**
+	 * erstellt für den Spieler ein Spielfeld und erstellt den Spieler mit allen Angaben
+	 */
 	public void initPlayerBattleShip(){
 
 		int i = this.playerId;

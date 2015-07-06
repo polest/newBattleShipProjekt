@@ -190,6 +190,10 @@ public class Options implements Serializable{
 		}
 	}
 
+	/**
+	 * @param preferredSize
+	 * ermittelt die größtmögliche Anzahl von Ki´s
+	 */
 	private void setKiSize(int preferredSize){
 		int maxSize = optionsView.getPlayerCount() - 1;
 		if(maxSize < preferredSize){
