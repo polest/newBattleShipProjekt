@@ -58,7 +58,7 @@ public class Round implements Serializable{
 
 	//TODO! KI SCHUSS AUSWAHL
 	public void setKiShoot(Ship ship, Player gegner, String pos, char orientation){
-		
+
 		System.out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
 		server.setAttack(text);
@@ -175,19 +175,22 @@ public class Round implements Serializable{
 					}
 				}
 
+				//spielzug beenden
 				player[index].setActive(false);
 				System.out.println("playerOnTurn: " + playerOnTurn);
+				//Spieler hochzählen
 				playerOnTurn++;	
 				index = playerOnTurn % player.length;
 				boolean nextPlayer = false;
-
+				//prüfen ob spieler noch am leben ist
 				while(nextPlayer == false){
 					if(player[index].getIsAlive() == true){
+						//und prüfen ob er geladene schiffe hat, wenn nicht nächsten spieler prüfen
 						if(player[index].checkIfAnyShipIsReady() == false){
 							server.PlayerHasNoLoadedShips(index);
 							playerOnTurn++;
 							index = playerOnTurn % player.length;
-							
+							//wenn alle spieler einmal durch waren, die ladezeit der schiffe runtersetzen
 							if(index == 0){
 								for(int j = 0; j < player.length; j++){
 									player[j].reloadTimeCountdown();
@@ -201,13 +204,10 @@ public class Round implements Serializable{
 					}
 				}
 
+				//nächsten Spielzug ermöglichen
 				player[index].setActive(true);
-
+				//Wenn dieser ein Computer ist, dann Spielzug von diesem Aufrufen
 				if(player[index].isPlayerBot()){
-					//VORRÜBERGEHEND DIE KI ÜBERSPRINGEN!
-					playerOnTurn++;
-					index = playerOnTurn % player.length;
-					//TODO! KI d
 					System.out.println("KIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());

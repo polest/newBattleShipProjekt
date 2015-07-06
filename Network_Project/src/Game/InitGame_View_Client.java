@@ -1,6 +1,5 @@
 package Game;
 
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -9,11 +8,9 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import Ships.Ship;
 import Tools.ImagePanel;
 
 public class InitGame_View_Client {
@@ -21,7 +18,6 @@ public class InitGame_View_Client {
 	private ImagePanel initGamePan;
 	private int width;
 	private int height;
-	private JLabel playerName;
 	private int fieldSize;
 	private BattleField_View battleFieldView;
 	private int destroyer;
@@ -32,7 +28,6 @@ public class InitGame_View_Client {
 	private JToggleButton frigateBtn;
 	private JToggleButton corvetteBtn;
 	private JToggleButton submarineBtn;
-	private int cellSize;
 	private JButton nextPlayer;
 	private JTextField name;
 	
@@ -238,7 +233,7 @@ public class InitGame_View_Client {
 
 
 	public void initPlayerField(Player player, int id){
-		//		player.setBattleFieldView(this.battleFieldView[id]);
+		//player.setBattleFieldView(this.battleFieldView[id]);
 
 		this.destroyerBtn.setSelected(false);
 		this.frigateBtn.setSelected(false);

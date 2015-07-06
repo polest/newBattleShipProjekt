@@ -106,7 +106,6 @@ public class InitGame implements Serializable{
 			isKi = true;
 		}
 
-
 		if(i == 0){
 			isActive = true;
 		}
@@ -143,9 +142,7 @@ public class InitGame implements Serializable{
 				pos = ai.setShip(this.fieldSize);
 				orientation = ai.setShipOrientation();
 				checked = setShipToField("destroyer", i, pos);
-				
 			}
-			
 		}
 
 		//FREGATTE
@@ -191,7 +188,6 @@ public class InitGame implements Serializable{
 				pos = ai.setShip(this.fieldSize);
 				orientation = ai.setShipOrientation();
 				checked = setShipToField("submarine", i, pos);
-				
 			}
 
 		}

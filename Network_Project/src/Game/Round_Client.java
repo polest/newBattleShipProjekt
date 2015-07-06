@@ -205,6 +205,7 @@ public class Round_Client implements Serializable{
 				this.playerOnTurn = id;
 			}
 		}
+		this.roundView.setMessage("Spieler " + this.playerNames[playerOnTurn] + " ist an der Reihe!");
 	}
 
 	public void reloadTime(){

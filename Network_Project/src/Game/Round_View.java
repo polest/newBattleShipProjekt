@@ -269,6 +269,7 @@ public class Round_View implements Serializable{
 		for(int k = 0; k < this.playerGroup[i].getField().length; k++){
 			for(int j = 0; j < this.playerGroup[i].getField().length; j++){
 				this.playerGroup[i].getField()[k][j].setEnabled(false);
+				this.playerGroup[i].setDeadBackground();
 			}
 		}
 	}
