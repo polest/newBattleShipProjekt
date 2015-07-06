@@ -127,74 +127,74 @@ public class InitGame implements Serializable{
 	// AI ÄNDERUNG START
 	private void setShipsToFieldForAI(int i){
 
-			Destroyer destroyer[] = player[i].getDestroyer();
-			Frigate frigate[] = player[i].getFrigate();
-			Corvette corvette[] = player[i].getCorvette();
-			Submarine submarine[] = player[i].getSubmarine();
+		Destroyer destroyer[] = player[i].getDestroyer();
+		Frigate frigate[] = player[i].getFrigate();
+		Corvette corvette[] = player[i].getCorvette();
+		Submarine submarine[] = player[i].getSubmarine();
 
-			//ZERSTÖRER
-			for(int d = 0; d < destroyer.length; d++){
+		//ZERSTÖRER
+		for(int d = 0; d < destroyer.length; d++){
 
-				boolean checked;
-				checked = false;
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("destroyer", i, pos);
+				
+			}
 			
-				while(!(checked)){
-					String pos;
-					pos = ai.setShip(this.fieldSize);
-					orientation = ai.setShipOrientation();
-					checked = setShipToField("destroyer",i, pos);
-					
-				}
+		}
+
+		//FREGATTE
+		for(int f = 0; f < frigate.length; f++){
+
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("frigate", i, pos);
 				
 			}
 
-			//FREGATTE
-			for(int f = 0; f < frigate.length; f++){
+		}
 
-				boolean checked;
-				checked = false;
-			
-				while(!(checked)){
-					String pos;
-					pos = ai.setShip(this.fieldSize);
-					orientation = ai.setShipOrientation();
-					checked = setShipToField("frigate",i, pos);
-					
-				}
+		//KORVETTE
+		for(int k = 0; k < corvette.length; k++){
 
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("corvette", i, pos);
+				
 			}
 
-			//KORVETTE
-			for(int k = 0; k < corvette.length; k++){
+		}
 
-				boolean checked;
-				checked = false;
+		//UBOOT
+		for(int s = 0; s < submarine.length; s++){
 			
-				while(!(checked)){
-					String pos;
-					pos = ai.setShip(this.fieldSize);
-					orientation = ai.setShipOrientation();
-					checked = setShipToField("corvette",i, pos);
-					
-				}
-
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("submarine", i, pos);
+				
 			}
 
-			//UBOOT
-			for(int s = 0; s < submarine.length; s++){
-
-				boolean checked;
-				checked = false;
-			
-				while(!(checked)){
-					String pos;
-					pos = ai.setShip(this.fieldSize);
-					orientation = ai.setShipOrientation();
-					checked = setShipToField("submarine",i, pos);
-					
-				}
-
-			}
+		}
 	}
 	// AI ÄNDERUNG ENDE
 	
