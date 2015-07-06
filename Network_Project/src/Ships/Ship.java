@@ -205,5 +205,9 @@ public class Ship implements Serializable{
 		}
 		return true;
 	}
+	
+	public void setSunk(){
+		this.isHit = this.shipSize;
+	}
 }
 

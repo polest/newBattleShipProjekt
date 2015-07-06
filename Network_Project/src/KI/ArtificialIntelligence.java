@@ -15,7 +15,7 @@ public class ArtificialIntelligence {
 	private Player[] player;
 	private Player gegner;
 	private String pos;
-	private Ship ship;
+	private int ship;
 	private char botOrientation = ' ';
 	
 	private int gegnerNumber;
@@ -42,22 +42,22 @@ public class ArtificialIntelligence {
 		return ""+this.gegnerNumber;
 	}
 
-	public Ship getShip() {
+	public int getShip() {
 		return ship;
 	}
 
 	public String getShipAsString(){
 		
-		if(this.ship instanceof Destroyer){
+		if(this.ship == 1){
 			return "destroyer";
 		}
-		else if(this.ship instanceof Frigate){
+		else if(this.ship == 2){
 			return "frigate";
 		}
-		else if(this.ship instanceof Corvette){
+		else if(this.ship == 3){
 			return "corvette";
 		}
-		else if(this.ship instanceof Submarine){
+		else if(this.ship == 4){
 			return "submarine";
 		}
 		
@@ -460,7 +460,7 @@ public class ArtificialIntelligence {
 		}
 	}
 	
-	public Ship getAvailableShip(Player[] player, int i, int schiff){
+	public int getAvailableShip(Player[] player, int i, int schiff){
 	
 		if(schiff == 1){
 			this.botOrientation = chooseBotOrientation();
@@ -476,7 +476,7 @@ public class ArtificialIntelligence {
 			return player[i].getAvailableSubmarine();
 		}
 		
-		return null;
+		return -1;
 	}
 	
 	public void roundForAI(Player[] player, int i, int fieldSize){
@@ -499,7 +499,7 @@ public class ArtificialIntelligence {
 		schiff = chooseShipToShoot();
 
 		this.pos = chooseWhereToShoot(player[this.gegnerNumber], player[this.gegnerNumber].getPublicField().getField(), fieldSize);
-		this.ship = getAvailableShip(player, i, schiff);
+		this.ship = schiff;
 	}
 
 	

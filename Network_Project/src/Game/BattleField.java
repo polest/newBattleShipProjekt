@@ -139,7 +139,7 @@ public class BattleField implements Serializable{
 	 * @param orientation - h oder v ausrichtung
 	 * @param player - anzugreifender Spieler
 	 */
-	public String setAttack(Ship ship, int[] coordinates, char orientation, Player player){
+	public String setAttack(String ship, int[] coordinates, char orientation, Player player){
 		String results = matrixTools.attackField(ship, coordinates, orientation, player);
 		return results;
 	}

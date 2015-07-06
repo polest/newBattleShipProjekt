@@ -200,7 +200,6 @@ public class BattleShipServer implements Runnable{
 		String gegner = values[1];
 		String pos = values[2];
 		String orientation = values[3];
-
 		round.setAttack(ship, gegner, pos, orientation);
 
 	}
@@ -266,5 +265,13 @@ public class BattleShipServer implements Runnable{
 		for(int i = 0; i < this.clientZahl; i++){
 			this.crp[i].reloadShips();
 		}
+	}
+
+	public void setPlayerShipIsntReady(int playerId, String shipString, int ship) {
+			this.crp[playerId].setShipIsntReady(shipString, ship);
+	}
+
+	public void setplayerShipSunk(int gegner, String sunkenShip) {
+		this.crp[gegner].setSunkenShip(sunkenShip);
 	}
 }

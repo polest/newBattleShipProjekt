@@ -109,7 +109,7 @@ public class Round implements Serializable{
 
 			int coords[] = new int[2];
 			coords = checkPos(pos);
-			Ship ship = null;
+			int ship = 0;
 
 			if(shipString.equals("destroyer") ){
 				ship = player[index].getAvailableDestroyer();
@@ -127,10 +127,23 @@ public class Round implements Serializable{
 				server.attackFailed();
 			}
 
-			if(ship != null){
-				String reply = player[gegner].getPrivateField().setAttack(ship, coords , orientation, player[gegner]);
-				player[index].setShipIsntReady(ship);
+			if(ship >= 0){
+				String reply = player[gegner].getPrivateField().setAttack(shipString, coords , orientation, player[gegner]);
+				player[index].setShipIsntReady(shipString, ship);
 				server.replyAttack(gegner, reply, pos, orientation);
+				
+				if(player[gegner].isPlayerBot() == false){
+					String sunkenShip = player[gegner].getLastSunkenShip();
+					if(sunkenShip.length() > 0){
+						server.setplayerShipSunk(gegner, sunkenShip);
+						 player[gegner].setShipIsSunk("");
+					}
+				}
+				
+				if(player[index].isPlayerBot() == false){
+					server.setPlayerShipIsntReady(index, shipString, ship);
+				}
+				
 				//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
 				if(player[gegner].getIsAlive() == false){
 					server.setPlayerIsDead(gegner);
@@ -175,12 +188,13 @@ public class Round implements Serializable{
 
 				server.setActive(index);
 				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-				if(index == 0){
-					for(int j = 0; j < player.length; j++){
-						player[j].reloadTimeCountdown();
-						server.reloadShips();
-					}
-				}
+				
+			}
+		}
+		if(index == 0){
+			for(int j = 0; j < player.length; j++){
+				player[j].reloadTimeCountdown();
+				server.reloadShips();
 			}
 		}
 	}

@@ -225,6 +225,25 @@ public class Client implements Runnable{
 					e.printStackTrace();
 				}
 			}
+			else if(message.equals("shipIsntReady")){
+				try {
+					String shipName = in.readLine();
+					String shipId = in.readLine();
+					int sId = Integer.parseInt(shipId);
+					this.roundClient.setPlayerShipIsntReady(shipName, sId);
+					} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("shipSunk")){
+				try {
+					String shipName = in.readLine();
+					this.roundClient.setShipIsSunk(shipName);
+					} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
 			//TODO Quit
 
 		}

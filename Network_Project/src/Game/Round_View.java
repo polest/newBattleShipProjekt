@@ -41,6 +41,10 @@ public class Round_View implements Serializable{
 	private String[] playerNames;
 	private BattleField_View[] playerGroup;
 	private int id;
+	private int destroyerLength;
+	private int corvetteLength;
+	private int frigateLength;
+	private int submarineLength;
 
 	public Round_View(Player player, int fieldSize, int playerLength, String[] playerNames){
 		this.roundPan = new ImagePanel("Resources/unterwasser.jpg");
@@ -51,6 +55,10 @@ public class Round_View implements Serializable{
 		this.player = player;
 		this.playerGroup = new BattleField_View[playerLength];
 		this.id = player.getId();
+		this.destroyerLength = 0;
+		this.corvetteLength = 0;
+		this.submarineLength = 0;
+		this.frigateLength = 0;
 		initRoundView();
 	}
 
@@ -128,7 +136,7 @@ public class Round_View implements Serializable{
 		//Erster Spieler in groß anzeigen
 		shownFieldPlayerName = new JLabel(playerNames[0]);
 		Font schrift = new Font("Times New Roman", Font.BOLD, 17);
-		
+
 		shownFieldPlayerName.setFont(schrift);
 		shownFieldPlayerName.setForeground(Color.white);
 		shownFieldPlayerName.setBounds(30, 70, 200, 30);
@@ -199,12 +207,13 @@ public class Round_View implements Serializable{
 		this.messages.setBounds(30, 20, 500, 60);
 		this.roundPan.add(messages);
 		//Alle der reihe nach sortiert, nun den eigenen Spieler in groß anzeigen lassen
-//		if(id != 0){
-//			setActive(id);
-//		}
+		//		if(id != 0){
+		//			setActive(id);
+		//		}
 	}
 
 	public void setDestroyer(int count){
+		this.destroyerLength = count;
 		this.destroyer.setText("Zerstörer " + count);
 		this.destroyer.setActionCommand("destroyer");
 		if(count <= 0){
@@ -216,6 +225,7 @@ public class Round_View implements Serializable{
 	}
 
 	public void setFrigate(int count){
+		this.frigateLength = count;
 		this.frigate.setText("Fregatte " + count);
 		this.frigate.setActionCommand("frigate");
 		if(count <= 0){
@@ -227,6 +237,7 @@ public class Round_View implements Serializable{
 	}
 
 	public void setCorvette(int count){
+		this.corvetteLength = count;
 		this.corvette.setText("Korvette " + count);
 		this.corvette.setActionCommand("corvette");
 		if(count <= 0){
@@ -238,9 +249,54 @@ public class Round_View implements Serializable{
 	}
 
 	public void setSubmarine(int count){
+		this.submarineLength = count;
 		this.submarine.setText("UBoot " + count);
 		this.submarine.setActionCommand("submarine");
 		if(count <= 0){
+			this.submarine.setEnabled(false);
+		}
+		else{
+			this.submarine.setEnabled(true);
+		}
+	}
+
+	public void setDestroyerBtn(){
+		destroyerLength--;
+		this.destroyer.setText("Zerstörer " + destroyerLength);
+		if(destroyerLength <= 0){
+			this.destroyer.setEnabled(false);
+		}
+		else{
+			this.destroyer.setEnabled(true);
+		}
+	}
+
+	public void setFrigateBtn(){
+		frigateLength--;
+		this.frigate.setText("Fregatte " + frigateLength);
+		if(this.frigateLength <= 0){
+			this.frigate.setEnabled(false);
+		}
+		else{
+			this.frigate.setEnabled(true);
+		}
+	}
+
+	public void setCorvetteBtn(){
+		corvetteLength--;
+		this.corvette.setText("Korvette " + corvetteLength);
+		if(this.corvetteLength <= 0){
+			this.corvette.setEnabled(false);
+		}
+		else{
+			this.corvette.setEnabled(true);
+		}
+	}
+
+	public void setSubmarineBtn(){
+		this.submarineLength--;
+		this.submarine.setText("UBoot " + submarineLength);
+		if(submarineLength <= 0){
 			this.submarine.setEnabled(false);
 		}
 		else{
@@ -290,7 +346,7 @@ public class Round_View implements Serializable{
 	public void changePlayer(int selectedIndex){
 		int[] smallBounds = new int[4];
 		int[] bigBounds = new int[4];
-		
+
 		smallBounds[0] = clickLabel[selectedIndex].getX();
 		smallBounds[1] = clickLabel[selectedIndex].getY();
 		smallBounds[2] = clickLabel[selectedIndex].getWidth();
@@ -387,8 +443,8 @@ public class Round_View implements Serializable{
 		int counter = 0;
 		int cellSize = playerGroup[gegnerInt].getCellSize();
 		ImageIcon newIcon;
-		
-		
+
+
 		if(orientation.equals("h")){
 			for(int i = x; i < xEndpos; i++){
 				if(values[counter].equals("true")){

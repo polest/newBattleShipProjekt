@@ -51,6 +51,7 @@ public class Player implements Serializable{
 	private int submarineIndex;
 	private int playerId;
 	private int enemyNumber;
+	private String lastSunkenShip;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -71,6 +72,7 @@ public class Player implements Serializable{
 		this.frigateIndex = 0;
 		this.corvetteIndex = 0;
 		this.submarineIndex = 0;
+		this.lastSunkenShip = "";
 		//this.battleFieldView = new BattleField_View();
 
 		this.destroyer = new Destroyer[destroyer];
@@ -299,10 +301,30 @@ public class Player implements Serializable{
 	 * setzt das Schiff auf isReady = false und setzt die NachladeZeit.
 	 */
 
-	public void setShipIsntReady(Ship ship){
-		if(ship.isReady() == true){
-			ship.setReady(false);
-			ship.setReloadTimeLeft(ship.getReloadTime());
+	public void setShipIsntReady(String ship, int count){
+		if(ship == "destroyer"){
+			if(this.destroyer[count].isReady() == true){
+				this.destroyer[count].setReady(false);
+				this.destroyer[count].setReloadTimeLeft(Destroyer.loadTime);
+			}
+		}
+		else if(ship == "frigate"){
+			if(this.frigate[count].isReady() == true){
+				this.frigate[count].setReady(false);
+				this.frigate[count].setReloadTimeLeft(Frigate.loadTime);
+			}
+		}
+		else if(ship == "corvette"){
+			if(this.corvette[count].isReady() == true){
+				this.corvette[count].setReady(false);
+				this.corvette[count].setReloadTimeLeft(Corvette.loadTime);
+			}
+		}
+		else if(ship == "submarine"){
+			if(this.submarine[count].isReady() == true){
+				this.submarine[count].setReady(false);
+				this.submarine[count].setReloadTimeLeft(Submarine.loadTime);
+			}
 		}
 	}
 
@@ -486,42 +508,42 @@ public class Player implements Serializable{
 	 * return ein Schiff, was verfügbar ist
 	 * @return
 	 */
-	public Destroyer getAvailableDestroyer(){
+	public int getAvailableDestroyer(){
 		for(int i = 0; i < destroyer.length; i++){
 			if(destroyer[i].isReady()){
-				return destroyer[i];
+				return i;
 			}
 		}
-		return null;
+		return -1;
 	}
 
-	public Frigate getAvailableFrigate(){
+	public int getAvailableFrigate(){
 		for(int i = 0; i < frigate.length; i++){
 			if(frigate[i].isReady()){
-				return frigate[i];
+				return i;
 			}
 		}
-		return null;
+		return -1;
 	}
 
 
-	public Corvette getAvailableCorvette(){
+	public int getAvailableCorvette(){
 		for(int i = 0; i < corvette.length; i++){
 			if(corvette[i].isReady()){
-				return corvette[i];
+				return i;
 			}
 		}
-		return null;
+		return -1;
 	}
 
 
-	public Submarine getAvailableSubmarine(){
+	public int getAvailableSubmarine(){
 		for(int i = 0; i < submarine.length; i++){
 			if(submarine[i].isReady()){
-				return submarine[i];
+				return i;
 			}
 		}
-		return null;
+		return -1;
 	}
 
 
@@ -838,5 +860,55 @@ public class Player implements Serializable{
 		return false;
 	}
 
+	public void setShipIsSunk(String ship) {
+		this.lastSunkenShip = ship;
+	}
 
+	public String getLastSunkenShip(){
+		return this.lastSunkenShip;
+	}
+
+	public void destroyerSunk() {
+		boolean done = false;
+		for(int i = 0; i < this.destroyer.length; i++){
+			if(done == false){
+				if(this.destroyer[i].checkIfIsSwimming() == true){
+				this.destroyer[i].setSunk();
+				}
+			}
+		}
+	}
+	
+	public void corvetteSunk() {
+		boolean done = false;
+		for(int i = 0; i < this.corvette.length; i++){
+			if(done == false){
+				if(this.corvette[i].checkIfIsSwimming() == true){
+				this.corvette[i].setSunk();
+				}
+			}
+		}
+	}
+
+	public void frigateSunk() {
+		boolean done = false;
+		for(int i = 0; i < this.frigate.length; i++){
+			if(done == false){
+				if(this.frigate[i].checkIfIsSwimming() == true){
+				this.frigate[i].setSunk();
+				}
+			}
+		}
+	}
+	
+	public void submarineSunk() {
+		boolean done = false;
+		for(int i = 0; i < this.submarine.length; i++){
+			if(done == false){
+				if(this.submarine[i].checkIfIsSwimming() == true){
+				this.submarine[i].setSunk();
+				}
+			}
+		}
+	}
 }

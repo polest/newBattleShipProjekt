@@ -200,6 +200,17 @@ public class ClientRequestProcessor implements Runnable{
 		out.println("reloadShips");
 	}
 
+	public void setShipIsntReady(String shipString, int ship) {
+		out.println("shipIsntReady");
+		out.println(shipString);
+		out.println(ship);
+	}
+
+	public void setSunkenShip(String sunkenShip) {
+		out.println("shipSunk");
+		out.println(sunkenShip);
+	}
+
 
 
 }

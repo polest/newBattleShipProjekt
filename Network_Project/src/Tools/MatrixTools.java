@@ -299,12 +299,26 @@ public class MatrixTools implements Serializable{
 	 * Setzt den Inhalt einer Zelle je nachdem ob ein Schiff auf dem privaten Feld ist oder nicht
 	 * auf getroffenes Wasser oder getroffenes Schiff
 	 */
-	public String attackField(Ship ship, int[] coordinates, char orientation, Player player){
+	public String attackField(String ship, int[] coordinates, char orientation, Player player){
+		int shootLength = 0;
+		if(ship.equals("destroyer")){
+			shootLength = Destroyer.shootArea;
+		}
+		else if(ship.equals("frigate")){
+			shootLength = Frigate.shootArea;
+		}
+		else if(ship.equals("corvette")){
+			shootLength = Corvette.shootArea;
+		}
+		else if(ship.equals("submarine")){
+			shootLength = Submarine.shootArea;
+		}
+
 
 		int[][] publicField = player.getPublicField().getField();
 		int[][] privateField = player.getPrivateField().getField();
 
-		int shootLength = ship.getShootArea();
+		//int shootLength = ship.getShootArea();
 
 		int x = coordinates[0];
 		int y = coordinates[1];
@@ -355,7 +369,7 @@ public class MatrixTools implements Serializable{
 							checkShipIsSunk(player,  player.getDestroyer()[i], z, y);
 						}
 						if(player.checkIfSunk("D") == true ){
-							sunk = sunk.concat("true_D");
+							sunk = sunk.concat("D");
 						}
 						results = results.concat("true;");
 						hitShip++;
@@ -368,7 +382,7 @@ public class MatrixTools implements Serializable{
 							checkShipIsSunk(player,  player.getFrigate()[i], z, y);
 						}
 						if(player.checkIfSunk("F") == true ){
-							sunk = sunk.concat("true_F");
+							sunk = sunk.concat("D");
 						}
 						results = results.concat("true;");
 						hitShip++;
@@ -380,9 +394,9 @@ public class MatrixTools implements Serializable{
 							checkShipIsSunk(player,  player.getCorvette()[i], z, y);
 						}
 						if(player.checkIfSunk("C") == true ){
-							sunk = sunk.concat("true_D");
+							sunk = sunk.concat("C");
 						}
-						
+
 						results = results.concat("true;");
 						hitShip++;
 					}
@@ -391,6 +405,7 @@ public class MatrixTools implements Serializable{
 
 						for(int i = 0; i < player.getSubmarine().length; i++){
 							checkShipIsSunk(player,  player.getSubmarine()[i], z, y);
+							sunk = sunk.concat("S");
 						}
 						player.checkIfSunk("S");
 						results = results.concat("true;");
@@ -493,7 +508,23 @@ public class MatrixTools implements Serializable{
 		if(shipIsSwimming == false){
 			int[] coordsSunkenShip = ship.getStartCoordsAndOrientation();
 			setPublicFieldSunkenShip(player, ship);
+		
+			if(ship instanceof Destroyer){
+				player.setShipIsSunk("destroyer");
+			}
+			else if(ship instanceof Frigate){
+				player.setShipIsSunk("frigate");
+			}
+			else if(ship instanceof Corvette){
+				player.setShipIsSunk("corvette");
+			}
+			else if(ship instanceof Submarine){
+				player.setShipIsSunk("submarine");
+			}
+		
 		}
+		
+		
 	}
 
 	/**
