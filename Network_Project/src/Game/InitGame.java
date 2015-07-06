@@ -51,13 +51,9 @@ public class InitGame implements Serializable{
 	private int oldBtnY;
 	private boolean shipCanBePlaced;
 	private int ki;
-<<<<<<< Updated upstream
 	// AI ÄNDERUNG START
 	private ArtificialIntelligence ai = new ArtificialIntelligence(); 
 	// AI ÄNDERUNG ENDE
-=======
-
->>>>>>> Stashed changes
 
 	public InitGame(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize, int ki){
 		this.playerId = 0;
