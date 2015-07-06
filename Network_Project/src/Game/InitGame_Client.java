@@ -311,6 +311,7 @@ public class InitGame_Client implements Serializable{
 						checked = setShipToField(choosenShip, pos);
 						if(checked == true){
 
+							client.sendShipToServer("frigate; " + pos);
 							frigateCount--;
 							initGameView.decrementFrigate(frigateCount);
 							if(frigateCount <= 0){
@@ -320,13 +321,11 @@ public class InitGame_Client implements Serializable{
 						}
 					}
 					else if(choosenShip instanceof Corvette){
-						checked = initGame.setShipToField(choosenShip, pos);
-
+						checked = setShipToField(choosenShip, pos);
+						
 						if(checked == true){
-							out.println("setShipFromClient");
-							out.println("corvette");
-							out.println(pos);
-
+							client.sendShipToServer("corvette; " + pos);
+							
 							corvetteCount--;
 							initGameView.decrementCorvette(corvetteCount);
 							if(corvetteCount <= 0){
@@ -337,12 +336,10 @@ public class InitGame_Client implements Serializable{
 					}
 
 					else if(choosenShip instanceof Submarine){
-						checked = initGame.setShipToField(choosenShip, pos);
+						checked = setShipToField(choosenShip, pos);
 						if(checked == true){
-							out.println("setShipFromClient");
-							out.println("destroyer");
-							out.println(pos);
-
+							client.sendShipToServer("submarine; " + pos);
+							
 							submarineCount--;
 							initGameView.decrementSubmarine(submarineCount);
 							if(submarineCount <= 0){
