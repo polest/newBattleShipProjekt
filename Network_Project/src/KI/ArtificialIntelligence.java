@@ -409,7 +409,7 @@ public class ArtificialIntelligence {
 	
 	public void setEnemyNumberForAI(Player[] player, int i, int number){
 		player[i].setEnemyNumber(number);
-		this.gegner = player[number];
+		this.gegner = player[number-1];
 	}
 	
 	public void getAllRdyShips(Player[] player, int i){

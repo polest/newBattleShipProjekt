@@ -250,7 +250,9 @@ public class InitGame implements Serializable{
 			return true;
 		}
 		else{
-			this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
+			if(!player[i].isPlayerBot()){
+				this.colorPrint.println(EPrintColor.RED, "Schiff kann dort nicht positioniert werden!\nBitte erneut Koordinaten eingeben");
+			}
 			return false;
 		}
 

@@ -208,7 +208,6 @@ public class Round implements Serializable{
 					playerOnTurn++;
 					index = playerOnTurn % player.length;
 					//TODO! KI d
-					System.out.println("KIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());
 				}
