@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import KI.ArtificialIntelligence;
 import SaveGame.Load;
 import Ships.Corvette;
 import Ships.Destroyer;
@@ -49,8 +50,10 @@ public class InitGame implements Serializable{
 	private int mouseY;
 	private int oldBtnY;
 	private boolean shipCanBePlaced;
-private int ki;
-
+	private int ki;
+	// AI ÄNDERUNG START
+	private ArtificialIntelligence ai = new ArtificialIntelligence(); 
+	// AI ÄNDERUNG ENDE
 
 	public InitGame(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize, int ki){
 		this.playerId = 0;
@@ -64,7 +67,7 @@ private int ki;
 		this.frigateCount = frigate;
 		this.corvetteCount = corvette;
 		this.submarineCount = submarine;
-this.ki = ki;
+		this.ki = ki;
 		this.totalShips = destroyer + frigate + corvette + submarine + fieldSize;
 
 		this.configureGame();
@@ -114,9 +117,87 @@ this.ki = ki;
 		player[i] = new Player(isActive, this.totalShips, this.destroyerCount, 
 				this.frigateCount, this.corvetteCount,this.submarineCount, ("Spieler " + (i+1) ), battlefield, isKi);
 
+		if(player[i].isPlayerBot()){
+			setShipsToFieldForAI(i);
+		}
+		
 		this.initShips();
 	}
 
+	// AI ÄNDERUNG START
+	private void setShipsToFieldForAI(int i){
+
+			Destroyer destroyer[] = player[i].getDestroyer();
+			Frigate frigate[] = player[i].getFrigate();
+			Corvette corvette[] = player[i].getCorvette();
+			Submarine submarine[] = player[i].getSubmarine();
+
+			//ZERSTÖRER
+			for(int d = 0; d < destroyer.length; d++){
+
+				boolean checked;
+				checked = false;
+			
+				while(!(checked)){
+					String pos;
+					pos = ai.setShip(this.fieldSize);
+					orientation = ai.setShipOrientation();
+					checked = setShipToField("destroyer",i, pos);
+					
+				}
+				
+			}
+
+			//FREGATTE
+			for(int f = 0; f < frigate.length; f++){
+
+				boolean checked;
+				checked = false;
+			
+				while(!(checked)){
+					String pos;
+					pos = ai.setShip(this.fieldSize);
+					orientation = ai.setShipOrientation();
+					checked = setShipToField("frigate",i, pos);
+					
+				}
+
+			}
+
+			//KORVETTE
+			for(int k = 0; k < corvette.length; k++){
+
+				boolean checked;
+				checked = false;
+			
+				while(!(checked)){
+					String pos;
+					pos = ai.setShip(this.fieldSize);
+					orientation = ai.setShipOrientation();
+					checked = setShipToField("corvette",i, pos);
+					
+				}
+
+			}
+
+			//UBOOT
+			for(int s = 0; s < submarine.length; s++){
+
+				boolean checked;
+				checked = false;
+			
+				while(!(checked)){
+					String pos;
+					pos = ai.setShip(this.fieldSize);
+					orientation = ai.setShipOrientation();
+					checked = setShipToField("submarine",i, pos);
+					
+				}
+
+			}
+	}
+	// AI ÄNDERUNG ENDE
+	
 	/**
 	 *  Positionierung der Schiffe von jedem Spieler (nacheinander)
 	 */
