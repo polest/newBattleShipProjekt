@@ -247,6 +247,10 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
+	/**
+	 * Verbindet mit eingegebener IP Adresse
+	 *
+	 */
 	private class AddressOkListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			ipAdress = ipField.getText();

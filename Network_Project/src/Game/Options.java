@@ -18,6 +18,7 @@ public class Options implements Serializable{
 	private static final long serialVersionUID = 6599149630474669593L;
 	private int player;
 	private boolean[] playerIsKi;
+	private int ki;
 	private String[] playerNames;
 	private int destroyer;
 	private int frigate;
@@ -122,13 +123,9 @@ public class Options implements Serializable{
 	 * @param chkbx
 	 * je nachdem wie viele Ki Checkboxes ausgewählt sind werden Spieler auf isKi true gesetzt.
 	 */
-	private void setKi(JCheckBox chkbx){
-		optionsView.setKi(chkbx);
-		playerIsKi = new boolean[this.player];
-
-		for(int i = 0; i < this.playerIsKi.length; i++){
-			this.playerIsKi[i] = this.optionsView.getKiBox()[i].isSelected();
-		}
+	private void setKi(){
+		playerIsKi = new boolean[optionsView.getKiBox().getSelectedIndex()];
+		this.ki = optionsView.getKiBox().getSelectedIndex();
 	}
 
 
@@ -170,6 +167,16 @@ public class Options implements Serializable{
 		else{
 			this.optionsView.setSize(preferredSize);
 			this.battlefieldSize = preferredSize;
+		}
+	}
+	
+	private void setKiSize(int preferredSize){
+		int maxSize = optionsView.getPlayerCount() - 1;
+		if(maxSize < preferredSize){
+			this.optionsView.setKiSize(maxSize);
+		}
+		else{
+			this.optionsView.setKiSize(preferredSize);
 		}
 	}
 	
@@ -221,7 +228,6 @@ public class Options implements Serializable{
 		this.optionsView.setKiSelectionListener(new SetKiListener());
 		this.optionsView.setShipsSelectionListener(new SetShipsListener() );
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
-		this.optionsView.setNameSelectionListener(new SetNameListener() );
 	}
 
 	
@@ -231,6 +237,8 @@ public class Options implements Serializable{
 	class SetPlayerListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			setPlayer(e.getActionCommand());
+			optionsView.getKiBox().setEnabled(true);
+			setKiSize(0);
 			optionsView.checkOkButton();
 			
 		}
@@ -238,7 +246,11 @@ public class Options implements Serializable{
 
 	private class SetKiListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			setKi((JCheckBox) e.getSource());
+			setKi();
+			JComboBox setKiSize = (JComboBox)e.getSource();
+			int size = setKiSize.getSelectedIndex();
+			setKiSize(size);
+			optionsView.checkOkButton();
 		}
 	}
 

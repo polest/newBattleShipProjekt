@@ -23,7 +23,7 @@ public class Options_View {
 	private JToggleButton[] player;
 	private int playerCount;
 	private JTextField[] playerNames;
-	private JCheckBox[] kiBox;
+	private JComboBox kiBox;
 	private JComboBox size;
 
 	private JComboBox[] ships;
@@ -42,7 +42,7 @@ public class Options_View {
 		this.initOptionsPan(); 
 		this.initOptions();
 		this.optionsView.repaint();
-		
+
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class Options_View {
 		this.optionsView.setSize(this.width, this.height);
 	}
 
-	
+
 	/**
 	 * Getter
 	 * optionsPanel
@@ -64,20 +64,20 @@ public class Options_View {
 	 * Setter
 	 * PlayerCount
 	 */
-	
+
 	public JPanel getPanel(){
 		return this.optionsView;
 	}
-	
+
 	public JTextField[] getNamesFields(){
 		return this.playerNames;
 	}
-	
+
 	public void setPlayerCount(int i){
 		this.playerCount = i;
 	}
-	
-	
+
+
 	/**
 	 * @param count
 	 * setzt die PlayerToggleButtons auf nicht ausgewählt, je nachdem wie viele Spieler ausgewählt sind.
@@ -91,49 +91,15 @@ public class Options_View {
 				this.player[arrIndex].setSelected(false);
 			}
 		}
-		
-		//Namens und Ki Feld für ungenutze Spieler ausblenden
-		for(int j = 0; j < this.playerNames.length; j++){
-			if(j < count){
-				this.playerNames[j].setEnabled(true);
-			}
-			else{
-				this.playerNames[j].setEnabled(false);
-			}
-		}
-		for(int k = 0; k < this.kiBox.length; k++){
-			
-			if(k < (count-1)){
-				this.kiBox[k].setEnabled(true);
-			}
-			else{
-				this.kiBox[k].setEnabled(false);
-			}
-		}
 	}
-	
+
 	/**
-	 * @param chkbx
-	 * setzt die ausgewählte Checkbox auf ausgewählt
+	 * @return KI combobox
 	 */
-	public void setKi(JCheckBox chkbx){
-		for(int i = 0; i < this.kiBox.length; i++){
-			if(chkbx == this.kiBox[i]){
-				this.kiBox[i].setSelected( chkbx.isSelected() );
-			}
-		}
-	}
-	
-	
-	
-	/**
-	 * @return KI checkbox
-	 */
-	public JCheckBox[] getKiBox(){
+	public JComboBox getKiBox(){
 		return this.kiBox;
 	}
-	
-	
+
 	/**
 	 * @param cmbbox
 	 * speichert die gesamte Schiffsanzahl
@@ -145,19 +111,36 @@ public class Options_View {
 			}
 		}
 	}
-	 
-	
+
+
 	/**
 	 * @param minSize - Mindestspielfeldgröße
 	 * aktualisiert die Spielfeldgrößenauswahl
 	 */
 	public void setSize(int minSize){
-		
+
 		this.size.setSelectedIndex( (minSize-1) );
-		
+
 		this.optionsView.repaint();
 	}
+	
+	/**
+	 * @param size
+	 * Setzt die Anzahl der möglich auswählbaren Bots
+	 */
+	public void setKiSize(int size){
+		this.kiBox.setSelectedIndex(size);
+	}
+	
 
+
+	/**
+	 * @return
+	 * get Player;
+	 */
+	public int getPlayerCount() {
+		return playerCount;
+	}
 
 	/**
 	 * initialisiert die Optionen
@@ -183,42 +166,32 @@ public class Options_View {
 		for(int p = 0; p < this.player.length; p++){
 			int pVal = p+2;
 			this.player[p] =  new JToggleButton(""+pVal);
-			this.player[p].setBounds(70,( 155+ (45*p) ), 35, 35);
+			this.player[p].setBounds(70,( 115+ (45*p) ), 35, 35);
 			this.optionsView.add(this.player[p]);
 		}
 
 		this.playerNames = new JTextField[6];
-		this.kiBox = new JCheckBox[5];
 
-		JLabel playerNameslb = new JLabel("Namen der Spieler");
-		playerNameslb.setBounds(190, 70, 130, 30);
-		playerNameslb.setForeground(Color.WHITE);
-		playerNameslb.setFont(schrift);
-		this.optionsView.add(playerNameslb);
+		//		JLabel playerNameslb = new JLabel("Namen der Spieler");
+		//		playerNameslb.setBounds(190, 70, 130, 30);
+		//		playerNameslb.setForeground(Color.WHITE);
+		//		playerNameslb.setFont(schrift);
+		//		this.optionsView.add(playerNameslb);
 
 		JLabel kilb = new JLabel("Computer");
 		kilb.setFont(schrift);
 		kilb.setForeground(Color.WHITE);
-		kilb.setBounds(320, 70, 100, 30);
+		kilb.setBounds(250, 70, 100, 30);
 		this.optionsView.add(kilb);
 
 
 
-		for(int n = 0; n < this.playerNames.length; n++){
-			int namesIndex = n+1;
-			int kiIndex = n-1;
-			
-			this.playerNames[n] = new JTextField("Spieler " + namesIndex);
-			this.playerNames[n].setBounds(190 ,( 110+ (45*n) ), 120, 35);
-			this.playerNames[n].setActionCommand("Spieler"+n);
-			this.optionsView.add(this.playerNames[n]);
 
-			if(n > 0){
-				this.kiBox[kiIndex] = new JCheckBox();
-				this.kiBox[kiIndex].setBounds(320 ,( 110+ (45*n) ), 100, 35);
-				this.optionsView.add(this.kiBox[kiIndex]);
-			}
-		}
+		String[] counter = {"0", "1", "2","3", "4","5"};
+		this.kiBox = new JComboBox(counter);
+		this.kiBox.setBounds(235 , 110, 100, 35);
+		this.kiBox.setEnabled(false);
+		this.optionsView.add(this.kiBox);
 
 
 		JLabel shipslb = new JLabel("Anzahl der Schiffe");
@@ -231,48 +204,46 @@ public class Options_View {
 
 		this.ships =  new JComboBox[4];
 		String[] count = {"0", "1", "2", "3", "4", "5"};
-		
+
 		for(int s = 0; s < this.ships.length; s++){
 			shipsLabel[s].setBounds(420 ,( 110+ (45*s) ), 90, 35);
 			shipsLabel[s].setForeground(Color.WHITE);
 			shipsLabel[s].setFont(schrift);
-		    this.optionsView.add(shipsLabel[s]);
-		    
-		    this.ships[s] = new JComboBox(count);
-		    
-		    this.ships[s].setBounds(510 ,( 110+ (45*s) ), 70, 35);
-		    
-		    if(s == 0){
-		    	this.ships[s].setActionCommand("destroyer");
-		    }
-		    else if(s == 1){
-		    	this.ships[s].setActionCommand("frigate");
-		    }
-		    else if(s == 2){
-		    	this.ships[s].setActionCommand("corvette");
-		    }
-		    else if(s == 3){
-		    	this.ships[s].setActionCommand("submarine");
-		    }
-		    
-		    
-		    this.optionsView.add(this.ships[s]);
+			this.optionsView.add(shipsLabel[s]);
+
+			this.ships[s] = new JComboBox(count);
+
+			this.ships[s].setBounds(510 ,( 110+ (45*s) ), 70, 35);
+
+			if(s == 0){
+				this.ships[s].setActionCommand("destroyer");
+			}
+			else if(s == 1){
+				this.ships[s].setActionCommand("frigate");
+			}
+			else if(s == 2){
+				this.ships[s].setActionCommand("corvette");
+			}
+			else if(s == 3){
+				this.ships[s].setActionCommand("submarine");
+			}
+			this.optionsView.add(this.ships[s]);
 		}
-		
-	
+
+
 		JLabel sizeOfGame = new JLabel("Größe des Spielfeldes");
 		sizeOfGame.setForeground(Color.white);
 		sizeOfGame.setFont(schrift);
-		sizeOfGame.setBounds(610, 70, 150, 30);
+		sizeOfGame.setBounds(590, 70, 150, 30);
 		this.optionsView.add(sizeOfGame);
-		
+
 		String[] sizeVal = new String[20];
-		
+
 		for(int i = 0; i < 20; i++){
 			int val = i+1;
 			sizeVal[i] = ""+val;
 		}
-		
+
 		this.size = new JComboBox(sizeVal);
 		this.size.setBounds(620, 110, 70, 35);
 		this.optionsView.add(this.size);
@@ -281,16 +252,16 @@ public class Options_View {
 		this.ok.setEnabled(false);
 		this.ok.setBounds(590, 515, 80, 35);
 		this.optionsView.add(this.ok);
-		
+
 		this.back = new JButton("Zurück");
 		this.back.setBounds(690, 515, 80, 35);
 		this.optionsView.add(this.back);
-		
+
 	}
-	
+
 	public void checkOkButton(){
 		boolean setEnabled = true;
-		
+
 		if(this.playerCount == 0){
 			setEnabled = false;
 		}
@@ -300,7 +271,7 @@ public class Options_View {
 		else if(this.size.getSelectedIndex() == 0){
 			setEnabled = false;
 		}
-		
+
 		if(setEnabled == true){
 			this.ok.setEnabled(true);
 		}
@@ -308,7 +279,7 @@ public class Options_View {
 			this.ok.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Funktionen bereitstellen, mit denen man später aus
 	 * dem Controller die nötigen Listener hinzufügen kann
@@ -318,33 +289,26 @@ public class Options_View {
 			this.player[p].addActionListener(l);
 		}
 	}
-	
+
 	public void setKiSelectionListener(ActionListener n){
-		for(int p = 0; p < this.kiBox.length; p++){
-			this.kiBox[p].addActionListener(n);
-		}
+		this.kiBox.addActionListener(n);
 	}
-	
+
 	public void setShipsSelectionListener(ActionListener s){
 		for(int t = 0; t < this.ships.length; t++){
 			this.ships[t].addActionListener(s);
 		}
 	}
-	
+
 	public void setSizeSelectionListener(ActionListener m){
 		this.size.addActionListener(m);
 	}
-	
-	public void setNameSelectionListener(FocusListener n){
-		for(int j = 0; j < this.playerNames.length; j++){
-			this.playerNames[j].addFocusListener(n);
-		}
-	}
-	
+
+
 	public void setOkSelectionListener(ActionListener o){
-			this.ok.addActionListener(o);
+		this.ok.addActionListener(o);
 	}
-	
+
 	public void setBackSelectionListener(ActionListener b){
 		this.back.addActionListener(b);
 	}

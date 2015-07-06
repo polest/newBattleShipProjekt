@@ -1,6 +1,8 @@
 package Game;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -45,15 +47,12 @@ public class InitGame_View_Client {
 	}
 
 	private void initPan(){
+		Font schrift = new Font("Times New Roman", Font.BOLD, 15);
 		this.initGamePan.setVisible(true);
 		this.initGamePan.setLayout(null);
 		this.initGamePan.setSize(this.width, this.height);
 
-		this.playerName = new JLabel();
-		this.playerName.setBounds(550, 30, 400, 50);
-		this.playerName.setVisible(true);
-		this.playerName.setText("Spieler xx ist an der Reihe");
-		this.initGamePan.add(this.playerName);
+		
 
 		this.destroyerBtn = new JToggleButton();
 		this.destroyerBtn.setBounds(550, 80, 150, 50);
@@ -91,13 +90,15 @@ public class InitGame_View_Client {
 		this.initGamePan.add(this.nextPlayer);
 		
 		JLabel nameLabel = new JLabel("Spieler Name");
-		nameLabel.setBounds(550, 300, 150, 30);
+		nameLabel.setFont(schrift);
+		nameLabel.setForeground(Color.WHITE);
+		nameLabel.setBounds(555, 300, 150, 40);
 		nameLabel.setVisible(true);
 		nameLabel.setEnabled(true);
 		this.initGamePan.add(nameLabel);
 		
 		this.name = new JTextField("");
-		this.name.setBounds(550, 350, 150, 50);
+		this.name.setBounds(550, 330, 150, 30);
 		this.name.setVisible(true);
 		this.name.setEnabled(true);
 		this.initGamePan.add(this.name);
@@ -120,9 +121,6 @@ public class InitGame_View_Client {
 		this.fieldSize = fieldSize;
 	}
 	
-	public void setPlayerName(String name){
-		this.playerName.setText("Spieler "+ name + " ist an der Reihe");
-	}
 
 	public void setDestroyer(int destroyer){
 		this.destroyer = destroyer;

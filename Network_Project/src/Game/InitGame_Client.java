@@ -24,11 +24,7 @@ import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
 
 public class InitGame_Client implements Serializable{
-
-	/**
-	 * @author ML
-	 * @version 21.03.15
-	 */
+	 
 	private static final long serialVersionUID = 988834907748712441L;
 
 	//	private Options gameOptions;
@@ -89,7 +85,7 @@ public class InitGame_Client implements Serializable{
 	public int getPlayerLength(){
 		return this.playerLength;
 	}
-	
+
 	public int getFieldSize(){
 		return this.fieldSize;
 	}
@@ -119,7 +115,7 @@ public class InitGame_Client implements Serializable{
 	public boolean getCanBePlaced(){
 		return this.shipCanBePlaced;
 	}
-	
+
 	public int getDestroyerCount(){
 		return this.destroyerCount;
 	}
@@ -127,15 +123,15 @@ public class InitGame_Client implements Serializable{
 	public int getFrigateCount(){
 		return this.frigateCount;
 	}
-	
+
 	public int getCorvetteCount(){
 		return this.corvetteCount;
 	}
-	
+
 	public int getSubmarineCount(){
 		return this.submarineCount;
 	}
-	
+
 	public void initPlayerBattleShip(){
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
@@ -155,7 +151,6 @@ public class InitGame_Client implements Serializable{
 		this.submarine = player.getSubmarine();
 
 		String name = player.getPlayerName();
-		this.initGameView.setPlayerName(name);
 
 		this.initGameView.setDestroyer( player.getDestroyer().length );
 		this.initGameView.setFrigate( player.getFrigate().length );
@@ -184,12 +179,12 @@ public class InitGame_Client implements Serializable{
 			if(orientation == 'h'){
 				player.saveShipCoordinatesH(koordinaten[0], koordinaten[1], length);
 				player.printShipOnField(ship,initGameView.getBattleFieldView(), koordinaten, 0);
-				
+
 			}
 			else{
 				player.saveShipCoordinatesV(koordinaten[0], koordinaten[1], length);
 				player.printShipOnField(ship,initGameView.getBattleFieldView(), koordinaten, 1 );
-				
+
 			}
 			return true;
 		}
@@ -198,7 +193,7 @@ public class InitGame_Client implements Serializable{
 		}
 
 	}
-	
+
 	public void addClient(Client client){
 		this.client = client;
 	}
@@ -293,7 +288,7 @@ public class InitGame_Client implements Serializable{
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("totalShips: " + totalShips);
 			boolean checked;
-	
+
 			if(choosenShip != null){
 				if(shipCanBePlaced == true){
 					JButton btn = (JButton)e.getSource();
@@ -304,11 +299,11 @@ public class InitGame_Client implements Serializable{
 
 						if(checked == true){
 							client.sendShipToServer("destroyer; " + pos);
-							
-//							TODO CLIENTREQUESTPROZEESOR!
-//							out.println("setShipFromClient");
-//							out.println("destroyer");
-//							out.println(pos);
+
+							//							TODO CLIENTREQUESTPROZEESOR!
+							//							out.println("setShipFromClient");
+							//							out.println("destroyer");
+							//							out.println(pos);
 							destroyerCount--;
 							initGameView.decrementDestroyer(destroyerCount);
 							if(destroyerCount <= 0){
@@ -318,51 +313,51 @@ public class InitGame_Client implements Serializable{
 						}
 					}
 					else if(choosenShip instanceof Frigate){
-//						checked = initGame.setShipToField(choosenShip, pos);
-//
-//						if(checked == true){
-//							out.println("setShipFromClient");
-//							out.println("frigate");
-//							out.println(pos);
-//							frigateCount--;
-//							initGameView.decrementFrigate(frigateCount);
-//							if(frigateCount <= 0){
-//								initGameView.setFrigateDisabled();
-//								choosenShip = null;
-//							}
-//						}
+						//						checked = initGame.setShipToField(choosenShip, pos);
+						//
+						//						if(checked == true){
+						//							out.println("setShipFromClient");
+						//							out.println("frigate");
+						//							out.println(pos);
+						//							frigateCount--;
+						//							initGameView.decrementFrigate(frigateCount);
+						//							if(frigateCount <= 0){
+						//								initGameView.setFrigateDisabled();
+						//								choosenShip = null;
+						//							}
+						//						}
 					}
 					else if(choosenShip instanceof Corvette){
-//						checked = initGame.setShipToField(choosenShip, pos);
-//
-//						if(checked == true){
-//							out.println("setShipFromClient");
-//							out.println("corvette");
-//							out.println(pos);
-//
-//							corvetteCount--;
-//							initGameView.decrementCorvette(corvetteCount);
-//							if(corvetteCount <= 0){
-//								initGameView.setCorvetteDisabled();
-//								choosenShip = null;
-//							}
-//						}
+						//						checked = initGame.setShipToField(choosenShip, pos);
+						//
+						//						if(checked == true){
+						//							out.println("setShipFromClient");
+						//							out.println("corvette");
+						//							out.println(pos);
+						//
+						//							corvetteCount--;
+						//							initGameView.decrementCorvette(corvetteCount);
+						//							if(corvetteCount <= 0){
+						//								initGameView.setCorvetteDisabled();
+						//								choosenShip = null;
+						//							}
+						//						}
 					}
 
 					else if(choosenShip instanceof Submarine){
-//						checked = initGame.setShipToField(choosenShip, pos);
-//						if(checked == true){
-//							out.println("setShipFromClient");
-//							out.println("destroyer");
-//							out.println(pos);
-//
-//							submarineCount--;
-//							initGameView.decrementSubmarine(submarineCount);
-//							if(submarineCount <= 0){
-//								initGameView.setSubmarineDisabled();
-//								choosenShip = null;
-//							}
-//						}
+						//						checked = initGame.setShipToField(choosenShip, pos);
+						//						if(checked == true){
+						//							out.println("setShipFromClient");
+						//							out.println("destroyer");
+						//							out.println(pos);
+						//
+						//							submarineCount--;
+						//							initGameView.decrementSubmarine(submarineCount);
+						//							if(submarineCount <= 0){
+						//								initGameView.setSubmarineDisabled();
+						//								choosenShip = null;
+						//							}
+						//						}
 					}
 					totalShips--;
 					System.out.println("totalShips: " + totalShips);
