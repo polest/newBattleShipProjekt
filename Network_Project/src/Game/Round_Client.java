@@ -10,10 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
-
 import java.io.Serializable;
-
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
@@ -53,6 +50,7 @@ public class Round_Client implements Serializable{
 	private int playerLength;
 	private String[] playerNames;
 	private Client client;
+	private Ship ship;
 
 	public Round_Client(Player player, int fieldSize, int playerLength, String[] playerNames, Client client){
 		this.player = player;
@@ -67,6 +65,7 @@ public class Round_Client implements Serializable{
 		this.playerNames = playerNames;
 		this.client = client;
 		this.roundView = new Round_View(player, this.fieldSize, playerLength, playerNames);
+		this.ship = null;
 		//this.play();
 		addListener();
 		setShipText();
@@ -140,19 +139,39 @@ public class Round_Client implements Serializable{
 	private class ShipListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent e) {
-			JToggleButton ship = (JToggleButton)e.getSource();
+			JToggleButton shipBtn = (JToggleButton)e.getSource();
 
-			if(ship.getActionCommand().equals("destroyer") ){
-				schiff = 1;
+			if(shipBtn.getActionCommand().equals("destroyer") ){
+				if(shipBtn.isSelected() == true){
+					schiff = 1;
+				}
+				else{
+					ship = null;
+				}
 			}
-			else if(ship.getActionCommand().equals("frigate") ){
-				schiff = 2;
+			else if(shipBtn.getActionCommand().equals("frigate") ){
+				if(shipBtn.isSelected() == true){
+					schiff = 2;
+				}
+				else{
+					ship = null;
+				}
 			}
-			else if(ship.getActionCommand().equals("corvette") ){
-				schiff = 3;
+			else if(shipBtn.getActionCommand().equals("corvette") ){
+				if(shipBtn.isSelected() == true){
+					schiff = 3;
+				}
+				else{
+					ship = null;
+				}
 			}
-			else if(ship.getActionCommand().equals("submarine") ){
-				schiff = 4;
+			else if(shipBtn.getActionCommand().equals("submarine") ){
+				if(shipBtn.isSelected() == true){
+					schiff = 4;
+				}
+				else{
+					ship = null;
+				}
 			}
 		}
 	}
@@ -162,16 +181,46 @@ public class Round_Client implements Serializable{
 		roundView.setPlayerDead(id);
 	}
 
-	public void setActive(int id) {
+	public void setActive(int id, boolean nextPlayer) {
 		if(this.player.getId() == id){
-			roundView.setActive(id);
+			//roundView.setActive(id);
+			if(nextPlayer == true){
+				this.playerOnTurn = id;
+			}
 		}
 	}
-
 
 	public void setAttackReply(String gegner, String[] values, String pos, String orientation) {
 		int[] coords = checkPos(pos);	
 		roundView.setAttackReply(gegner, values, coords, orientation);
+		this.player.setShipIsntReady(ship);
+		setShipIsntReady();
+	}
+
+	public void setShipIsntReady(){
+		if(this.player.getAvailableDestroyer() == null){
+			roundView.setDestroyerEnabled(false);
+		}else{
+			roundView.setDestroyerEnabled(true);
+		}
+
+		if(this.player.getAvailableFrigate() == null){
+			roundView.setFrigateEnabled(false);
+		}else{
+			roundView.setFrigateEnabled(true);
+		}
+
+		if(this.player.getAvailableCorvette() == null){
+			roundView.setCorvetteEnabled(false);
+		}else{
+			roundView.setCorvetteEnabled(true);
+		}
+
+		if(this.player.getAvailableSubmarine() == null){
+			roundView.setSubmarineEnabled(false);
+		}else{
+			roundView.setSubmarineEnabled(true);
+		}
 	}
 
 	private void setShipsOrientation(int x, int y ){
@@ -179,32 +228,22 @@ public class Round_Client implements Serializable{
 		int length = 0;
 		int count = 0;
 		gegner = roundView.getEnemyIndex();
-
-
+		
 		for(int i = 0; i < field.length; i++){
 			for(int j = 0; j < field.length; j++){
 				field[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));	
 			}	
 		}
 
-		if(player.getId() == playerOnTurn){
+		boolean setGreen = false;
 
+		if(player.getId() == playerOnTurn){
 			if(gegner != playerOnTurn){
 
-				if(schiff != 0){
+				if(ship != null){
+					setGreen = true;
 
-					if(schiff == 1){
-						length = Destroyer.shootArea;
-					}
-					else if(schiff == 2){
-						length = Frigate.shootArea;
-					}
-					else if(schiff == 3){
-						length = Corvette.shootArea;
-					}
-					else if(schiff == 4){
-						length = Submarine.shootArea;
-					}
+					length = ship.getShootArea();
 
 					if(orientation == 'h'){
 						for(int i = (x-1); i < (x-1)+length; i++){
@@ -217,16 +256,11 @@ public class Round_Client implements Serializable{
 						}
 					}
 				}
-				else{
-					field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
-				}
-			}
-			else{
-				field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));
 			}
 		}
-		else{
-			field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));
+
+		if(setGreen = false){
+			field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
 		}
 	}
 
@@ -238,7 +272,6 @@ public class Round_Client implements Serializable{
 				String pos = btn.getActionCommand();
 				int koords[] = new int[2];
 				koords = checkPos(pos);
-				Ship ship = null;
 				String shipString = "";
 
 				if(schiff == 1){
@@ -272,7 +305,6 @@ public class Round_Client implements Serializable{
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
@@ -287,7 +319,6 @@ public class Round_Client implements Serializable{
 				String xString = pos[0];
 				String yString = pos[1];
 				int btnX = Integer.parseInt(""+xString);
-				//System.out.println(btnX);
 				int btnY = Integer.parseInt(yString);
 
 				mouse2 += ( btnY - 1) * roundView.getShownPanCellSize();
@@ -322,7 +353,6 @@ public class Round_Client implements Serializable{
 					roundView.changePlayer(i);
 				}
 			}
-
 			gegner = roundView.getChoosenPlayer();
 			System.out.println("Gegner ist Spieler: " + gegner);
 		}

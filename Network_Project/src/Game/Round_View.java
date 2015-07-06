@@ -195,7 +195,9 @@ public class Round_View implements Serializable{
 		this.messages.setBounds(30, 20, 500, 60);
 		this.roundPan.add(messages);
 		//Alle der reihe nach sortiert, nun den eigenen Spieler in groß anzeigen lassen
-		setActive(id);
+		if(id != 0){
+			setActive(id);
+		}
 	}
 
 	public void setDestroyer(int count){
@@ -283,11 +285,11 @@ public class Round_View implements Serializable{
 	public void changePlayer(int selectedIndex){
 		int[] smallBounds = new int[4];
 		int[] bigBounds = new int[4];
-
-		smallBounds[0] = clickLabel[order[selectedIndex]].getX();
-		smallBounds[1] = clickLabel[order[selectedIndex]].getY();
-		smallBounds[2] = clickLabel[order[selectedIndex]].getWidth();
-		smallBounds[3] = clickLabel[order[selectedIndex]].getHeight();
+		
+		smallBounds[0] = clickLabel[selectedIndex].getX();
+		smallBounds[1] = clickLabel[selectedIndex].getY();
+		smallBounds[2] = clickLabel[selectedIndex].getWidth();
+		smallBounds[3] = clickLabel[selectedIndex].getHeight();
 
 		bigBounds[0] = 30;
 		bigBounds[1] = 100;
@@ -430,13 +432,18 @@ public class Round_View implements Serializable{
 		int counter = 0;
 		int cellSize = playerGroup[gegnerInt].getCellSize();
 		ImageIcon newIcon;
-
+		
+		
 		if(orientation.equals("h")){
 			for(int i = x; i < xEndpos; i++){
 				if(values[counter].equals("true")){
 					String desc = "Resources/ShipsNeu/getroffenesSchiff.png";
 					newIcon = new ImageIcon(""+desc, ""+desc);
 					newIcon.setImage(newIcon.getImage().getScaledInstance(cellSize,cellSize, Image.SCALE_DEFAULT));
+					if(gegnerInt == this.player.getId()){
+						
+					}
+				
 				}
 				else{
 					String desc = "Resources/versenktesMeer.png";
@@ -463,6 +470,22 @@ public class Round_View implements Serializable{
 				playerGroup[gegnerInt].getBattleField()[x][i].setIcon(newIcon);
 			}
 		}
+	}
+
+	public void setDestroyerEnabled(boolean b) {
+		this.destroyer.setEnabled(b);
+	}
+
+	public void setFrigateEnabled(boolean b) {
+		this.frigate.setEnabled(b);
+	}
+
+	public void setCorvetteEnabled(boolean b) {
+		this.corvette.setEnabled(b);
+	}
+
+	public void setSubmarineEnabled(boolean b) {
+		this.submarine.setEnabled(b);
 	}
 
 }

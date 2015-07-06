@@ -103,6 +103,9 @@ public class Options implements Serializable{
 		return this.optionsView;
 	}
 	
+	public int getKi(){
+		return this.ki;
+	}
 	/**
 	 * Einstellungen der Spieleranzahl
 	 * speichert die Spieleranzahl

@@ -195,7 +195,6 @@ public class Round implements Serializable{
 				server.setActive(index);
 				System.out.println("playerOnTurn: " + playerOnTurn);
 
-
 			}
 		}
 	}

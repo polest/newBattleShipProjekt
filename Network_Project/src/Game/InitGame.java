@@ -49,10 +49,10 @@ public class InitGame implements Serializable{
 	private int mouseY;
 	private int oldBtnY;
 	private boolean shipCanBePlaced;
+private int ki;
 
 
-
-	public InitGame(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize){
+	public InitGame(int player, int destroyer, int frigate, int corvette, int submarine, int fieldSize, int ki){
 		this.playerId = 0;
 		this.orientation = 'h';
 		this.mouseY = 0;
@@ -64,7 +64,7 @@ public class InitGame implements Serializable{
 		this.frigateCount = frigate;
 		this.corvetteCount = corvette;
 		this.submarineCount = submarine;
-
+this.ki = ki;
 		this.totalShips = destroyer + frigate + corvette + submarine + fieldSize;
 
 		this.configureGame();
@@ -97,6 +97,13 @@ public class InitGame implements Serializable{
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
 		boolean isActive;
+		boolean isKi = false;
+		
+		if(i > (this.player.length - this.ki) ) {
+			isKi = true;
+		}
+		
+		
 		if(i == 0){
 			isActive = true;
 		}
@@ -105,7 +112,7 @@ public class InitGame implements Serializable{
 		}
 
 		player[i] = new Player(isActive, this.totalShips, this.destroyerCount, 
-				this.frigateCount, this.corvetteCount,this.submarineCount, ("Spieler " + (i+1) ), battlefield, false);
+				this.frigateCount, this.corvetteCount,this.submarineCount, ("Spieler " + (i+1) ), battlefield, isKi);
 
 		this.initShips();
 	}

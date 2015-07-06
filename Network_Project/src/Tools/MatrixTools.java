@@ -312,6 +312,7 @@ public class MatrixTools implements Serializable{
 		int hitWater = 0;
 		int hitShip = 0;
 		String results = "";
+		String sunk = "";
 
 		if(orientation == 'h'){
 
@@ -353,7 +354,9 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getDestroyer().length; i++){
 							checkShipIsSunk(player,  player.getDestroyer()[i], z, y);
 						}
-						player.checkIfSunk("D");
+						if(player.checkIfSunk("D") == true ){
+							sunk = sunk.concat("true_D");
+						}
 						results = results.concat("true;");
 						hitShip++;
 
@@ -364,7 +367,9 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getFrigate().length; i++){
 							checkShipIsSunk(player,  player.getFrigate()[i], z, y);
 						}
-						player.checkIfSunk("F");
+						if(player.checkIfSunk("F") == true ){
+							sunk = sunk.concat("true_F");
+						}
 						results = results.concat("true;");
 						hitShip++;
 					}
@@ -374,7 +379,10 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getCorvette().length; i++){
 							checkShipIsSunk(player,  player.getCorvette()[i], z, y);
 						}
-						player.checkIfSunk("C");
+						if(player.checkIfSunk("C") == true ){
+							sunk = sunk.concat("true_D");
+						}
+						
 						results = results.concat("true;");
 						hitShip++;
 					}

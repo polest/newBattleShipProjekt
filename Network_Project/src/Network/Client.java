@@ -172,7 +172,7 @@ public class Client implements Runnable{
 					String id = in.readLine();
 					int playerId = Integer.parseInt(id);
 					
-					this.roundClient.setActive(playerId);
+					this.roundClient.setActive(playerId, true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

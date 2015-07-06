@@ -87,8 +87,8 @@ public class Main_Controler implements Serializable{
 		initGameView.setNextSelectionListener(new StartRoundListener());
 		main_view.getSave().setEnabled(true);
 	}
-	
-	
+
+
 	/**
 	 * holt sich alle informationen aus gameOptions um diese später an alle Clients zu übergeben
 	 * Startet den Server und verbindet den 1. Client automatisch mit dem Server
@@ -106,11 +106,12 @@ public class Main_Controler implements Serializable{
 		System.out.println(submarine);
 		int fieldSize = gameOptions.getBattlefieldSize();
 		System.out.println(fieldSize);
+		int ki = gameOptions.getKi();
 
 		initGameView =  new InitGame_View_Client();
 		initGameClient = new InitGame_Client(player, destroyer, frigate, corvette, submarine, fieldSize, initGameView);
 
-		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, fieldSize);
+		initGame = new InitGame(player, destroyer, frigate, corvette, submarine, fieldSize, ki);
 
 		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 
@@ -122,7 +123,7 @@ public class Main_Controler implements Serializable{
 		initGameClient.addClient(client);
 
 	}
-	
+
 	/**
 	 * @param player
 	 * @param destroyer
@@ -144,7 +145,7 @@ public class Main_Controler implements Serializable{
 
 	}
 
-	
+
 	/**
 	 * Methode um einen Client dem Spiel hinzuzufügen
 	 */
@@ -159,7 +160,7 @@ public class Main_Controler implements Serializable{
 	public void changeToRoundView(){
 		client.getPlayerNames();
 	}
-	
+
 	public void setPlayerId(int id){
 		initGameClient.setPlayerId(id);
 	}
@@ -170,13 +171,13 @@ public class Main_Controler implements Serializable{
 		player.setBattleFieldView(initGameView.getBattleFieldView() );
 		int playerLength = initGameClient.getPlayerLength();
 
-		roundClient = new Round_Client(player, fieldSize, playerLength, names, client);
+		//		roundClient = new Round_Client(player, fieldSize, playerLength, names, client);
 		Round_View roundView = roundClient.getRoundView();
-		
+
 		main_view.addPanel(roundView.getPanel(), "roundView"); 
 		main_view.changeShownPan("roundView");
 		client.addRoundClient(roundClient);
-		
+
 		if(server != null){
 			round = new Round(this.initGame.getPlayer(), fieldSize, server);
 			server.addRound(round);
@@ -195,7 +196,7 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
-	
+
 	/**
 	 * erstellt ein kleines Frame, in dem der Client
 	 * eine IP ADresse und einen Port eingeben kann um diesem Spiel beizutreten
@@ -269,7 +270,7 @@ public class Main_Controler implements Serializable{
 		}
 	}
 
-	
+
 	/**
 	 * beendet das Spiel und schließt es
 	 *

@@ -189,7 +189,7 @@ public class BattleShipServer implements Runnable{
 	public void setAttack(String txt){
 		txt = txt.trim();
 		String[] values = txt.split(";");
-String ship = values[0];
+		String ship = values[0];
 		String gegner = values[1];
 		String pos = values[2];
 		String orientation = values[3];
@@ -216,8 +216,9 @@ String ship = values[0];
 		for(int j = 0; j < clientZahl; j++){
 			if(j > 0){
 				this.initGame.incrementPlayerId();
-				this.initGame.initPlayerBattleShip();
 			}
+			this.initGame.initPlayerBattleShip();
+
 			crp[j].verarbeiteAnfragen(this);
 		}
 		connection.dispose();
