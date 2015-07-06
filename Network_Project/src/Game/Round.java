@@ -3,8 +3,8 @@ package Game;
 
 import java.io.Serializable;
 import java.util.Random;
-
 import KI.ArtificialIntelligence;
+
 import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
@@ -63,8 +63,7 @@ public class Round implements Serializable{
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
 		server.setAttack(text);
 	}
-	
-	
+
 	public void play(){
 		char orientation = 'h';
 		String eingabe;
@@ -74,7 +73,7 @@ public class Round implements Serializable{
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
-					
+
 					if(player[i].getIsAlive()){
 
 						if(player[i].checkIfAnyShipIsReady()){
@@ -86,14 +85,10 @@ public class Round implements Serializable{
 				}
 			}
 		}
-		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-		for(int j = 0; j < player.length; j++){
-			player[j].reloadTimeCountdown();
-		}
 	}
 
 
-	
+
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
 	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
@@ -141,7 +136,7 @@ public class Round implements Serializable{
 
 	public void setAttack(String shipString, String gegnerString, String pos, String orientationString){
 		int index = playerOnTurn % player.length;
-		
+
 		gegner = Integer.parseInt(gegnerString);
 		orientation = orientationString.charAt(0);
 
@@ -184,69 +179,58 @@ public class Round implements Serializable{
 				System.out.println("playerOnTurn: " + playerOnTurn);
 				playerOnTurn++;	
 				index = playerOnTurn % player.length;
+				boolean nextPlayer = false;
 
-				while(player[index].getIsAlive() == false){
-					if(player[index].checkIfAnyShipIsReady() == false){
-						server.PlayerHasNoLoadedShips(index);
-						playerOnTurn++;
-						index = playerOnTurn % player.length;
+				while(nextPlayer == false){
+					if(player[index].getIsAlive() == true){
+						if(player[index].checkIfAnyShipIsReady() == false){
+							server.PlayerHasNoLoadedShips(index);
+							playerOnTurn++;
+							index = playerOnTurn % player.length;
+							
+							if(index == 0){
+								for(int j = 0; j < player.length; j++){
+									player[j].reloadTimeCountdown();
+									server.reloadShips();
+								}
+							}
+						}
+						else{
+							nextPlayer = true;
+						}
 					}
 				}
+
 				player[index].setActive(true);
-				
+
 				if(player[index].isPlayerBot()){
-					//VORRÜBER GEHEN DIE KI ÜBERSPRINGEN!
+					//VORRÜBERGEHEND DIE KI ÜBERSPRINGEN!
 					playerOnTurn++;
 					index = playerOnTurn % player.length;
-					//TODO! KI
+					//TODO! KI d
 					System.out.println("KIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());
 				}
-				
-				server.setActive(index);
-				System.out.println("playerOnTurn: " + playerOnTurn);
 
+				server.setActive(index);
+				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
+				if(index == 0){
+					for(int j = 0; j < player.length; j++){
+						player[j].reloadTimeCountdown();
+
+					}
+				}
 			}
 		}
 	}
-	
-	/*
-	// AI ÄNDERUNG START
-	private void roundForAI(int index){
-		
-		
 
-		if(ship != null){
-			//setKiShoot(ship, player[gegner-1], pos, orientation);
-			//player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
-			player[i].setShipIsntReady(ship);
+
+	public void addPlayerNames(String[] sortedNames) {
+		for(int i = 0; i < player.length; i++){
+			player[i].setPlayerName(sortedNames[i]);
 		}
-
-
-		//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-
-		if(player[gegner-1].getIsAlive() == false){
-			this.colorPrint.println(EPrintColor.PURPLE,"Herzlichen Glückwunsch, sie haben " + player[gegner-1].getPlayerName() + " besiegt.");
-		}
-
-		//überprüft, ob noch Spieler am leben sind. Wenn nicht wird Spiel beendet.
-		if(ende() == 1){
-			this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-			System.exit(-1);
-		}
-
-		player[i].setActive(false);
-		if(i == player.length-1){
-			player[0].setActive(true);
-		}else{
-			player[i+1].setActive(true);
-		}
-
 	}
 
-	// AI ÄNDERUNG ENDE
-	*/
-	
 }
 

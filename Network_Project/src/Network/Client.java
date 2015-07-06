@@ -20,7 +20,9 @@ public class Client implements Runnable{
 	private Main_Controler mainControler;
 	private String[] playerNames;
 	private Round_Client roundClient;
-	
+	private JFrame connection = new JFrame();
+	private JLabel status = new JLabel();
+
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 	 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
@@ -31,6 +33,15 @@ public class Client implements Runnable{
 	 */
 	public Client(String host, int port, Main_Controler mainControler) {
 		try {
+			connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			connection.setLayout(null);
+			connection.setSize(300, 100);
+			connection.setVisible(true);
+			connection.add(status);
+			status.setText("angemeldet... warten auf weitere Spieler");
+			status.setBounds(10,30, 300, 30);
+			status.setVisible(true);
+
 			// Socket-Objekt fuer die Kommunikation mit Host/Port erstellen
 			socket = new Socket(host, port);
 			this.mainControler = mainControler;
@@ -71,7 +82,6 @@ public class Client implements Runnable{
 		try {
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -83,14 +93,14 @@ public class Client implements Runnable{
 	public void addRoundClient(Round_Client roundClient){
 		this.roundClient = roundClient;
 	}
-	
+
 	public void setAttack(String ship, String gegner, String pos, String orientation){
 		out.println("setAttack");
 		out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void run() {
 		//this.mainControler.ChangeShipsView();
@@ -103,15 +113,14 @@ public class Client implements Runnable{
 				message = in.readLine();
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
 			if(message.equals("changeInitView") ){
+				status.setText("Schiffe werden platziert...");
 				String values = "";
 				try {
 					values = in.readLine();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				String attributes[] = values.split(";");
@@ -125,6 +134,7 @@ public class Client implements Runnable{
 
 			}
 			else if(message.equals("startGame") ){
+				status.setText("Bereit... warte auf die anderen Spieler...");
 				mainControler.changeToRoundView();
 			}
 			else if(message.equals("setPlayerNames") ){
@@ -134,7 +144,6 @@ public class Client implements Runnable{
 					this.playerNames = names; 
 					this.mainControler.startRoundView(this.playerNames);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -144,7 +153,6 @@ public class Client implements Runnable{
 					int playerId = Integer.parseInt(id);
 					this.mainControler.setPlayerId(playerId);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -152,10 +160,11 @@ public class Client implements Runnable{
 				try {
 					String id = in.readLine();
 					int playerId = Integer.parseInt(id);
-					
-					this.roundClient.setPlayerOnTurn(playerId);
+
+					String name = in.readLine();
+
+					this.roundClient.setPlayerOnTurn(playerId, name);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -163,10 +172,9 @@ public class Client implements Runnable{
 				try {
 					String id = in.readLine();
 					int playerId = Integer.parseInt(id);
-					
+
 					this.roundClient.setPlayerDead(playerId);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -174,10 +182,9 @@ public class Client implements Runnable{
 				try {
 					String id = in.readLine();
 					int playerId = Integer.parseInt(id);
-					
+
 					this.roundClient.setActive(playerId, true);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -187,17 +194,38 @@ public class Client implements Runnable{
 					String reply = in.readLine();
 					String pos = in.readLine();
 					String orientation = in.readLine();
-					
+					System.out.println(reply);
 					String[] values = reply.split(";");
-					
+
 					this.roundClient.setAttackReply(gegner, values, pos, orientation);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		}
+			else if(message.equals("reloadShips")){
+				roundClient.reloadTime();
+			}
+			else if(message.equals("attackFailed")){
+				this.status.setText("Angriff fehlgeschlagen! Erneut versuchen!");
+			}
+			else if(message.equals("setWinner")){
+				try {
+					String name = in.readLine();
+					this.status.setText("Spieler "+ name + " hat gewonnen!!!");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("playerHasNoShips")){
+				try {
+					String name = in.readLine();
+					this.status.setText("Spieler "+ name + " muss aussetzen!");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			//TODO Quit
 
-		//TODO Quit
+		}
 	}
 }

@@ -26,10 +26,8 @@ public class ClientRequestProcessor implements Runnable{
 	private int corvette;
 	private int submarine;
 	private int fieldSize;
-	private BattleShipServer server;
-	private JFrame connection = new JFrame();
-	private JLabel status = new JLabel();
 	private int playerId;
+	private BattleShipServer server;
 
 	/**
 	 * @param socket
@@ -46,14 +44,6 @@ public class ClientRequestProcessor implements Runnable{
 		this.submarine = submarine;
 		this.fieldSize = fieldSize;
 
-		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		connection.setLayout(null);
-		connection.setSize(300, 100);
-		connection.setVisible(true);
-		connection.add(status);
-		status.setText("angemeldet... warten auf weitere Spieler");
-		status.setBounds(10,30, 300, 30);
-		status.setVisible(true);
 
 		System.out.println("Daten sind: " + this.clientZahl + "," + this.destroyer  + "," + this.frigate   + "," + this.corvette   + "," + this.submarine   + "," + this.fieldSize) ; 		
 		// I/O-Streams initialisieren:
@@ -80,7 +70,6 @@ public class ClientRequestProcessor implements Runnable{
 
 	public void verarbeiteAnfragen(BattleShipServer server){
 		this.server = server;
-		status.setText("Schiffe werden platziert...");
 		out.println("changeInitView");
 		String values = clientZahl + ";" + destroyer + ";" + frigate + ";" + corvette + ";" + submarine + ";" + fieldSize + ";";
 		out.println("" + values);
@@ -89,7 +78,6 @@ public class ClientRequestProcessor implements Runnable{
 
 
 	public void startGame(){
-		status.setText("Bereit... warte auf die anderen Spieler...");
 		out.println("startGame");
 	}
 
@@ -97,18 +85,19 @@ public class ClientRequestProcessor implements Runnable{
 		this.playerId = id;
 		out.println("setId");
 		out.println(this.playerId);
-		}
+	}
 
-	public void setMove(int id){
+	public void setMove(int id, String name){
 		out.println("setMove");
 		out.println(id);
+		out.println(name);
 	}
-	
-	
+
+
 	public void attackFailed(){
-		this.status.setText("Angriff fehlgeschlagen! Erneut versuchen!");
+		out.println("attackFailed");
 	}
-	
+
 	public void start() {
 
 	}
@@ -166,13 +155,14 @@ public class ClientRequestProcessor implements Runnable{
 				try {
 					String txt = in.readLine();
 					server.setAttack(txt);
-					
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		}while(!(input.equals("quit")));
+		}while(!(input.equals("quit") ) );
+
 		try {
 			clientSocket.close();
 		} catch (IOException e2) {
@@ -185,12 +175,14 @@ public class ClientRequestProcessor implements Runnable{
 		out.println(gegner);
 	}
 
-	public void setWinner(int index, String name) {
-		this.status.setText("Spieler "+ name + " hat gewonnen!!!");
+	public void setWinner(String name) {
+		out.println("setWinner");
+		out.println(name);
 	}
 
 	public void playerHasNoLoadedShips(int index, String name) {
-		this.status.setText("Spieler "+ name + " muss aussetzen!");
+		out.println("playerHasNoShips");
+		out.println(name);
 	}
 
 	public void setActive(int index) {
@@ -205,6 +197,11 @@ public class ClientRequestProcessor implements Runnable{
 		out.println(coords);
 		out.println(orientation);
 	}
+
+	public void reloadShips() {
+		out.println("reloadShips");
+	}
+
 
 
 }

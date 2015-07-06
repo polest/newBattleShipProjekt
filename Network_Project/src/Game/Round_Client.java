@@ -97,7 +97,8 @@ public class Round_Client implements Serializable{
 		roundView.setSubmarine(player.getSubmarine().length);
 	}
 
-	public void setPlayerOnTurn(int id){
+	public void setPlayerOnTurn(int id, String name){
+		this.roundView.setMessage("Spieler " + name + " ist an der Reihe");
 		this.playerOnTurn = id;
 		this.roundView.setActive(id);
 	}
@@ -143,22 +144,31 @@ public class Round_Client implements Serializable{
 			if(shipBtn.getActionCommand().equals("destroyer") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 1;
+					roundView.setFrigateSelected(false);
+					roundView.setCorvetteSelected(false);
+					roundView.setSubmarineSelected(false);
 				}
 				else{
-					ship = null;
+					ship = null;	
 				}
 			}
 			else if(shipBtn.getActionCommand().equals("frigate") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 2;
+					roundView.setDestroyerSelected(false);
+					roundView.setCorvetteSelected(false);
+					roundView.setSubmarineSelected(false);
 				}
 				else{
-					ship = null;
+					ship = null;	
 				}
 			}
 			else if(shipBtn.getActionCommand().equals("corvette") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 3;
+					roundView.setFrigateSelected(false);
+					roundView.setDestroyerSelected(false);
+					roundView.setSubmarineSelected(false);
 				}
 				else{
 					ship = null;
@@ -167,9 +177,13 @@ public class Round_Client implements Serializable{
 			else if(shipBtn.getActionCommand().equals("submarine") ){
 				if(shipBtn.isSelected() == true){
 					schiff = 4;
+					roundView.setFrigateSelected(false);
+					roundView.setCorvetteSelected(false);
+					roundView.setSubmarineSelected(false);
 				}
 				else{
 					ship = null;
+					
 				}
 			}
 		}
@@ -181,6 +195,10 @@ public class Round_Client implements Serializable{
 	}
 
 	public void setActive(int id, boolean nextPlayer) {
+		if(id == 0){
+			reloadTime();
+		}
+		
 		if(this.player.getId() == id){
 			//roundView.setActive(id);
 			if(nextPlayer == true){
@@ -189,14 +207,22 @@ public class Round_Client implements Serializable{
 		}
 	}
 
+	public void reloadTime(){
+		player.reloadTimeCountdown();
+		setShipReadyOrNot();
+	}
+
 	public void setAttackReply(String gegner, String[] values, String pos, String orientation) {
 		int[] coords = checkPos(pos);	
 		roundView.setAttackReply(gegner, values, coords, orientation);
-		this.player.setShipIsntReady(ship);
-		setShipIsntReady();
+		if(this.ship != null){
+			this.player.setShipIsntReady(this.ship);
+		}
+		this.ship = null;
+		setShipReadyOrNot();
 	}
 
-	public void setShipIsntReady(){
+	public void setShipReadyOrNot(){
 		if(this.player.getAvailableDestroyer() == null){
 			roundView.setDestroyerEnabled(false);
 		}else{
@@ -227,7 +253,7 @@ public class Round_Client implements Serializable{
 		int length = 0;
 		int count = 0;
 		gegner = roundView.getEnemyIndex();
-		
+
 		for(int i = 0; i < field.length; i++){
 			for(int j = 0; j < field.length; j++){
 				field[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));	
@@ -258,7 +284,7 @@ public class Round_Client implements Serializable{
 			}
 		}
 
-		if(setGreen = false){
+		if(setGreen == false){
 			field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
 		}
 	}

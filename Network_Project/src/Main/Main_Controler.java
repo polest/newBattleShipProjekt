@@ -33,6 +33,7 @@ import Tools.ImagePanel;
 
 public class Main_Controler implements Serializable{
 	private static final long serialVersionUID = -2959797632378263001L;
+	public final static int DEFAULT_PORT = 4477;
 	private Main_View main_view;
 	private int width;
 	private int height;
@@ -52,6 +53,7 @@ public class Main_Controler implements Serializable{
 	private JLabel ipLabel;
 	private JTextField ipField;
 	private JButton button;
+	
 
 
 	public Main_Controler(){
@@ -107,6 +109,11 @@ public class Main_Controler implements Serializable{
 		int fieldSize = gameOptions.getBattlefieldSize();
 		System.out.println(fieldSize);
 		int ki = gameOptions.getKi();
+		
+		this.port = gameOptions.getPort();
+		if (port == 0)
+			port = DEFAULT_PORT;
+		this.port = port;
 
 		int clients = player - ki;
 		initGameView =  new InitGame_View_Client();
@@ -116,10 +123,10 @@ public class Main_Controler implements Serializable{
 
 		main_view.addPanel(initGameView.getPanel(), "placeShipsPan");
 
-		Thread t = new Thread(server = new BattleShipServer(4477, player, clients, initGame, destroyer, frigate, corvette, submarine, fieldSize, this) );
+		Thread t = new Thread(server = new BattleShipServer(port, player, clients, initGame, destroyer, frigate, corvette, submarine, fieldSize, this) );
 		t.start();
 
-		Thread s = new Thread(client = new Client("localhost", 4477, this) );
+		Thread s = new Thread(client = new Client("localhost", port, this) );
 		s.start();
 		initGameClient.addClient(client);
 

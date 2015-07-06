@@ -111,7 +111,7 @@ public class Main_View{
 	 * wird cardPanel geaddet
 	 */
 	private void initStartPanel(){
-		this.welcomePan = new ImagePanel("Resources/unterwasser.jpg");
+		this.welcomePan = new ImagePanel("Resources/unterwasser2.png");
 		this.welcomePan.setSize(this.width, this.height);
 		this.welcomePan.setLayout(null);
 		this.welcomePan.setVisible(true);
