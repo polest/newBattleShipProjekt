@@ -46,6 +46,10 @@ public class ArtificialIntelligence {
 		return ship;
 	}
 
+	/**
+	 * @return
+	 * wandelt Shifftyp in String um
+	 */
 	public String getShipAsString(){
 		
 		if(this.ship == 1){
@@ -118,12 +122,21 @@ public class ArtificialIntelligence {
 	}
 
 	
+	/**
+	 * @param max
+	 * @return
+	 * generiert Random koordinaten um Schiff zu setzten
+	 */
 	public String setShip(int max){
 		int randomX = rn.nextInt(max - 1 + 1) + 1;
 		int randomY = rn.nextInt(max - 1 + 1) + 1;
 		return ""+randomX+","+randomY+"";
 	}
 	
+	/**
+	 * @return
+	 * generiert random orientation
+	 */
 	public char setShipOrientation(){
 		int randomInt = rn.nextInt(2 - 1 + 1) + 1;
 		if(randomInt == 1){
@@ -132,6 +145,7 @@ public class ArtificialIntelligence {
 			return 'v';
 		}
 	}
+	
 	
 	public String chooseWhereToShoot(Player gegnerMinusEins, int[][] gegnerPublicField, int max){
 

@@ -130,6 +130,11 @@ public class InitGame_Client implements Serializable{
 		return this.submarineCount;
 	}
 
+	/**
+	 * erstellt ein Spielfeld und einen Spieler
+	 * added die Listener
+	 * ruft initShips auf
+	 */
 	public void initPlayerBattleShip(){
 		int i = this.playerId;
 		BattleField battlefield = new BattleField(this.fieldSize);
@@ -163,12 +168,21 @@ public class InitGame_Client implements Serializable{
 		this.initGameView.initPlayerField(player, playerId);
 	}
 
+	/**
+	 * added die Listener
+	 */
 	private void addListener(){
 		this.initGameView.getBattleFieldView().setBattleFieldMouseMotionListener(new BattleFieldMouseMotionListener());
 		this.initGameView.setShipsSelectionListener(new ShipsListener());
 		this.initGameView.getBattleFieldView().setBattleFieldMouseListener(new BattleFieldMouseListener());
 	}
 
+	/**
+	 * @param ship
+	 * @param pos
+	 * Methode für Client zum Schiffe setzen.
+	 * @return
+	 */
 	public boolean setShipToField(Ship ship, String pos) {
 		int length = ship.getShipSize();
 		int[] koordinaten = checkPos(pos);
@@ -230,6 +244,13 @@ public class InitGame_Client implements Serializable{
 
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * Färbt den Rahmen einer Zelle rot oder grün
+	 * rot, wenn kein Schiff ausgewählt & wenn schiff dort nicht plaziert werden kann
+	 * grün, wenn Shiff plaziert werden kann
+	 */
 	private void setShipsOrientation(int x, int y){
 		JButton[][] field = initGameView.getBattleField();
 		int length = 0;
@@ -278,10 +299,20 @@ public class InitGame_Client implements Serializable{
 	}
 
 
+	/**
+	 * @param x
+	 * @param y
+	 * @param length
+	 * überprüft, ob schiff dort plaziert werden kann
+	 * @return true, wenn Schiff plaziert werden kann
+	 */
 	private boolean checkBorder(int x, int y, int length){
 		shipCanBePlaced =  this.player.getPrivateField().checkFree(length, x, y, orientation);
 		return shipCanBePlaced;
 	}
+	/**
+	 * sendet die koordinaten des gesetzten Schiffs an den Server und zählt die vorhandenen schiffe runter
+	 */
 	private class BattleFieldMouseListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("totalShips: " + totalShips);
@@ -379,6 +410,10 @@ public class InitGame_Client implements Serializable{
 
 		}
 	}
+	/**
+	 * richtet das Schiff entsprechend der Mausposition aus
+	 *
+	 */
 	private class BattleFieldMouseMotionListener implements MouseMotionListener{
 
 		@Override
@@ -399,7 +434,6 @@ public class InitGame_Client implements Serializable{
 				String xString = pos[0];
 				String yString = pos[1];
 				int btnX = Integer.parseInt(""+xString);
-				//System.out.println(btnX);
 				int btnY = Integer.parseInt(yString);
 
 				mouse2 += ( btnY - 1) * initGameView.getCellSize();
@@ -422,6 +456,9 @@ public class InitGame_Client implements Serializable{
 		}
 	}
 
+	/**
+	 *ermittelt das ausgewählte Shiff entsprechend dem ausgewählten JToggleButtons
+	 */
 	private class ShipsListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			JToggleButton btn = (JToggleButton)e.getSource();

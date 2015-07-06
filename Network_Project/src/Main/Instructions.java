@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
@@ -41,8 +42,8 @@ public class Instructions {
 		int h = (int)height;
 		this.frame = new JFrame("Instructions");
 		this.frame.setLocation((int) width, 0);
-		this.frame.setSize(496,720);
-		this.frame.setResizable(true);
+		this.frame.setSize(505,720);
+		this.frame.setResizable(false);
 		this.frame.setLayout(null);
 		this.frame.setVisible(true);
 	}
@@ -53,7 +54,7 @@ public class Instructions {
 	 */
 	private void initPanel(){
 		this.panel = new ImagePanel("Resources/Panel.png");
-		this.panel.setSize(496,991);
+		this.panel.setSize(505,991);
 		this.panel.setLayout(null);
 		this.panel.setVisible(true);
 		this.panel.repaint();
@@ -67,7 +68,6 @@ public class Instructions {
 	private void initScrollBar(){	
 		this.scrollBar = new JScrollPane(this.panel);
 		this.scrollBar.setBounds(0, 0, 496,700);
-		
 		
 		this.frame.add(this.scrollBar, BorderLayout.EAST);
 	}

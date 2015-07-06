@@ -41,6 +41,9 @@ public class InitGame_View_Client {
 		this.initGamePan.repaint();
 	}
 
+	/**
+	 * initialisiert das InitGame Panel
+	 */
 	private void initPan(){
 		Font schrift = new Font("Times New Roman", Font.BOLD, 15);
 		this.initGamePan.setVisible(true);
@@ -148,6 +151,10 @@ public class InitGame_View_Client {
 		return this.width/this.fieldSize;
 	}
 
+	/**
+	 * @param s
+	 * added den SchiffsButtons die Listener
+	 */
 	public void setShipsSelectionListener(ActionListener s){
 		this.destroyerBtn.addActionListener(s);
 		this.frigateBtn.addActionListener(s);
@@ -160,10 +167,17 @@ public class InitGame_View_Client {
 	}
 
 
+	/**
+	 * disabled den Fertig Button
+	 */
 	public void disableNext(){
 		this.nextPlayer.setEnabled(false);
 	}
 
+	/**
+	 * @param ship
+	 * wenn kein Schiff ausgewählt ist, werden die Buttons auf nicht ausgewählt gesetzt
+	 */
 	public void setChoosenShip(JToggleButton ship){
 		if(ship == null){
 			this.destroyerBtn.setSelected(false);
@@ -232,8 +246,13 @@ public class InitGame_View_Client {
 	}
 
 
+	/**
+	 * @param player
+	 * @param id
+	 * initialisiert die Felder der Spieler
+	 * setzt die Schiffsbuttons auf enabled oder disabled, je nachdem ob und wie viele Schiffe ausgewählt sind
+	 */
 	public void initPlayerField(Player player, int id){
-		//player.setBattleFieldView(this.battleFieldView[id]);
 
 		this.destroyerBtn.setSelected(false);
 		this.frigateBtn.setSelected(false);

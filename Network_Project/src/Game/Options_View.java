@@ -253,6 +253,7 @@ public class Options_View {
 		this.optionsView.add(portLbl);
 		
 		this.port = new JTextField("4477");
+		this.port.setHorizontalAlignment(JTextField.CENTER);
 		this.port.setBounds(700, 110, 70, 30);
 		this.optionsView.add(this.port);
 
