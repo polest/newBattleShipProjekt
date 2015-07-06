@@ -69,7 +69,7 @@ public class Player implements Serializable{
 		this.playerName = playerName;
 		this.colorPrint = new ColoredPrint();
 		this.isBot = isKi;
-		this.enemyNumber = 0;
+		this.enemyNumber = -1;
 		this.destroyerIndex = 0;
 		this.frigateIndex = 0;
 		this.corvetteIndex = 0;

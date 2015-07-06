@@ -27,7 +27,7 @@ public class ArtificialIntelligence {
 	private boolean isSubmarineRdy;
 	
 	private Random rn = new Random();
-	private int aliveEnemy = 0;
+	private int aliveEnemy = -1;
 	
 	
 	
@@ -393,7 +393,7 @@ public class ArtificialIntelligence {
 			counter = j+1;
 			if(j != i){
 				if(player[j].getIsAlive()){
-					setAliveEnemy(counter);
+					setAliveEnemy(j);
 				}
 			}
 		}
@@ -402,7 +402,7 @@ public class ArtificialIntelligence {
 	
 	public int getEnemyNumber(Player[] player, int i){
 
-		if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()-1].getIsAlive()){								
+		if(player[i].getEnemyNumber() != -1 && player[player[i].getEnemyNumber()].getIsAlive()){								
 			return player[i].getEnemyNumber();																	
 		} else {
 			return getAliveEnemy();
@@ -476,7 +476,7 @@ public class ArtificialIntelligence {
 		getAllRdyShips(player, i);
 		schiff = chooseShipToShoot();
 
-		this.pos = chooseWhereToShoot(player[this.gegnerNumber-1], player[this.gegnerNumber-1].getPublicField().getField(), fieldSize);
+		this.pos = chooseWhereToShoot(player[this.gegnerNumber], player[this.gegnerNumber].getPublicField().getField(), fieldSize);
 		this.ship = getAvailableShip(player, i, schiff);
 	}
 
