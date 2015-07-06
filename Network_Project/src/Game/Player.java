@@ -52,6 +52,7 @@ public class Player implements Serializable{
 	private int corvetteIndex;
 	private int submarineIndex;
 	private int playerId;
+	private int enemyNumber;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -68,6 +69,7 @@ public class Player implements Serializable{
 		this.playerName = playerName;
 		this.colorPrint = new ColoredPrint();
 		this.isBot = isKi;
+		this.enemyNumber = 0;
 		this.destroyerIndex = 0;
 		this.frigateIndex = 0;
 		this.corvetteIndex = 0;
@@ -113,6 +115,21 @@ public class Player implements Serializable{
 	}
 
 
+	/**
+	 * @return enemyNumber
+	 */
+	public int getEnemyNumber() {
+		return enemyNumber;
+	}
+
+
+	/**
+	 * @param enemyNumber
+	 */
+	public void setEnemyNumber(int enemyNumber) {
+		this.enemyNumber = enemyNumber;
+	}
+	
 	/**
 	 * Getter für den Playernamen
 	 * @return

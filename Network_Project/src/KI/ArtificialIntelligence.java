@@ -3,18 +3,48 @@ package KI;
 import java.util.Random;
 
 import Game.Player;
+import Game.Round;
+import Ships.Corvette;
+import Ships.Destroyer;
+import Ships.Frigate;
+import Ships.Ship;
+import Ships.Submarine;
+import Tools.ColoredPrint.EPrintColor;
 
 public class ArtificialIntelligence {
-
+	
+	private Player[] player;
+	private Player gegner;
+	private String pos;
+	private Ship ship;
+	private char botOrientation = ' ';
+	
 	private boolean isDestroyerRdy;
 	private boolean isFrigateRdy;
 	private boolean isCorvetteRdy;
 	private boolean isSubmarineRdy;
-	private char botOrientation = ' ';
+	
 	private Random rn = new Random();
 	private int aliveEnemy = 0;
 	
 	
+	
+	public Player[] getPlayer() {
+		return player;
+	}
+
+	public String getPos() {
+		return pos;
+	}
+
+	public Player getGegner() {
+		return gegner;
+	}
+
+	public Ship getShip() {
+		return ship;
+	}
+
 	public boolean isDestroyerRdy() {
 		return isDestroyerRdy;
 	}
@@ -349,6 +379,178 @@ public class ArtificialIntelligence {
 	}
 	
 	
+	
+	
+	
+	
+	public void getAliveEnemys(Player[] player, int i){
+		
+		int counter = 1;
+		
+		for(int j = 0; j < player.length; j++){
+			counter = j+1;
+			if(j != i){
+				if(player[j].getIsAlive()){
+					setAliveEnemy(counter);
+				}
+			}
+		}
+	}
+	
+	
+	public int getEnemyNumber(Player[] player, int i){
+
+		if(player[i].getEnemyNumber() != 0 && player[player[i].getEnemyNumber()-1].getIsAlive()){								
+			return player[i].getEnemyNumber();																	
+		} else {
+			return getAliveEnemy();
+		}
+	}
+	
+	public void setEnemyNumberForAI(Player[] player, int i, int number){
+		player[i].setEnemyNumber(number);
+		this.gegner = player[number];
+	}
+	
+	public void getAllRdyShips(Player[] player, int i){
+		if(player[i].getDestroyer().length > 0){
+			if(player[i].checkIfShipIsReady("D")){
+				setDestroyerRdy(true);
+			}
+		}
+		if(player[i].getFrigate().length > 0){
+			if(player[i].checkIfShipIsReady("F")){
+				setFrigateRdy(true);
+			}
+		}
+		if(player[i].getCorvette().length > 0){
+			if(player[i].checkIfShipIsReady("C")){
+				setCorvetteRdy(true);
+			}
+		}
+		if(player[i].getSubmarine().length > 0){
+			if(player[i].checkIfShipIsReady("S")){
+				setSubmarineRdy(true);
+			}
+		}
+	}
+	
+	public Ship getAvailableShip(Player[] player, int i, int schiff){
+	
+		if(schiff == 1){
+			this.botOrientation = chooseBotOrientation();
+			return player[i].getAvailableDestroyer();
+		} else if(schiff == 2){
+			this.botOrientation = chooseBotOrientation();
+			return player[i].getAvailableFrigate();
+		} else if(schiff == 3){
+			this.botOrientation = 'h';
+			return player[i].getAvailableCorvette();
+		} else if(schiff == 4){
+			this.botOrientation = 'h';
+			return player[i].getAvailableSubmarine();
+		}
+		
+		return null;
+	}
+	
+	public void roundForAI(Player[] player, int i, int fieldSize){
+
+		this.player = player;
+
+		int gegner = 0;
+		int schiff = 0;
+		
+		getAliveEnemys(player, i);
+	
+		setEnemyNumberForAI(player, i, getEnemyNumber(player, i));
+		
+		setDestroyerRdy(false);
+		setFrigateRdy(false);
+		setCorvetteRdy(false);
+		setSubmarineRdy(false);
+		
+		getAllRdyShips(player, i);
+		schiff = chooseShipToShoot();
+
+		this.pos = chooseWhereToShoot(player[gegner-1], player[gegner-1].getPublicField().getField(), fieldSize);
+		this.ship = getAvailableShip(player, i, schiff);
+	}
+	
+	
+	/*
+	public void setShipsToFieldForAI(Player[] player, int i, int fieldSize){
+		Destroyer destroyer[] = player[i].getDestroyer();
+		Frigate frigate[] = player[i].getFrigate();
+		Corvette corvette[] = player[i].getCorvette();
+		Submarine submarine[] = player[i].getSubmarine();
+
+		//ZERSTÖRER
+		for(int d = 0; d < destroyer.length; d++){
+
+			boolean checked;
+			checked = false;
+			String pos;
+			
+			while(!(checked)){
+				
+				pos = setShip(fieldSize);
+				this.botOrientation = setShipOrientation();
+				checked = setShipToField("destroyer", i, pos);
+				
+			}
+			this.pos
+		}
+
+		//FREGATTE
+		for(int f = 0; f < frigate.length; f++){
+
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("frigate", i, pos);
+				
+			}
+
+		}
+
+		//KORVETTE
+		for(int k = 0; k < corvette.length; k++){
+
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("corvette", i, pos);
+				
+			}
+
+		}
+
+		//UBOOT
+		for(int s = 0; s < submarine.length; s++){
+			
+			boolean checked;
+			checked = false;
+		
+			while(!(checked)){
+				String pos;
+				pos = ai.setShip(this.fieldSize);
+				orientation = ai.setShipOrientation();
+				checked = setShipToField("submarine", i, pos);
+				
+			}
+
+		}
+	}
+	*/
 	
 }
 

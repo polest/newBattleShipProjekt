@@ -2,6 +2,9 @@
 package Game;
 
 import java.io.Serializable;
+import java.util.Random;
+
+import KI.ArtificialIntelligence;
 import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
@@ -27,6 +30,10 @@ public class Round implements Serializable{
 	private char orientation;
 	private int alivePlayer;
 	private BattleShipServer server;
+	// AI ÄNDERUNG START
+	Random rn = new Random();
+	ArtificialIntelligence ai = new ArtificialIntelligence();
+	// AI ÄNDERUNG ENDE
 
 	public Round(Player[] player, int fieldSize, BattleShipServer server){
 		this.player = player;
@@ -50,10 +57,12 @@ public class Round implements Serializable{
 	}
 
 	//TODO! KI SCHUSS AUSWAHL
-//	public void setKiShoot(){
-//  out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
-//		server.setAttack(STRING TEXT);
-//	}
+	public void setKiShoot(Ship ship, Player gegner, String pos, char orientation){
+		
+		System.out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
+		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
+		server.setAttack(text);
+	}
 	
 	
 	public void play(){
@@ -190,7 +199,9 @@ public class Round implements Serializable{
 					playerOnTurn++;
 					index = playerOnTurn % player.length;
 					//TODO! KI
-					//player[index].MACH:KI:METHoDE!!
+					System.out.println("KIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+					ai.roundForAI(player, index, this.fieldSize);
+					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());
 				}
 				
 				server.setActive(index);
@@ -199,5 +210,43 @@ public class Round implements Serializable{
 			}
 		}
 	}
+	
+	/*
+	// AI ÄNDERUNG START
+	private void roundForAI(int index){
+		
+		
+
+		if(ship != null){
+			//setKiShoot(ship, player[gegner-1], pos, orientation);
+			//player[gegner-1].getPrivateField().setAttack(ship, koordinaten,orientation, player[gegner-1]);
+			player[i].setShipIsntReady(ship);
+		}
+
+
+		//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
+
+		if(player[gegner-1].getIsAlive() == false){
+			this.colorPrint.println(EPrintColor.PURPLE,"Herzlichen Glückwunsch, sie haben " + player[gegner-1].getPlayerName() + " besiegt.");
+		}
+
+		//überprüft, ob noch Spieler am leben sind. Wenn nicht wird Spiel beendet.
+		if(ende() == 1){
+			this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
+			System.exit(-1);
+		}
+
+		player[i].setActive(false);
+		if(i == player.length-1){
+			player[0].setActive(true);
+		}else{
+			player[i+1].setActive(true);
+		}
+
+	}
+
+	// AI ÄNDERUNG ENDE
+	*/
+	
 }
 
