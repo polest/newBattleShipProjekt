@@ -184,6 +184,7 @@ public class Client implements Runnable{
 					int playerId = Integer.parseInt(id);
 
 					this.roundClient.setActive(playerId, true);
+					this.status.setText("Spieler " + playerNames[playerId] + " ist an der reihe...");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -183,7 +183,7 @@ public class BattleShipServer implements Runnable{
 			if(playerReady < player){
 				int counter = 1;
 				for(int i = playerReady; i < player; i++){
-					playerNames = playerNames.concat("Computer" + counter + ";");
+					playerNames = playerNames.concat("Computer " + counter + ";");
 				}
 			}
 			for(int i = 0; i < this.clientZahl; i++){

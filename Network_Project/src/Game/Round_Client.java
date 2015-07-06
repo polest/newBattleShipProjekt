@@ -193,16 +193,9 @@ public class Round_Client implements Serializable{
 	}
 
 	public void setActive(int id, boolean nextPlayer) {
-		if(id == 0){
-			reloadTime();
-		}
 		
-		if(this.player.getId() == id){
-			//roundView.setActive(id);
-			if(nextPlayer == true){
-				this.playerOnTurn = id;
-			}
-		}
+		this.playerOnTurn = id;
+		
 		this.roundView.setMessage("Spieler " + this.playerNames[playerOnTurn] + " ist an der Reihe!");
 	}
 

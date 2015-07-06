@@ -41,7 +41,6 @@ public class Round implements Serializable{
 		this.orientation = 'h';
 		this.player[0].setActive(true);
 		this.server = server;
-		//		this.play();
 	}
 
 	public Player[] getPlayer() {
@@ -54,33 +53,8 @@ public class Round implements Serializable{
 
 	public void setKiShoot(String ship, String gegner, String pos, String orientation){
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
-		server.setAttack(text);
+		setAttack(ship, gegner, pos, orientation);
 	}
-
-	public void play(){
-		char orientation = 'h';
-		String eingabe;
-		int gegner = 0;
-		int schiff = 0;
-		int counter = 1;
-		while(ende() > 1){
-			for(int i = 0; i < player.length; i++){
-				if(player[i].getIsActive()){
-
-					if(player[i].getIsAlive()){
-
-						if(player[i].checkIfAnyShipIsReady()){
-							server.setPlayerMove(i);
-						}else{
-							player[i+1].setActive(true);
-						}
-					}
-				}
-			}
-		}
-	}
-
-
 
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
@@ -204,7 +178,7 @@ public class Round implements Serializable{
 				if(index == 0){
 					for(int j = 0; j < player.length; j++){
 						player[j].reloadTimeCountdown();
-
+						server.reloadShips();
 					}
 				}
 			}
