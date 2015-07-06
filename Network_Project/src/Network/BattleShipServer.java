@@ -68,13 +68,13 @@ public class BattleShipServer implements Runnable{
 		this.sortedPlayerCrp = new ClientRequestProcessor[clientZahl];
 		this.player = player;
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		connection.setResizable(false);
 		connection.setSize(200, 200);
 		connection.setVisible(true);
 		connection.add(status);
 		status.setText("warten auf Spieler...");
-		status.setBounds(10,0, 100, 30);
+		status.setBounds(20,0, 100, 30);
 		status.setVisible(true);
-		System.out.println("laaabeeel");
 
 		if(clientZahl == 0){
 			clientZahl = DEFAULT_CLIENTS;

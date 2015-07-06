@@ -2,18 +2,15 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 import Tools.ImagePanel;
 
@@ -37,7 +34,7 @@ public class Options_View {
 	public Options_View(int width, int height){
 		this.width = width;
 		this.height = height;
-		this.optionsView = new ImagePanel("Resources/unterwasser.jpg");
+		this.optionsView = new ImagePanel("Resources/unterwasser3.png");
 		this.totalShipSize = 0;
 		this.playerCount = 0;
 		this.initOptionsPan(); 
