@@ -39,14 +39,32 @@ public class ArtificialIntelligence {
 		return pos;
 	}
 
-	public Player getGegner() {
-		return gegner;
+	public String getGegnerAsString() {
+		return ""+this.gegnerNumber;
 	}
 
 	public Ship getShip() {
 		return ship;
 	}
 
+	public String getShipAsString(){
+		
+		if(this.ship instanceof Destroyer){
+			return "destroyer";
+		}
+		else if(this.ship instanceof Frigate){
+			return "frigate";
+		}
+		else if(this.ship instanceof Corvette){
+			return "corvette";
+		}
+		else if(this.ship instanceof Submarine){
+			return "submarine";
+		}
+		
+		return "";
+	}
+	
 	public boolean isDestroyerRdy() {
 		return isDestroyerRdy;
 	}
@@ -83,6 +101,11 @@ public class ArtificialIntelligence {
 		return botOrientation;
 	}
 
+	public String getOrientationAsString() {
+		return ""+botOrientation;
+	}
+
+	
 	public void setBotOrientation(char botOrientation) {
 		this.botOrientation = botOrientation;
 	}

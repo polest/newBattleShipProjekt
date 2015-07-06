@@ -57,7 +57,7 @@ public class Round implements Serializable{
 	}
 
 	//TODO! KI SCHUSS AUSWAHL
-	public void setKiShoot(Ship ship, Player gegner, String pos, char orientation){
+	public void setKiShoot(String ship, String gegner, String pos, String orientation){
 		
 		System.out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
@@ -205,7 +205,7 @@ public class Round implements Serializable{
 
 				if(player[index].isPlayerBot()){
 					ai.roundForAI(player, index, this.fieldSize);
-					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());
+					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
 				}
 
 				server.setActive(index);
