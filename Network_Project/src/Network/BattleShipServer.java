@@ -221,13 +221,14 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void start(){
-		for(int j = 0; j < clientZahl; j++){
+		for(int j = 0; j < player; j++){
 			if(j > 0){
 				this.initGame.incrementPlayerId();
 			}
 			this.initGame.initPlayerBattleShip();
-
-			crp[j].verarbeiteAnfragen(this);
+			if(j < clientZahl){
+				crp[j].verarbeiteAnfragen(this);
+			}
 		}
 		connection.dispose();
 		//mainControler.ChangeShipsView();
