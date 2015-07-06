@@ -6,8 +6,6 @@ import java.util.Random;
 import KI.ArtificialIntelligence;
 
 import Network.BattleShipServer;
-import SaveGame.Save;
-import Ships.Ship;
 
 
 public class Round implements Serializable{
@@ -185,8 +183,6 @@ public class Round implements Serializable{
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
 				}
-
-				server.setActive(index);
 				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
 				
 			}
