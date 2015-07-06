@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import Game.Round_Client;
 import Main.Main_Controler;
 
 public class Client implements Runnable{
@@ -15,6 +16,7 @@ public class Client implements Runnable{
 	private PrintStream out; // server-output stream
 	private Main_Controler mainControler;
 	private String[] playerNames;
+	private Round_Client roundClient;
 
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
@@ -75,6 +77,16 @@ public class Client implements Runnable{
 		out.println("getPlayerNames");
 	}
 
+	public void addRoundClient(Round_Client roundClient){
+		this.roundClient = roundClient;
+	}
+	
+	public void setAttack(String ship, String gegner, String pos, String orientation){
+		out.println("setAttack");
+		out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
+	}
+	
+	
 	
 	@Override
 	public void run() {
@@ -123,7 +135,64 @@ public class Client implements Runnable{
 					e.printStackTrace();
 				}
 			}
-
+			else if(message.equals("setId") ){
+				try {
+					String id = in.readLine();
+					int playerId = Integer.parseInt(id);
+					this.mainControler.setPlayerId(playerId);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("setMove") ){
+				try {
+					String id = in.readLine();
+					int playerId = Integer.parseInt(id);
+					
+					this.roundClient.setPlayerOnTurn(playerId);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("setDead") ){
+				try {
+					String id = in.readLine();
+					int playerId = Integer.parseInt(id);
+					
+					this.roundClient.setPlayerDead(playerId);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("setActive") ){
+				try {
+					String id = in.readLine();
+					int playerId = Integer.parseInt(id);
+					
+					this.roundClient.setActive(playerId);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else if(message.equals("attackReply") ){
+				try {
+					String gegner = in.readLine();
+					String reply = in.readLine();
+					String pos = in.readLine();
+					String orientation = in.readLine();
+					
+					String[] values = reply.split(";");
+					
+					this.roundClient.setAttackReply(gegner, values, pos, orientation);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 
 		//TODO Quit

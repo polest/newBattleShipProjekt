@@ -159,6 +159,10 @@ public class Main_Controler implements Serializable{
 	public void changeToRoundView(){
 		client.getPlayerNames();
 	}
+	
+	public void setPlayerId(int id){
+		initGameClient.setPlayerId(id);
+	}
 
 	public void startRoundView(String[] names){
 		int fieldSize = initGameClient.getFieldSize();
@@ -166,13 +170,15 @@ public class Main_Controler implements Serializable{
 		player.setBattleFieldView(initGameView.getBattleFieldView() );
 		int playerLength = initGameClient.getPlayerLength();
 
-		roundClient = new Round_Client(player, fieldSize, playerLength, names);
+		roundClient = new Round_Client(player, fieldSize, playerLength, names, client);
 		Round_View roundView = roundClient.getRoundView();
+		
 		main_view.addPanel(roundView.getPanel(), "roundView"); 
 		main_view.changeShownPan("roundView");
+		client.addRoundClient(roundClient);
 		
 		if(server != null){
-			round = new Round(this.initGame.getPlayer(), fieldSize);
+			round = new Round(this.initGame.getPlayer(), fieldSize, server);
 			server.addRound(round);
 		}
 	}
@@ -234,8 +240,7 @@ public class Main_Controler implements Serializable{
 			portField.setBounds(100, 50, 100, 30);
 			portField.setVisible(true);
 
-
-			button.setBounds(150, 100, 50, 50);
+			button.setBounds(200, 100, 50, 30);
 			pan.add(button);
 			button.addActionListener(new AddressOkListener());
 
@@ -306,7 +311,6 @@ public class Main_Controler implements Serializable{
 		public void actionPerformed(ActionEvent e) {
 			Instructions ins = new Instructions();
 		}
-
 	}
 
 	/**
@@ -337,6 +341,8 @@ public class Main_Controler implements Serializable{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			JButton btn = (JButton)e.getSource();
+			btn.setEnabled(false);
 			client.setReady(initGameView.getName());
 		}
 

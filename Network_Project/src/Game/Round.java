@@ -8,16 +8,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.BorderFactory;
-
 import java.io.Serializable;
-
-import javax.swing.BorderFactory;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
+
+import Network.BattleShipServer;
 import SaveGame.Save;
 import Ships.Ship;
 import Tools.ColoredPrint;
@@ -44,8 +41,9 @@ public class Round implements Serializable{
 	private int mouseY;
 	private int oldBtnY;
 	private int alivePlayer;
+	private BattleShipServer server;
 
-	public Round(Player[] player, int fieldSize){
+	public Round(Player[] player, int fieldSize, BattleShipServer server){
 		this.player = player;
 		this.playerOnTurn = 0;
 		this.alivePlayer = player.length;
@@ -54,8 +52,9 @@ public class Round implements Serializable{
 		this.colorPrint = new ColoredPrint();
 		this.fieldSize = fieldSize;
 		this.orientation = 'h';
-//		this.roundView = new Round_View(this.fieldSize, player);
-		//this.play();
+		this.player[0].setActive(true);
+		this.server = server;
+		//		this.play();
 	}
 
 	public Player[] getPlayer() {
@@ -72,7 +71,6 @@ public class Round implements Serializable{
 		int gegner = 0;
 		int schiff = 0;
 		int counter = 1;
-
 		while(ende() > 1){
 			for(int i = 0; i < player.length; i++){
 				if(player[i].getIsActive()){
@@ -80,10 +78,7 @@ public class Round implements Serializable{
 					if(player[i].getIsAlive()){
 
 						if(player[i].checkIfAnyShipIsReady()){
-
-
-							//TODO in den Event einbauen
-							//						
+							server.setPlayerMove(i);
 						}else{
 							player[i+1].setActive(true);
 						}
@@ -98,39 +93,39 @@ public class Round implements Serializable{
 
 	}
 
-//	/**
-//	 * @param pos - die zu überprüfenden Koordinaten 
-//	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
-//	 */
-//	private int[] checkPos(String pos){
-//		try{
-//			pos = pos.replaceAll("\\s+", "");
-//
-//			String[] sKoordinaten = pos.split(",");
-//			int[] iKoordinaten = new int[2];
-//
-//			if(sKoordinaten.length != 2){
-//				return null;
-//			}
-//			for(int i = 0; i < 2; i++){
-//				int toInt = Integer.parseInt(sKoordinaten[i]);
-//				if(toInt < 0 || toInt > fieldSize){
-//					return null;
-//				}
-//				else{
-//					iKoordinaten[i] = toInt;
-//				}
-//			}
-//
-//			return iKoordinaten;
-//		}
-//		catch(Exception e){
-//			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
-//
-//		}
-//		return null;
-//	}
-//
+	/**
+	 * @param pos - die zu überprüfenden Koordinaten 
+	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
+	 */
+	private int[] checkPos(String pos){
+		try{
+			pos = pos.replaceAll("\\s+", "");
+
+			String[] sKoordinaten = pos.split(",");
+			int[] iKoordinaten = new int[2];
+
+			if(sKoordinaten.length != 2){
+				return null;
+			}
+			for(int i = 0; i < 2; i++){
+				int toInt = Integer.parseInt(sKoordinaten[i]);
+				if(toInt < 0 || toInt > fieldSize){
+					return null;
+				}
+				else{
+					iKoordinaten[i] = toInt;
+				}
+			}
+
+			return iKoordinaten;
+		}
+		catch(Exception e){
+			this.colorPrint.println(EPrintColor.RED, "Ungültige Eingabe");
+
+		}
+		return null;
+	}
+
 
 	public int ende(){
 		int counter = 0;
@@ -143,117 +138,66 @@ public class Round implements Serializable{
 	}
 
 
+	public void setAttack(String shipString, String gegnerString, String pos, String orientationString){
+		int index = playerOnTurn % player.length;
+		
+		gegner = Integer.parseInt(gegnerString);
+		orientation = orientationString.charAt(0);
 
-//	private class PositionListener implements ActionListener{
-//		public void actionPerformed(ActionEvent e) {
-//			int index = playerOnTurn % player.length;
-//			if(gegner != index){
-//				JButton btn = (JButton)e.getSource();
-//
-//				String pos = btn.getActionCommand();
-//				int koords[] = new int[2];
-//				koords = checkPos(pos);
-//				Ship ship = null;
-//
-//				if(schiff == 1){
-//					ship = player[index].getAvailableDestroyer();
-//				}
-//				else if(schiff == 2){
-//					ship = player[index].getAvailableFrigate();
-//				}
-//				else if(schiff == 3){
-//					ship = player[index].getAvailableCorvette();
-//				}
-//				else if(schiff == 4){
-//					ship = player[index].getAvailableSubmarine();
-//				}
-//				else{
-//					roundView.setMessage("Schiff muss ausgewählt werden!");
-//				}
-//
-//				if(ship != null){
-//					player[gegner].getPrivateField().setAttack(ship, koords,orientation, player[gegner]);
-//					player[gegner].getPublicBattleFieldView().setAttack(ship, koords,orientation);
-//					roundView.getPanel().repaint();
-//					roundView.getPanel().revalidate();
-//
-//					player[index].setShipIsntReady(ship);
-//
-//
-//					//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-//					if(player[gegner].getIsAlive() == false){
-//						roundView.setMessage("GEGNER WURDE BESIEGT!!!");
-//						roundView.setPlayerDead(gegner);
-//						alivePlayer--;
-//						if(alivePlayer == 1){
-//							roundView.setMessage("Spieler " + player[playerOnTurn].getPlayerName() + "hat gewonnen!");
-//						}
-//					}
-//					//			
-//					//			if(ende() == 1){
-//					//				this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-//					//				System.exit(-1);
-//					//			}
-//
-//					player[index].setActive(false);
-//					System.out.println("playerOnTurn: " + playerOnTurn);
-//					playerOnTurn++;	
-//					index = playerOnTurn % player.length;
-//
-//					while(player[index].getIsAlive() == false){
-//						if(player[index].checkIfAnyShipIsReady() == false){
-//							roundView.setMessage("Spieler " + player[index].getPlayerName() + "hat keine geladenen Schiffe!");
-//							playerOnTurn++;
-//							index = playerOnTurn % player.length;
-//						}
-//					}
-//					player[index].setActive(true);
-//					roundView.setActive(index);
-//
-//					System.out.println("playerOnTurn: " + playerOnTurn);
-//
-//
-//				}
-//			}
-//		}
-//	}
-	
-//	private class ChangePlayerListener implements MouseListener{
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			JLabel selectedLabel = (JLabel)e.getSource();
-//			JLabel[] switchableLabels = roundView.getSwitchLabel();
-//
-//			for(int i = 0; i < switchableLabels.length; i++){
-//				if(selectedLabel == switchableLabels[i]){
-//					roundView.changePlayer(i);
-//				}
-//			}
-//
-//			gegner = roundView.getChoosenPlayer();
-//			System.out.println("Gegner ist Spieler: " + gegner);
-//		}
-//
-//		@Override
-//		public void mousePressed(MouseEvent e) {
-//			// TODO Auto-generated method stub	
-//		}
-//
-//		@Override
-//		public void mouseReleased(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//		}
-//
-//		@Override
-//		public void mouseEntered(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//		}
-//
-//		@Override
-//		public void mouseExited(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//	}
+		if(gegner != index){
 
+			int coords[] = new int[2];
+			coords = checkPos(pos);
+			Ship ship = null;
+
+			if(shipString.equals("destroyer") ){
+				ship = player[index].getAvailableDestroyer();
+			}
+			else if(shipString.equals("frigate") ){
+				ship = player[index].getAvailableFrigate();
+			}
+			else if(shipString.equals("corvette") ){
+				ship = player[index].getAvailableCorvette();
+			}
+			else if(shipString.equals("submarine") ){
+				ship = player[index].getAvailableSubmarine();
+			}
+			else{
+				server.attackFailed();
+			}
+
+			if(ship != null){
+				String reply = player[gegner].getPrivateField().setAttack(ship, coords , orientation, player[gegner]);
+				player[index].setShipIsntReady(ship);
+				server.replyAttack(gegner, reply, pos, orientation);
+				//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
+				if(player[gegner].getIsAlive() == false){
+					server.setPlayerIsDead(gegner);
+					alivePlayer--;
+					if(alivePlayer == 1){
+						server.playerWins(index);
+					}
+				}
+
+				player[index].setActive(false);
+				System.out.println("playerOnTurn: " + playerOnTurn);
+				playerOnTurn++;	
+				index = playerOnTurn % player.length;
+
+				while(player[index].getIsAlive() == false){
+					if(player[index].checkIfAnyShipIsReady() == false){
+						server.PlayerHasNoLoadedShips(index);
+						playerOnTurn++;
+						index = playerOnTurn % player.length;
+					}
+				}
+				player[index].setActive(true);
+				server.setActive(index);
+				System.out.println("playerOnTurn: " + playerOnTurn);
+
+
+			}
+		}
+	}
 }
+

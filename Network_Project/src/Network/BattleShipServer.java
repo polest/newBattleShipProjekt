@@ -49,6 +49,9 @@ public class BattleShipServer implements Runnable{
 	private Main_Controler mainControler;
 	private Round round;
 	private int loggedPlayer;
+	private String[] sortedNames;
+	private ClientRequestProcessor[] sortedPlayerCrp;
+	private int playerOnTurn;
 
 
 	/**
@@ -63,7 +66,7 @@ public class BattleShipServer implements Runnable{
 		this.initGame = initGame;
 		this.playerNames = "";
 		this.loggedPlayer = 0;
-
+		this.sortedPlayerCrp = new ClientRequestProcessor[clientZahl];
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setSize(200, 200);
 		connection.setVisible(true);
@@ -133,7 +136,7 @@ public class BattleShipServer implements Runnable{
 
 	public void addRound(Round round){
 		this.round = round;
-		
+
 	}
 
 	public void setShipsToPlayer(String ship, String pos, ClientRequestProcessor crp){
@@ -145,26 +148,65 @@ public class BattleShipServer implements Runnable{
 
 	}
 
+	public void setPlayerMove(int id){
+		this.playerOnTurn = id;
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].setMove(id);
+
+		}
+	}
+
 	public void setPlayerReadyToPlay(ClientRequestProcessor crp, String name) {
-		
+
 		if(name.equals("")){
 			name = "Spieler" + ( playerReady + 1 );
 		}
-		
+
+		this.crp[playerReady].setPlayerId(playerReady);
+
 		playerNames = playerNames.concat(";" + name);
+		sortCrpToId();
 		playerReady++;
 		if(playerReady >= clientZahl){
 			for(int i = 0; i < this.clientZahl; i++){
-				this.crp[i].startGame();
+				this.sortedPlayerCrp[i].startGame();
 			}
 		}
+	}
+
+	public void sortCrpToId(){
+		boolean found = false;
+		for(int i = 0; i < this.clientZahl; i++){
+			if(found == false){
+				if(this.crp[playerReady] == this.crp[i]){
+					this.sortedPlayerCrp[playerReady] = this.crp[i];
+					found = true;
+				}
+			}
+		}
+	}
+
+	public void setAttack(String txt){
+		txt = txt.trim();
+		String[] values = txt.split(";");
+String ship = values[0];
+		String gegner = values[1];
+		String pos = values[2];
+		String orientation = values[3];
+
+		round.setAttack(ship, gegner, pos, orientation);
+
+	}
+
+	public void attackFailed(){
+		sortedPlayerCrp[playerOnTurn].attackFailed();
 	}
 
 	public String getPlayerNames(){
 		return playerNames;
 	}
-	
-	
+
+
 	@Override
 	public void run() {
 		acceptClientConnectRequests();
@@ -180,5 +222,36 @@ public class BattleShipServer implements Runnable{
 		}
 		connection.dispose();
 		//mainControler.ChangeShipsView();
+	}
+
+	public void setPlayerIsDead(int gegner) {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].setDead(gegner);
+		}
+	}
+
+	public void playerWins(int index) {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].setWinner(index, this.sortedNames[index]);
+		}
+
+	}
+
+	public void PlayerHasNoLoadedShips(int index) {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].playerHasNoLoadedShips(index, this.sortedNames[index]);
+		}
+	}
+
+	public void setActive(int index) {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].setActive(index);
+		}
+	}
+
+	public void replyAttack(int gegner, String reply, String coords, char orientation) {
+		for(int i = 0; i < this.clientZahl; i++){
+			this.sortedPlayerCrp[i].setAttackReply(gegner, reply, coords, orientation);
+		}
 	}
 }

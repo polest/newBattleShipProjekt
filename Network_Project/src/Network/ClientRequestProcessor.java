@@ -29,7 +29,7 @@ public class ClientRequestProcessor implements Runnable{
 	private BattleShipServer server;
 	private JFrame connection = new JFrame();
 	private JLabel status = new JLabel();
-
+	private int playerId;
 
 	/**
 	 * @param socket
@@ -89,9 +89,26 @@ public class ClientRequestProcessor implements Runnable{
 
 
 	public void startGame(){
+		status.setText("Bereit... warte auf die anderen Spieler...");
 		out.println("startGame");
 	}
 
+	public void setPlayerId(int id){
+		this.playerId = id;
+		out.println("setId");
+		out.println(this.playerId);
+		}
+
+	public void setMove(int id){
+		out.println("setMove");
+		out.println(id);
+	}
+	
+	
+	public void attackFailed(){
+		this.status.setText("Angriff fehlgeschlagen! Erneut versuchen!");
+	}
+	
 	public void start() {
 
 	}
@@ -143,7 +160,17 @@ public class ClientRequestProcessor implements Runnable{
 				String names = server.getPlayerNames();
 				out.println("setPlayerNames");
 				out.println(names);
-				
+
+			}
+			else if(input.equals("setAttack")){
+				try {
+					String txt = in.readLine();
+					server.setAttack(txt);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}while(!(input.equals("quit")));
 		try {
@@ -151,6 +178,32 @@ public class ClientRequestProcessor implements Runnable{
 		} catch (IOException e2) {
 
 		}
+	}
+
+	public void setDead(int gegner) {
+		out.println("setDead");
+		out.println(gegner);
+	}
+
+	public void setWinner(int index, String name) {
+		this.status.setText("Spieler "+ name + " hat gewonnen!!!");
+	}
+
+	public void playerHasNoLoadedShips(int index, String name) {
+		this.status.setText("Spieler "+ name + " muss aussetzen!");
+	}
+
+	public void setActive(int index) {
+		out.println("setActive");
+		out.println(index);
+	}
+
+	public void setAttackReply(int gegner, String reply, String coords, char orientation) {
+		out.println("attackReply");
+		out.println(gegner);	
+		out.println(reply);
+		out.println(coords);
+		out.println(orientation);
 	}
 
 

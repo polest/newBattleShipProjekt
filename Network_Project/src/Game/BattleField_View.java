@@ -36,17 +36,7 @@ public class BattleField_View implements Serializable{
 	private int cellSize;
 	private ImageIcon empty;
 	private JLabel background;
-	
-	public BattleField_View(ImagePanel panel, int fieldSize, int width, int startX, int startY){
-		this.panel = panel;
-		this.width = width;
-		this.height = width;
-		this.startX = startX;
-		this.startY = startY;
-		this.fieldSize = fieldSize;
-		this.empty = new ImageIcon("Resources/empty.png");
-		initField();
-	}
+
 	/**
 	 * @param panel
 	 * @param fieldSize
@@ -58,7 +48,7 @@ public class BattleField_View implements Serializable{
 	 * ruft initField auf
 	 * setzt Parameter
 	 */
-	
+
 	public BattleField_View(JPanel panel, int fieldSize, int width, int startX, int startY){
 		this.panel = panel;
 		this.width = width;
@@ -69,8 +59,16 @@ public class BattleField_View implements Serializable{
 		this.empty = new ImageIcon("Resources/empty.png");
 		initField();
 	}
-	
 
+	public BattleField_View(int fieldSize, int width, int startX, int startY){
+		this.width = width;
+		this.height = width;
+		this.startX = startX;
+		this.startY = startY;
+		this.fieldSize = fieldSize;
+		this.empty = new ImageIcon("Resources/empty.png");
+		initField();
+	}
 
 	/**
 	 * @param ship
@@ -84,8 +82,8 @@ public class BattleField_View implements Serializable{
 		int x = coords[0];
 		int y = coords[1];
 	}
-	
-	
+
+
 
 	/**
 	 * JPanel Getter
@@ -95,7 +93,7 @@ public class BattleField_View implements Serializable{
 		return battleFieldViewPanel;
 	}
 
-	
+
 	/**
 	 * JButton[][] Getter
 	 * @return ButtonField
@@ -115,7 +113,7 @@ public class BattleField_View implements Serializable{
 		}
 	}
 
-	
+
 	/**
 	 * Methode um die Listener einer Koordinate zu entfernen
 	 * ActionListener wird entfernt
@@ -169,6 +167,9 @@ public class BattleField_View implements Serializable{
 			}
 		}
 
+		ImageIcon meer = new ImageIcon("Resources/Meer2.jpg");
+		meer.setImage(meer.getImage().getScaledInstance(size,size, Image.SCALE_DEFAULT));
+		this.background.setIcon(meer);
 		this.background.setSize(size, size);
 	}
 
@@ -240,7 +241,9 @@ public class BattleField_View implements Serializable{
 		this.battleFieldViewPanel.add(background);
 
 		this.battleFieldViewPanel.setBounds(30,30,size,size);
-		this.panel.add(this.battleFieldViewPanel);
+		if(this.panel != null){
+			this.panel.add(this.battleFieldViewPanel);
+		}
 	}
 
 
@@ -309,6 +312,6 @@ public class BattleField_View implements Serializable{
 		}
 		this.battleFieldViewPanel.repaint();
 		this.battleFieldViewPanel.revalidate();
-			
+
 	}
 }

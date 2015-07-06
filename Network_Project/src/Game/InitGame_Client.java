@@ -77,6 +77,10 @@ public class InitGame_Client implements Serializable{
 		this.fieldSize = fieldSize;
 		this.configureGame();
 	}
+	
+	public void setPlayerId(int id){
+		this.player.setId(id);
+	}
 
 	public Player getPlayer() {
 		return player;

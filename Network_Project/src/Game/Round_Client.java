@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 
+import Network.Client;
 import SaveGame.Save;
 import Ships.Corvette;
 import Ships.Destroyer;
@@ -51,8 +52,9 @@ public class Round_Client implements Serializable{
 	private int alivePlayer;
 	private int playerLength;
 	private String[] playerNames;
+	private Client client;
 
-	public Round_Client(Player player, int fieldSize, int playerLength, String[] playerNames){
+	public Round_Client(Player player, int fieldSize, int playerLength, String[] playerNames, Client client){
 		this.player = player;
 		this.playerOnTurn = 0;
 		this.alivePlayer = playerLength;
@@ -63,14 +65,13 @@ public class Round_Client implements Serializable{
 		this.orientation = 'h';
 		this.playerLength = playerLength;
 		this.playerNames = playerNames;
+		this.client = client;
 		this.roundView = new Round_View(player, this.fieldSize, playerLength, playerNames);
 		//this.play();
 		addListener();
 		setShipText();
 	}
 
-	public Round_Client(){
-	}
 
 	public Round_View getRoundView(){
 		return this.roundView;
@@ -98,37 +99,11 @@ public class Round_Client implements Serializable{
 		roundView.setSubmarine(player.getSubmarine().length);
 	}
 
-	public void play(){
-//		char orientation = 'h';
-//		String eingabe;
-//		int gegner = 0;
-//		int schiff = 0;
-//		int counter = 1;
-//
-//		while(ende() > 1){
-//			for(int i = 0; i < playerLength; i++){
-//				if(player[i].getIsActive()){
-//
-//					if(player[i].getIsAlive()){
-//
-//						if(player[i].checkIfAnyShipIsReady()){
-//
-//
-//							//TODO in den Event einbauen
-//							//						
-//						}else{
-//							player[i+1].setActive(true);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-//		for(int j = 0; j < player.length; j++){
-//			player[j].reloadTimeCountdown();
-//		}
-
+	public void setPlayerOnTurn(int id){
+		this.playerOnTurn = id;
+		this.roundView.setActive(id);
 	}
+
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
 	 * @return Gibt zurück, ob die eingegebenen Koordinaten korrekt sind
@@ -182,6 +157,23 @@ public class Round_Client implements Serializable{
 		}
 	}
 
+
+	public void setPlayerDead(int id) {
+		roundView.setPlayerDead(id);
+	}
+
+	public void setActive(int id) {
+		if(this.player.getId() == id){
+			roundView.setActive(id);
+		}
+	}
+
+
+	public void setAttackReply(String gegner, String[] values, String pos, String orientation) {
+		int[] coords = checkPos(pos);	
+		roundView.setAttackReply(gegner, values, coords, orientation);
+	}
+
 	private void setShipsOrientation(int x, int y ){
 		JButton[][] field = roundView.getClickField();
 		int length = 0;
@@ -195,37 +187,42 @@ public class Round_Client implements Serializable{
 			}	
 		}
 
-		if(gegner != playerOnTurn){
+		if(player.getId() == playerOnTurn){
 
-			if(schiff != 0){
+			if(gegner != playerOnTurn){
 
-				if(schiff == 1){
-					length = Destroyer.shootArea;
-				}
-				else if(schiff == 2){
-					length = Frigate.shootArea;
-				}
-				else if(schiff == 3){
-					length = Corvette.shootArea;
-				}
-				else if(schiff == 4){
-					length = Submarine.shootArea;
-				}
+				if(schiff != 0){
 
-				if(orientation == 'h'){
-					for(int i = (x-1); i < (x-1)+length; i++){
-						field[i][y-1].setBorder(BorderFactory.createLineBorder(Color.green));
+					if(schiff == 1){
+						length = Destroyer.shootArea;
+					}
+					else if(schiff == 2){
+						length = Frigate.shootArea;
+					}
+					else if(schiff == 3){
+						length = Corvette.shootArea;
+					}
+					else if(schiff == 4){
+						length = Submarine.shootArea;
+					}
+
+					if(orientation == 'h'){
+						for(int i = (x-1); i < (x-1)+length; i++){
+							field[i][y-1].setBorder(BorderFactory.createLineBorder(Color.green));
+						}
+					}
+					else{
+						for(int i = (y-1); i < (y-1)+length; i++){
+							field[x-1][i].setBorder(BorderFactory.createLineBorder(Color.green));
+						}
 					}
 				}
 				else{
-					for(int i = (y-1); i < (y-1)+length; i++){
-						field[x-1][i].setBorder(BorderFactory.createLineBorder(Color.green));
-					}
-
+					field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
 				}
 			}
 			else{
-				field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
+				field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));
 			}
 		}
 		else{
@@ -235,74 +232,37 @@ public class Round_Client implements Serializable{
 
 	private class PositionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			int index = 0;
-			//playerOnTurn % player.length;
-			if(gegner != index){
+			if(gegner != playerOnTurn){
 				JButton btn = (JButton)e.getSource();
 
 				String pos = btn.getActionCommand();
 				int koords[] = new int[2];
 				koords = checkPos(pos);
 				Ship ship = null;
+				String shipString = "";
 
 				if(schiff == 1){
 					ship = player.getAvailableDestroyer();
+					shipString = "destroyer";
 				}
 				else if(schiff == 2){
 					ship = player.getAvailableFrigate();
+					shipString = "frigate";
 				}
 				else if(schiff == 3){
 					ship = player.getAvailableCorvette();
+					shipString = "corvette";
 				}
 				else if(schiff == 4){
 					ship = player.getAvailableSubmarine();
+					shipString = "submarine";
 				}
 				else{
 					roundView.setMessage("Schiff muss ausgewählt werden!");
 				}
 
 				if(ship != null){
-//					player[gegner].getPrivateField().setAttack(ship, koords,orientation, player[gegner]);
-//					player[gegner].getPublicBattleFieldView().setAttack(ship, koords,orientation);
-//					roundView.getPanel().repaint();
-//					roundView.getPanel().revalidate();
-//
-//					player[index].setShipIsntReady(ship);
-//
-//
-//					//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-//					if(player[gegner].getIsAlive() == false){
-//						roundView.setMessage("GEGNER WURDE BESIEGT!!!");
-//						roundView.setPlayerDead(gegner);
-//						alivePlayer--;
-//						if(alivePlayer == 1){
-//							roundView.setMessage("Spieler " + player[playerOnTurn].getPlayerName() + "hat gewonnen!");
-//						}
-//					}
-//					//			
-//					//			if(ende() == 1){
-//					//				this.colorPrint.println(EPrintColor.GREEN, "Herzlichen Glückwunsch, Spieler " + player[i].getPlayerName() + " hat gewonnen.");
-//					//				System.exit(-1);
-//					//			}
-//
-//					player[index].setActive(false);
-//					System.out.println("playerOnTurn: " + playerOnTurn);
-//					playerOnTurn++;	
-//					index = playerOnTurn % player.length;
-//
-//					while(player[index].getIsAlive() == false){
-//						if(player[index].checkIfAnyShipIsReady() == false){
-//							roundView.setMessage("Spieler " + player[index].getPlayerName() + "hat keine geladenen Schiffe!");
-//							playerOnTurn++;
-//							index = playerOnTurn % player.length;
-//						}
-//					}
-//					player[index].setActive(true);
-//					roundView.setActive(index);
-//
-//					System.out.println("playerOnTurn: " + playerOnTurn);
-
-
+					client.setAttack(shipString, (""+gegner), pos, (""+orientation) );
 				}
 			}
 		}

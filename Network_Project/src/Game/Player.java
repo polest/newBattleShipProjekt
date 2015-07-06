@@ -51,7 +51,7 @@ public class Player implements Serializable{
 	private int frigateIndex;
 	private int corvetteIndex;
 	private int submarineIndex;
-
+	private int playerId;
 
 	/**
 	 * Konstruktor der Klasse Player
@@ -95,6 +95,13 @@ public class Player implements Serializable{
 
 	}
 
+	public void setId(int id){
+		this.playerId = id;
+	}
+	
+	public int getId(){
+		return this.playerId;
+	}
 
 	/**
 	 * Getter für totalShips
