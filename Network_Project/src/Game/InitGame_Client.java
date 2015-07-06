@@ -24,7 +24,7 @@ import Tools.ColoredPrint;
 import Tools.ColoredPrint.EPrintColor;
 
 public class InitGame_Client implements Serializable{
-	 
+
 	private static final long serialVersionUID = 988834907748712441L;
 
 	//	private Options gameOptions;
@@ -73,7 +73,7 @@ public class InitGame_Client implements Serializable{
 		this.fieldSize = fieldSize;
 		this.configureGame();
 	}
-	
+
 	public void setPlayerId(int id){
 		this.player.setId(id);
 	}
@@ -299,11 +299,6 @@ public class InitGame_Client implements Serializable{
 
 						if(checked == true){
 							client.sendShipToServer("destroyer; " + pos);
-
-							//							TODO CLIENTREQUESTPROZEESOR!
-							//							out.println("setShipFromClient");
-							//							out.println("destroyer");
-							//							out.println(pos);
 							destroyerCount--;
 							initGameView.decrementDestroyer(destroyerCount);
 							if(destroyerCount <= 0){
@@ -313,51 +308,48 @@ public class InitGame_Client implements Serializable{
 						}
 					}
 					else if(choosenShip instanceof Frigate){
-						//						checked = initGame.setShipToField(choosenShip, pos);
-						//
-						//						if(checked == true){
-						//							out.println("setShipFromClient");
-						//							out.println("frigate");
-						//							out.println(pos);
-						//							frigateCount--;
-						//							initGameView.decrementFrigate(frigateCount);
-						//							if(frigateCount <= 0){
-						//								initGameView.setFrigateDisabled();
-						//								choosenShip = null;
-						//							}
-						//						}
+						checked = setShipToField(choosenShip, pos);
+						if(checked == true){
+
+							frigateCount--;
+							initGameView.decrementFrigate(frigateCount);
+							if(frigateCount <= 0){
+								initGameView.setFrigateDisabled();
+								choosenShip = null;
+							}
+						}
 					}
 					else if(choosenShip instanceof Corvette){
-						//						checked = initGame.setShipToField(choosenShip, pos);
-						//
-						//						if(checked == true){
-						//							out.println("setShipFromClient");
-						//							out.println("corvette");
-						//							out.println(pos);
-						//
-						//							corvetteCount--;
-						//							initGameView.decrementCorvette(corvetteCount);
-						//							if(corvetteCount <= 0){
-						//								initGameView.setCorvetteDisabled();
-						//								choosenShip = null;
-						//							}
-						//						}
+						checked = initGame.setShipToField(choosenShip, pos);
+
+						if(checked == true){
+							out.println("setShipFromClient");
+							out.println("corvette");
+							out.println(pos);
+
+							corvetteCount--;
+							initGameView.decrementCorvette(corvetteCount);
+							if(corvetteCount <= 0){
+								initGameView.setCorvetteDisabled();
+								choosenShip = null;
+							}
+						}
 					}
 
 					else if(choosenShip instanceof Submarine){
-						//						checked = initGame.setShipToField(choosenShip, pos);
-						//						if(checked == true){
-						//							out.println("setShipFromClient");
-						//							out.println("destroyer");
-						//							out.println(pos);
-						//
-						//							submarineCount--;
-						//							initGameView.decrementSubmarine(submarineCount);
-						//							if(submarineCount <= 0){
-						//								initGameView.setSubmarineDisabled();
-						//								choosenShip = null;
-						//							}
-						//						}
+						checked = initGame.setShipToField(choosenShip, pos);
+						if(checked == true){
+							out.println("setShipFromClient");
+							out.println("destroyer");
+							out.println(pos);
+
+							submarineCount--;
+							initGameView.decrementSubmarine(submarineCount);
+							if(submarineCount <= 0){
+								initGameView.setSubmarineDisabled();
+								choosenShip = null;
+							}
+						}
 					}
 					totalShips--;
 					System.out.println("totalShips: " + totalShips);
