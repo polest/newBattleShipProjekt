@@ -56,10 +56,7 @@ public class Round implements Serializable{
 		this.player = player;
 	}
 
-	//TODO! KI SCHUSS AUSWAHL
 	public void setKiShoot(String ship, String gegner, String pos, String orientation){
-		
-		System.out.println(ship + ";" + gegner + ";" + pos + ";" + orientation);
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
 		server.setAttack(text);
 	}
