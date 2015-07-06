@@ -52,6 +52,7 @@ public class BattleShipServer implements Runnable{
 	private String[] sortedNames;
 	private int playerOnTurn;
 	private int player;
+	private int ki;
 
 
 	/**
@@ -68,6 +69,7 @@ public class BattleShipServer implements Runnable{
 		this.loggedPlayer = 0;
 		this.player = player;
 		this.sortedNames = new String[player];
+		this.ki = player - clientZahl;
 		connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		connection.setResizable(false);
 		connection.setSize(200, 200);
