@@ -51,6 +51,7 @@ public class BattleShipServer implements Runnable{
 	private ClientRequestProcessor[] sortedPlayerCrp;
 	private int playerOnTurn;
 	private int player;
+	
 
 	/**
 	 * Konstruktor zur Erzeugung des Adressbuch-Servers.
