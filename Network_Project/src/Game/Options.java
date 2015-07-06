@@ -10,11 +10,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.event.DocumentListener;
 
 
 public class Options implements Serializable{
-	
+
 	private static final long serialVersionUID = 6599149630474669593L;
 	private int player;
 	private boolean[] playerIsKi;
@@ -36,8 +37,8 @@ public class Options implements Serializable{
 		}catch(Exception e){
 			return 0;
 		}
-		
-		
+
+
 	}
 
 	public void setPort(int port) {
@@ -118,7 +119,7 @@ public class Options implements Serializable{
 	public Options_View getView(){
 		return this.optionsView;
 	}
-	
+
 	public int getKi(){
 		return this.ki;
 	}
@@ -132,12 +133,12 @@ public class Options implements Serializable{
 		int count = Integer.parseInt(number); 
 		this.player = count;
 		this.optionsView.setPlayerCount(count);
-		this.playerIsKi = new boolean[count-1];
+		if(count != 0){
+			this.playerIsKi = new boolean[count-1];
+		}
 		this.optionsView.setPlayerToggle(count);
 	}
 
-	
-	
 	/**
 	 * @param chkbx
 	 * je nachdem wie viele Ki Checkboxes ausgewählt sind werden Spieler auf isKi true gesetzt.
@@ -188,7 +189,7 @@ public class Options implements Serializable{
 			this.battlefieldSize = preferredSize;
 		}
 	}
-	
+
 	private void setKiSize(int preferredSize){
 		int maxSize = optionsView.getPlayerCount() - 1;
 		if(maxSize < preferredSize){
@@ -198,7 +199,7 @@ public class Options implements Serializable{
 			this.optionsView.setKiSize(preferredSize);
 		}
 	}
-	
+
 
 	/**
 	 * @param name
@@ -249,17 +250,23 @@ public class Options implements Serializable{
 		this.optionsView.setSizeSelectionListener(new SetSizeListener() );
 	}
 
-	
+
 	/**
 	 * Inneren Listener Klassen implementieren das Interface ActionListener
 	 */
 	class SetPlayerListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			setPlayer(e.getActionCommand());
-			optionsView.getKiBox().setEnabled(true);
-			setKiSize(0);
+			JToggleButton btn = (JToggleButton)e.getSource();
+			if(btn.isSelected() == true){
+				setPlayer(e.getActionCommand());
+				optionsView.getKiBox().setEnabled(true);
+				setKiSize(0);
+			}
+			else{
+				setKiSize(0);
+				setPlayer("0");
+			}
 			optionsView.checkOkButton();
-			
 		}
 	}
 
@@ -286,21 +293,6 @@ public class Options implements Serializable{
 			int size = Integer.parseInt( sizeBox.getSelectedItem().toString() );
 			setSize(size);
 			optionsView.checkOkButton();
-		}
-	}
-
-	private class SetNameListener implements FocusListener{
-
-		@Override
-		public void focusGained(FocusEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void focusLost(FocusEvent e) {
-			JTextField name =  (JTextField)e.getSource();
-			setName(name);
 		}
 	}
 

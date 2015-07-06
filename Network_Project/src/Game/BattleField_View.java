@@ -314,4 +314,14 @@ public class BattleField_View implements Serializable{
 		this.battleFieldViewPanel.revalidate();
 
 	}
+
+	public void setDeadBackground() {
+		int size = this.getView().getWidth();
+		ImageIcon meerTot = new ImageIcon("Resources/MeerTOOOT.jpg");
+		meerTot.setImage(meerTot.getImage().getScaledInstance(size,size, Image.SCALE_DEFAULT));
+		background.setIcon(meerTot);
+		battleFieldViewPanel.setVisible(true);
+		this.battleFieldViewPanel.add(background);
+
+	}
 }

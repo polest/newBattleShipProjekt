@@ -177,15 +177,11 @@ public class Options_View {
 		kilb.setBounds(190, 70, 100, 30);
 		this.optionsView.add(kilb);
 
-
-
-
 		String[] counter = {"0", "1", "2","3", "4","5"};
 		this.kiBox = new JComboBox(counter);
 		this.kiBox.setBounds(175 , 110, 100, 35);
 		this.kiBox.setEnabled(false);
 		this.optionsView.add(this.kiBox);
-
 
 		JLabel shipslb = new JLabel("Anzahl der Schiffe");
 		shipslb.setForeground(Color.WHITE);
@@ -256,7 +252,7 @@ public class Options_View {
 		portLbl.setFont(schrift);
 		this.optionsView.add(portLbl);
 		
-		this.port = new JTextField();
+		this.port = new JTextField("4477");
 		this.port.setBounds(700, 110, 70, 30);
 		this.optionsView.add(this.port);
 

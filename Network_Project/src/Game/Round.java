@@ -204,10 +204,6 @@ public class Round implements Serializable{
 				player[index].setActive(true);
 
 				if(player[index].isPlayerBot()){
-					//VORRÜBERGEHEND DIE KI ÜBERSPRINGEN!
-					playerOnTurn++;
-					index = playerOnTurn % player.length;
-					//TODO! KI d
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShip(), ai.getGegner(), ai.getPos(), ai.getBotOrientation());
 				}
