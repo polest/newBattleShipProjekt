@@ -172,11 +172,6 @@ public class Options_View {
 
 		this.playerNames = new JTextField[6];
 
-		//		JLabel playerNameslb = new JLabel("Namen der Spieler");
-		//		playerNameslb.setBounds(190, 70, 130, 30);
-		//		playerNameslb.setForeground(Color.WHITE);
-		//		playerNameslb.setFont(schrift);
-		//		this.optionsView.add(playerNameslb);
 
 		JLabel kilb = new JLabel("Computer");
 		kilb.setFont(schrift);

@@ -66,7 +66,6 @@ public class Round_Client implements Serializable{
 		this.client = client;
 		this.roundView = new Round_View(player, this.fieldSize, playerLength, playerNames);
 		this.ship = null;
-		//this.play();
 		addListener();
 		setShipText();
 	}

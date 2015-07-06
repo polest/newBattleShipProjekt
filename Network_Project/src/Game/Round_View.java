@@ -2,6 +2,7 @@ package Game;
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -131,7 +132,10 @@ public class Round_View implements Serializable{
 		this.choosen = 0;
 		//Erster Spieler in groß anzeigen
 		shownFieldPlayerName = new JLabel(playerNames[0]);
-
+		Font schrift = new Font("Times New Roman", Font.BOLD, 17);
+		
+		shownFieldPlayerName.setFont(schrift);
+		shownFieldPlayerName.setForeground(Color.white);
 		shownFieldPlayerName.setBounds(30, 70, 200, 30);
 		this.roundPan.add(shownFieldPlayerName);
 
@@ -191,7 +195,9 @@ public class Round_View implements Serializable{
 
 		this.messages = new JLabel();
 		this.messages.setText("Spieler " + playerNames[0] + " ist an der Reihe");
-		this.messages.setForeground(Color.red);
+		Font font = new Font("Times New Roman", Font.BOLD, 25);
+		this.messages.setFont(font);
+		this.messages.setForeground(Color.white);
 		this.messages.setBounds(30, 20, 500, 60);
 		this.roundPan.add(messages);
 		//Alle der reihe nach sortiert, nun den eigenen Spieler in groß anzeigen lassen

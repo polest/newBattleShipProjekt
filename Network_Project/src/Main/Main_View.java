@@ -1,12 +1,22 @@
 package Main;
 
-import javax.swing.*; 
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import Tools.ImagePanel;
-
-import java.awt.*; 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Main_View{
 
@@ -138,17 +148,9 @@ public class Main_View{
 	 * setzt den Willkommenstext und added ihn dem welcome Panel
 	 */
 	private void setWelcomeText(){
-
 		this.welcome_text = new JLabel("", SwingConstants.CENTER);
-		//this.welcome_text.setText("<HTML><BODY>Willkommen bei BATTLESHIP special LARS edition</BODY></HTML>");
-		//this.welcome_text.setForeground(Color.black);	
-		//this.welcome_text.setFont(new Font(this.welcome_text.getFont().getName(), Font.BOLD, 2));
 		this.welcome_text.setIcon(new ImageIcon("Resources/welcomeText.png"));
 		int labelWidth = 800;
-		//		ImageIcon img = new ImageIcon(""+welcomeTextIcon);
-		//        Image newimg = img.getImage().getScaledInstance(800, 100, java.awt.Image.SCALE_SMOOTH);  
-		//        ImageIcon icon = new ImageIcon(newimg);
-		//        this.welcome_text.setIcon(icon);
 		this.welcome_text.setBounds((this.width-labelWidth)/2, 100, labelWidth, 100);
 		this.welcome_text.setVisible(true);
 		this.frame.repaint();
