@@ -23,6 +23,7 @@ public class Options_View {
 	private JToggleButton[] player;
 	private int playerCount;
 	private JTextField[] playerNames;
+	private JTextField port;
 	private JComboBox kiBox;
 	private JComboBox size;
 
@@ -159,14 +160,14 @@ public class Options_View {
 		playerlb.setForeground(Color.WHITE);
 		playerlb.setFont(schrift);
 		//playerlb.setIcon(new ImageIcon("Resources/countPlayer.png"));
-		playerlb.setBounds(40,70, 130,30);
+		playerlb.setBounds(15,70, 130,30);
 		this.optionsView.add(playerlb);
 
 		this.player = new JToggleButton[5];
 		for(int p = 0; p < this.player.length; p++){
 			int pVal = p+2;
 			this.player[p] =  new JToggleButton(""+pVal);
-			this.player[p].setBounds(70,( 115+ (45*p) ), 35, 35);
+			this.player[p].setBounds(50,( 115+ (45*p) ), 35, 35);
 			this.optionsView.add(this.player[p]);
 		}
 
@@ -176,7 +177,7 @@ public class Options_View {
 		JLabel kilb = new JLabel("Computer");
 		kilb.setFont(schrift);
 		kilb.setForeground(Color.WHITE);
-		kilb.setBounds(250, 70, 100, 30);
+		kilb.setBounds(190, 70, 100, 30);
 		this.optionsView.add(kilb);
 
 
@@ -184,7 +185,7 @@ public class Options_View {
 
 		String[] counter = {"0", "1", "2","3", "4","5"};
 		this.kiBox = new JComboBox(counter);
-		this.kiBox.setBounds(235 , 110, 100, 35);
+		this.kiBox.setBounds(175 , 110, 100, 35);
 		this.kiBox.setEnabled(false);
 		this.optionsView.add(this.kiBox);
 
@@ -192,7 +193,7 @@ public class Options_View {
 		JLabel shipslb = new JLabel("Anzahl der Schiffe");
 		shipslb.setForeground(Color.WHITE);
 		shipslb.setFont(schrift);
-		shipslb.setBounds(420, 70, 150, 30);
+		shipslb.setBounds(330, 70, 150, 30);
 		this.optionsView.add(shipslb);
 
 		JLabel[] shipsLabel = {new JLabel("Zerstörer"), new JLabel("Fregatten"), new JLabel("Korvetten"), new JLabel("UBoote")};
@@ -201,14 +202,14 @@ public class Options_View {
 		String[] count = {"0", "1", "2", "3", "4", "5"};
 
 		for(int s = 0; s < this.ships.length; s++){
-			shipsLabel[s].setBounds(420 ,( 110+ (45*s) ), 90, 35);
+			shipsLabel[s].setBounds(330 ,( 110+ (45*s) ), 90, 35);
 			shipsLabel[s].setForeground(Color.WHITE);
 			shipsLabel[s].setFont(schrift);
 			this.optionsView.add(shipsLabel[s]);
 
 			this.ships[s] = new JComboBox(count);
 
-			this.ships[s].setBounds(510 ,( 110+ (45*s) ), 70, 35);
+			this.ships[s].setBounds(410 ,( 110+ (45*s) ), 70, 35);
 
 			if(s == 0){
 				this.ships[s].setActionCommand("destroyer");
@@ -229,7 +230,7 @@ public class Options_View {
 		JLabel sizeOfGame = new JLabel("Größe des Spielfeldes");
 		sizeOfGame.setForeground(Color.white);
 		sizeOfGame.setFont(schrift);
-		sizeOfGame.setBounds(590, 70, 150, 30);
+		sizeOfGame.setBounds(520, 70, 150, 30);
 		this.optionsView.add(sizeOfGame);
 
 		String[] sizeVal = new String[20];
@@ -240,7 +241,7 @@ public class Options_View {
 		}
 
 		this.size = new JComboBox(sizeVal);
-		this.size.setBounds(620, 110, 70, 35);
+		this.size.setBounds(555, 110, 70, 35);
 		this.optionsView.add(this.size);
 
 		this.ok = new JButton("OK");
@@ -251,6 +252,16 @@ public class Options_View {
 		this.back = new JButton("Zurück");
 		this.back.setBounds(690, 515, 80, 35);
 		this.optionsView.add(this.back);
+		
+		JLabel portLbl = new JLabel("Port");
+		portLbl.setBounds(718, 75, 50, 20);
+		portLbl.setForeground(Color.white);
+		portLbl.setFont(schrift);
+		this.optionsView.add(portLbl);
+		
+		this.port = new JTextField();
+		this.port.setBounds(700, 110, 70, 30);
+		this.optionsView.add(this.port);
 
 	}
 
@@ -306,5 +317,9 @@ public class Options_View {
 
 	public void setBackSelectionListener(ActionListener b){
 		this.back.addActionListener(b);
+	}
+
+	public JTextField getPort() {
+		return port;
 	}
 }

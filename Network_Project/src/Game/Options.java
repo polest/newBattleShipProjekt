@@ -27,6 +27,22 @@ public class Options implements Serializable{
 	private int totalShips;
 	private int battlefieldSize;
 	private Options_View optionsView;
+	private int port = 0;
+
+	public int getPort() {
+		try{
+			port = Integer.parseInt(optionsView.getPort().getText());
+			return port;
+		}catch(Exception e){
+			return 0;
+		}
+		
+		
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
 
 	/**
 	 * @param width
@@ -287,4 +303,5 @@ public class Options implements Serializable{
 			setName(name);
 		}
 	}
+
 }

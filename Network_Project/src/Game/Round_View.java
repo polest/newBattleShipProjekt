@@ -160,6 +160,8 @@ public class Round_View implements Serializable{
 			enemiesName[enemiesCounter] = new JLabel(name);
 
 			enemiesName[enemiesCounter].setBounds(x, labelY, 200, 30);
+			enemiesName[enemiesCounter].setFont(schrift);
+			enemiesName[enemiesCounter].setForeground(Color.WHITE);
 
 			this.roundPan.add(enemiesName[enemiesCounter]);
 			this.roundPan.add(playerGroup[i].getView());

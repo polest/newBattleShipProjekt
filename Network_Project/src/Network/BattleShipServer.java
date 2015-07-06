@@ -27,7 +27,7 @@ import Main.Main_Controler;
  */				
 public class BattleShipServer implements Runnable{
 	//	public final static int DEFAULT_PORT = 6789;
-	public final static int DEFAULT_PORT = 4477;
+
 	public final static int DEFAULT_CLIENTS = 1;
 
 	protected int port;
@@ -75,10 +75,6 @@ public class BattleShipServer implements Runnable{
 		status.setBounds(10,0, 100, 30);
 		status.setVisible(true);
 		System.out.println("laaabeeel");
-
-		if (port == 0)
-			port = DEFAULT_PORT;
-		this.port = port;
 
 		if(clientZahl == 0){
 			clientZahl = DEFAULT_CLIENTS;
