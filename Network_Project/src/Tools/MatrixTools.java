@@ -35,73 +35,73 @@ public class MatrixTools implements Serializable{
 	 * nicht gespeichert oder zurückgegeben!
 	 */
 	public void printPrivateField(int[][] privateField, String name){
-
-		int[][] printMatrix = new int[privateField.length][privateField.length];
-
-		IO.println("Spielfeld von \"" + name + "\"");
-
-		for(int y = 0; y < printMatrix.length; y++){
-			String leftAlignFormat = "| %-3s ";
-			boolean isSmallField = true;
-
-			if(printMatrix.length > 9){
-				isSmallField  = true;
-			}
-			else{
-				isSmallField = false;
-			}
-
-			for(int f = 0; f < printMatrix.length; f++){
-
-				System.out.format("+-----");
-			}
-
-			System.out.print("+ \n");
-
-			for(int x = 0; x < printMatrix.length; x++){
-
-
-				if( (x == 0) && (y == 0)){
-					System.out.format(leftAlignFormat, "y\\x");
-				}
-				else if(y == 0){
-					if(isSmallField == true && x < 10){
-
-						System.out.format(leftAlignFormat, " " + x);
-					}
-					else{
-						System.out.format(leftAlignFormat, x);
-					}
-				}
-				else if(x == 0){
-					if(isSmallField == true && x < 10){
-
-						System.out.format(leftAlignFormat, " " + y);
-					}
-					else{
-						System.out.format(leftAlignFormat, y);
-					}
-				}
-				else{
-					if(privateField[y][x] <= 0){
-						System.out.format(leftAlignFormat, " " + wave);
-					}
-					else{
-						System.out.format(leftAlignFormat, " " + black);
-					}
-
-				}
-
-			}
-			System.out.println("");
-		}
-
-		for(int f = 0; f < printMatrix.length; f++){
-
-			System.out.format("+-----");
-		}
-
-		System.out.print("+ \n");
+//
+//		int[][] printMatrix = new int[privateField.length][privateField.length];
+//
+//		IO.println("Spielfeld von \"" + name + "\"");
+//
+//		for(int y = 0; y < printMatrix.length; y++){
+//			String leftAlignFormat = "| %-3s ";
+//			boolean isSmallField = true;
+//
+//			if(printMatrix.length > 9){
+//				isSmallField  = true;
+//			}
+//			else{
+//				isSmallField = false;
+//			}
+//
+//			for(int f = 0; f < printMatrix.length; f++){
+//
+//				System.out.format("+-----");
+//			}
+//
+//			System.out.print("+ \n");
+//
+//			for(int x = 0; x < printMatrix.length; x++){
+//
+//
+//				if( (x == 0) && (y == 0)){
+//					System.out.format(leftAlignFormat, "y\\x");
+//				}
+//				else if(y == 0){
+//					if(isSmallField == true && x < 10){
+//
+//						System.out.format(leftAlignFormat, " " + x);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, x);
+//					}
+//				}
+//				else if(x == 0){
+//					if(isSmallField == true && x < 10){
+//
+//						System.out.format(leftAlignFormat, " " + y);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, y);
+//					}
+//				}
+//				else{
+//					if(privateField[y][x] <= 0){
+//						System.out.format(leftAlignFormat, " " + wave);
+//					}
+//					else{
+//						System.out.format(leftAlignFormat, " " + black);
+//					}
+//
+//				}
+//
+//			}
+//			System.out.println("");
+//		}
+//
+//		for(int f = 0; f < printMatrix.length; f++){
+//
+//			System.out.format("+-----");
+//		}
+//
+//		System.out.print("+ \n");
 
 	}
 
@@ -491,7 +491,7 @@ public class MatrixTools implements Serializable{
 
 		printPublicField(publicField, player.getPlayerName());
 
-		System.out.println(hitShip + "x Schiff getroffen\n" + hitWater + "x Wasser getroffen\n");
+		//System.out.println(hitShip + "x Schiff getroffen\n" + hitWater + "x Wasser getroffen\n");
 		return results;
 	}
 
@@ -666,7 +666,7 @@ public class MatrixTools implements Serializable{
 
 		int[][] printMatrix = new int[publicField.length][publicField.length];
 
-		System.out.println("Spielfeld von \"" + name + "\"");
+		//System.out.println("Spielfeld von \"" + name + "\"");
 
 		for(int y = 0; y < printMatrix.length; y++){
 			String leftAlignFormat = "| %-3s ";
@@ -684,7 +684,7 @@ public class MatrixTools implements Serializable{
 				System.out.format("+-----");
 			}
 
-			System.out.print("+ \n");
+			//System.out.print("+ \n");
 
 			for(int x = 0; x < printMatrix.length; x++){
 
@@ -734,7 +734,7 @@ public class MatrixTools implements Serializable{
 				}
 
 			}
-			System.out.println("");
+			//System.out.println("");
 		}
 
 		for(int f = 0; f < printMatrix.length; f++){
@@ -742,7 +742,7 @@ public class MatrixTools implements Serializable{
 			System.out.format("+-----");
 		}
 
-		System.out.print("+ \n");
+		//System.out.print("+ \n");
 
 	}
 

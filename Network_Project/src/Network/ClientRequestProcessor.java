@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 
 public class ClientRequestProcessor implements Runnable{
 
@@ -45,7 +42,6 @@ public class ClientRequestProcessor implements Runnable{
 		this.fieldSize = fieldSize;
 
 
-		System.out.println("Daten sind: " + this.clientZahl + "," + this.destroyer  + "," + this.frigate   + "," + this.corvette   + "," + this.submarine   + "," + this.fieldSize) ; 		
 		// I/O-Streams initialisieren:
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -108,7 +104,6 @@ public class ClientRequestProcessor implements Runnable{
 		do{
 			try {
 				input = in.readLine();
-				System.out.println(input);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

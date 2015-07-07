@@ -195,7 +195,6 @@ public class Client implements Runnable{
 					String reply = in.readLine();
 					String pos = in.readLine();
 					String orientation = in.readLine();
-					System.out.println(reply);
 					String[] values = reply.split(";");
 
 					this.roundClient.setAttackReply(gegner, values, pos, orientation);
@@ -231,7 +230,7 @@ public class Client implements Runnable{
 					String shipId = in.readLine();
 					int sId = Integer.parseInt(shipId);
 					this.roundClient.setPlayerShipIsntReady(shipName, sId);
-					} catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -239,10 +238,10 @@ public class Client implements Runnable{
 				try {
 					String shipName = in.readLine();
 					this.roundClient.setShipIsSunk(shipName);
-					} catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 			//TODO Quit
 

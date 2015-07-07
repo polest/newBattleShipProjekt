@@ -152,7 +152,6 @@ public class Round implements Serializable{
 				}
 
 				player[index].setActive(false);
-				System.out.println("playerOnTurn: " + playerOnTurn);
 				playerOnTurn++;	
 				index = playerOnTurn % player.length;
 				boolean nextPlayer = false;
@@ -187,6 +186,26 @@ public class Round implements Serializable{
 					ai.roundForAI(player, index, this.fieldSize);
 					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
 				
+					boolean playerShipsReady = false;
+					while(playerShipsReady == false){
+						if(player[index].getIsAlive() == true){
+							if(player[index].checkIfAnyShipIsReady() == false){
+								server.PlayerHasNoLoadedShips(index);
+								playerOnTurn++;
+								index = playerOnTurn % player.length;
+
+								if(index == 0){
+									for(int j = 0; j < player.length; j++){
+										player[j].reloadTimeCountdown();
+										server.reloadShips();
+									}
+								}
+							}
+							else{
+								playerShipsReady = true;
+							}
+						}
+					}
 				}
 			}
 		}

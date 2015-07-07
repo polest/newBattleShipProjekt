@@ -359,16 +359,13 @@ public class Round_View implements Serializable{
 
 		//ausgewähtlen Spieler aus der Gegner Liste als Gegner setzen bzw zur Hauptansicht
 		int selectedPlayerId = order[selectedIndex];
-		System.out.println("Spieler " + selectedPlayerId + " wurde ausgewählt!");
 		//Spieler aus der Großansicht sichern, um diesen später 
 		//in die richtige reinhenfolge der Gegner hinzuzufügen
 		int oldId = this.choosen;
-		System.out.println("Vorheriger spieler: " + oldId);
 		this.order[0] = selectedPlayerId;
 		this.order[selectedIndex] = oldId;
 		this.choosen = selectedPlayerId;
-		System.out.println("Gegner ist: "+choosen);
-
+		
 		String selectedName = playerNames[this.order[0]];
 		String oldName = shownFieldPlayerName.getText();
 
@@ -379,7 +376,6 @@ public class Round_View implements Serializable{
 		playerGroup[selectedIndex].clearBorder();
 		playerGroup[order[selectedIndex]].getView().repaint();
 		playerGroup[order[selectedIndex]].getView().revalidate();
-
 
 		playerGroup[order[0]].setSize(bigBounds[0], bigBounds[1], bigBounds[2]);
 		playerGroup[order[0]].clearBorder();

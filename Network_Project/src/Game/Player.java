@@ -674,7 +674,6 @@ public class Player implements Serializable{
 		if(shipSymbol.equals("D")){
 			for(int i = 0; i < destroyer.length; i++){
 				if(destroyer[i].checkIfIsSwimming() == false){
-					System.out.println("Herzlichen Glückwunsch, du hast den Zerstörer von " + this.playerName + " versenkt.");
 					this.totalShips--;
 					return true;
 				}
@@ -682,8 +681,6 @@ public class Player implements Serializable{
 		}else if(shipSymbol.equals("F")){
 			for(int i = 0; i < frigate.length; i++){
 				if(frigate[i].checkIfIsSwimming() == false){
-					System.out.println("Herzlichen Glückwunsch, du hast die Frigatte von " + this.playerName + " versenkt.");
-
 					this.totalShips--;
 					return true;
 				}
@@ -691,7 +688,6 @@ public class Player implements Serializable{
 		}else if(shipSymbol.equals("C")){
 			for(int i = 0; i < corvette.length; i++){
 				if(corvette[i].checkIfIsSwimming() == false){
-					System.out.println("Herzlichen Glückwunsch, du hast die Corvette von " + this.playerName + " versenkt.");
 					this.totalShips--;
 
 					return true;
@@ -700,8 +696,6 @@ public class Player implements Serializable{
 		}else if(shipSymbol.equals("S")){
 			for(int i = 0; i < submarine.length; i++){
 				if(submarine[i].checkIfIsSwimming() == false){
-					System.out.println("Herzlichen Glückwunsch, du hast das U-Boot von " + this.playerName + " versenkt.");
-
 					this.totalShips--;
 
 					return true;
