@@ -26,8 +26,8 @@ public class Round implements Serializable{
 	private int alivePlayer;
 	private BattleShipServer server;
 	// AI ÄNDERUNG START
-	Random rn = new Random();
-	ArtificialIntelligence ai = new ArtificialIntelligence();
+	private Random rn = new Random();
+	private ArtificialIntelligence ai = new ArtificialIntelligence();
 	// AI ÄNDERUNG ENDE
 
 	public Round(Player[] player, int fieldSize, BattleShipServer server){
@@ -51,7 +51,7 @@ public class Round implements Serializable{
 
 	public void setKiShoot(String ship, String gegner, String pos, String orientation){
 		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
-		setAttack(ship, gegner, pos, orientation);
+		server.setAttack(text);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Round implements Serializable{
 			return iKoordinaten;
 		}
 		catch(Exception e){
-		return null;
+			return null;
 		}
 	}
 
@@ -129,19 +129,19 @@ public class Round implements Serializable{
 				String reply = player[gegner].getPrivateField().setAttack(shipString, coords , orientation, player[gegner]);
 				player[index].setShipIsntReady(shipString, ship);
 				server.replyAttack(gegner, reply, pos, orientation);
-				
+
 				if(player[gegner].isPlayerBot() == false){
 					String sunkenShip = player[gegner].getLastSunkenShip();
 					if(sunkenShip.length() > 0){
 						server.setplayerShipSunk(gegner, sunkenShip);
-						 player[gegner].setShipIsSunk("");
+						player[gegner].setShipIsSunk("");
 					}
 				}
-				
+
 				if(player[index].isPlayerBot() == false){
 					server.setPlayerShipIsntReady(index, shipString, ship);
 				}
-				
+
 				//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
 				if(player[gegner].getIsAlive() == false){
 					server.setPlayerIsDead(gegner);
@@ -163,7 +163,7 @@ public class Round implements Serializable{
 							server.PlayerHasNoLoadedShips(index);
 							playerOnTurn++;
 							index = playerOnTurn % player.length;
-							
+
 							if(index == 0){
 								for(int j = 0; j < player.length; j++){
 									player[j].reloadTimeCountdown();
@@ -178,20 +178,19 @@ public class Round implements Serializable{
 				}
 
 				player[index].setActive(true);
-
-				if(player[index].isPlayerBot()){
-					ai.roundForAI(player, index, this.fieldSize);
-					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
-				}
-				else{
+				
+				if(player[index].isPlayerBot() == false){
 					server.setActive(index);
 				}
 				
+				if(player[index].isPlayerBot()){
+					ai.roundForAI(player, index, this.fieldSize);
+					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
 				
-				//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-				
+				}
 			}
 		}
+		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
 		if(index == 0){
 			for(int j = 0; j < player.length; j++){
 				player[j].reloadTimeCountdown();

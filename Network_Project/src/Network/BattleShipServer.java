@@ -251,9 +251,9 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void setActive(int index) {
-		for(int i = 0; i < this.clientZahl; i++){
-			this.crp[i].setActive(index);
-		}
+			for(int i = 0; i < this.clientZahl; i++){
+				this.crp[i].setActive(index);
+			}
 	}
 
 	public void replyAttack(int gegner, String reply, String coords, char orientation) {
@@ -269,7 +269,7 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void setPlayerShipIsntReady(int playerId, String shipString, int ship) {
-			this.crp[playerId].setShipIsntReady(shipString, ship);
+		this.crp[playerId].setShipIsntReady(shipString, ship);
 	}
 
 	public void setplayerShipSunk(int gegner, String sunkenShip) {

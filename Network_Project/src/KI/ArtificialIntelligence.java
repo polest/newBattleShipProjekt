@@ -16,7 +16,7 @@ public class ArtificialIntelligence {
 	private Player gegner;
 	private String pos;
 	private int ship;
-	private char botOrientation = ' ';
+	private char botOrientation = 'h';
 	
 	private int gegnerNumber;
 	
@@ -105,6 +105,7 @@ public class ArtificialIntelligence {
 	}
 
 	public String getOrientationAsString() {
+		System.out.println("botOrientation: " + botOrientation);
 		return ""+botOrientation;
 	}
 

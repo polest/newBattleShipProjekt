@@ -476,6 +476,7 @@ public class Round_View implements Serializable{
 				}
 
 				playerGroup[gegnerInt].getBattleField()[x][i].setIcon(newIcon);
+				counter++;
 			}
 		}
 	}
