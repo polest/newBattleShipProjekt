@@ -214,7 +214,7 @@ public class Round_Client implements Serializable{
 		this.ship = 0;
 		setShipReadyOrNot();
 	}
-	
+
 	public void setPlayerShipIsntReady(String shipName, int shipId){
 		this.player.setShipIsntReady(shipName, shipId);
 	}
@@ -295,47 +295,52 @@ public class Round_Client implements Serializable{
 			field[x-1][y-1].setBorder(BorderFactory.createLineBorder(Color.red));	
 		}
 	}
-	
+
 
 	private class PositionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if(gegner != playerOnTurn){
-				JButton btn = (JButton)e.getSource();
+			if(playerOnTurn == player.getId()){
+				if(gegner != playerOnTurn){
+					JButton btn = (JButton)e.getSource();
 
-				String pos = btn.getActionCommand();
-				int koords[] = new int[2];
-				koords = checkPos(pos);
-				String shipString = "";
+					String pos = btn.getActionCommand();
+					int koords[] = new int[2];
+					koords = checkPos(pos);
+					String shipString = "";
+					
+					if(schiff == 1){
+						ship = player.getAvailableDestroyer();
+						shipString = "destroyer";
+					}
+					else if(schiff == 2){
+						ship = player.getAvailableFrigate();
+						shipString = "frigate";
+					}
+					else if(schiff == 3){
+						ship = player.getAvailableCorvette();
+						shipString = "corvette";
+					}
+					else if(schiff == 4){
+						ship = player.getAvailableSubmarine();
+						shipString = "submarine";
+					}
+					else{
+						roundView.setMessage("Schiff muss ausgewählt werden!");
+					}
 
-				if(schiff == 1){
-					ship = player.getAvailableDestroyer();
-					shipString = "destroyer";
-				}
-				else if(schiff == 2){
-					ship = player.getAvailableFrigate();
-					shipString = "frigate";
-				}
-				else if(schiff == 3){
-					ship = player.getAvailableCorvette();
-					shipString = "corvette";
-				}
-				else if(schiff == 4){
-					ship = player.getAvailableSubmarine();
-					shipString = "submarine";
-				}
-				else{
-					roundView.setMessage("Schiff muss ausgewählt werden!");
-				}
+					if(schiff > 0){
+						client.setAttack(shipString, (""+gegner), pos, (""+orientation) );
+						roundView.setDestroyerSelected(false);
+						roundView.setFrigateSelected(false);
+						roundView.setCorvetteSelected(false);
+						roundView.setSubmarineSelected(false);
+						if(ship != -1){
+							player.setShipIsntReady(shipString, ship);
+						}
+					}
 
-				if(schiff > 0){
-					client.setAttack(shipString, (""+gegner), pos, (""+orientation) );
-					roundView.setDestroyerSelected(false);
-					roundView.setFrigateSelected(false);
-					roundView.setCorvetteSelected(false);
-					roundView.setSubmarineSelected(false);
+					schiff = 0;
 				}
-
-				schiff = 0;
 			}
 		}
 	}
