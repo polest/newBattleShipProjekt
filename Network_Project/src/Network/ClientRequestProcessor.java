@@ -154,6 +154,17 @@ public class ClientRequestProcessor implements Runnable{
 					e.printStackTrace();
 				}
 			}
+			else if(input.equals("chatMessage")){
+				try {
+					String txt = in.readLine();
+					server.addToChat(txt, this);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 		}while(!(input.equals("quit") ) );
 
 		try {
@@ -204,6 +215,11 @@ public class ClientRequestProcessor implements Runnable{
 	public void setSunkenShip(String sunkenShip) {
 		out.println("shipSunk");
 		out.println(sunkenShip);
+	}
+
+	public void addMessageToChat(String txt) {
+		out.println("chatMessage");
+		out.println(txt);
 	}
 
 

@@ -315,7 +315,6 @@ public class InitGame_Client implements Serializable{
 	 */
 	private class BattleFieldMouseListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("totalShips: " + totalShips);
 			boolean checked;
 
 			if(choosenShip != null){
@@ -378,7 +377,6 @@ public class InitGame_Client implements Serializable{
 						}
 					}
 					totalShips--;
-					System.out.println("totalShips: " + totalShips);
 					if(totalShips <= 0){
 						initGameView.enableFinish();
 					}

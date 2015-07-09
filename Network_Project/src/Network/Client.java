@@ -1,5 +1,7 @@
 package Network;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +10,8 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import Game.Round_Client;
 import Main.Main_Controler;
@@ -20,9 +24,7 @@ public class Client implements Runnable{
 	private Main_Controler mainControler;
 	private String[] playerNames;
 	private Round_Client roundClient;
-	private JFrame connection = new JFrame();
-	private JLabel status = new JLabel();
-
+	private Chat status;
 	/**
 	 * Konstruktor, der die Verbindung zum Server aufbaut (Socket) und dieser
 	 * Grundlage Eingabe- und Ausgabestreams f�r die Kommunikation mit dem
@@ -33,15 +35,9 @@ public class Client implements Runnable{
 	 */
 	public Client(String host, int port, Main_Controler mainControler) {
 		try {
-			connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			connection.setLayout(null);
-			connection.setSize(300, 100);
-			connection.setVisible(true);
-			connection.add(status);
-			status.setText("angemeldet... warten auf weitere Spieler");
-			status.setBounds(10,30, 300, 30);
-			status.setVisible(true);
-
+			
+			status = new Chat(this);
+			
 			// Socket-Objekt fuer die Kommunikation mit Host/Port erstellen
 			socket = new Socket(host, port);
 			this.mainControler = mainControler;
@@ -116,7 +112,7 @@ public class Client implements Runnable{
 				e.printStackTrace();
 			}		
 			if(message.equals("changeInitView") ){
-				status.setText("Schiffe werden platziert...");
+				status.addText("Schiffe werden platziert...");
 				String values = "";
 				try {
 					values = in.readLine();
@@ -134,7 +130,7 @@ public class Client implements Runnable{
 
 			}
 			else if(message.equals("startGame") ){
-				status.setText("Bereit... warte auf die anderen Spieler...");
+				status.addText("Bereit... warte auf die anderen Spieler...");
 				mainControler.changeToRoundView();
 			}
 			else if(message.equals("setPlayerNames") ){
@@ -184,7 +180,7 @@ public class Client implements Runnable{
 					int playerId = Integer.parseInt(id);
 
 					this.roundClient.setActive(playerId, true);
-					this.status.setText("Spieler " + playerNames[playerId] + " ist an der reihe...");
+					this.status.addText("Spieler " + playerNames[playerId] + " ist an der reihe...");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -206,12 +202,12 @@ public class Client implements Runnable{
 				roundClient.reloadTime();
 			}
 			else if(message.equals("attackFailed")){
-				this.status.setText("Angriff fehlgeschlagen! Erneut versuchen!");
+				this.status.addText("Angriff fehlgeschlagen! Erneut versuchen!");
 			}
 			else if(message.equals("setWinner")){
 				try {
 					String name = in.readLine();
-					this.status.setText("Spieler "+ name + " hat gewonnen!!!");
+					this.status.addText("Spieler "+ name + " hat gewonnen!!!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -219,7 +215,7 @@ public class Client implements Runnable{
 			else if(message.equals("playerHasNoShips")){
 				try {
 					String name = in.readLine();
-					this.status.setText("Spieler "+ name + " muss aussetzen!");
+					this.status.addText("Spieler "+ name + " muss aussetzen!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -238,13 +234,27 @@ public class Client implements Runnable{
 				try {
 					String shipName = in.readLine();
 					this.roundClient.setShipIsSunk(shipName);
+					status.addText("Schiff wurde versenkt!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 			}
+			else if(message.equals("chatMessage") ){
+				try {
+					String text = in.readLine();
+					this.status.addText(text);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			//TODO Quit
 
 		}
+	}
+
+	public void addTextToChat(String text) {
+		out.println("chatMessage");
+		out.println(text);
 	}
 }

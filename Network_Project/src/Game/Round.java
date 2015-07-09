@@ -49,10 +49,10 @@ public class Round implements Serializable{
 		this.player = player;
 	}
 
-	public void setKiShoot(String ship, String gegner, String pos, String orientation){
-		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
-		server.setAttack(text);
-	}
+	//	public void setKiShoot(String ship, String gegner, String pos, String orientation){
+	//		String text = ship + ";" + gegner + ";" + pos + ";" + orientation;
+	//		server.setAttack(text);
+	//	}
 
 	/**
 	 * @param pos - die zu überprüfenden Koordinaten 
@@ -99,7 +99,7 @@ public class Round implements Serializable{
 
 	public void setAttack(String shipString, String gegnerString, String pos, String orientationString){
 		int index = playerOnTurn % player.length;
-
+		
 		gegner = Integer.parseInt(gegnerString);
 		orientation = orientationString.charAt(0);
 
@@ -129,93 +129,87 @@ public class Round implements Serializable{
 				String reply = player[gegner].getPrivateField().setAttack(shipString, coords , orientation, player[gegner]);
 				player[index].setShipIsntReady(shipString, ship);
 				server.replyAttack(gegner, reply, pos, orientation);
+				server.setPlayerShipIsntReady(index, shipString, ship);
 
-				if(player[gegner].isPlayerBot() == false){
-					String sunkenShip = player[gegner].getLastSunkenShip();
-					if(sunkenShip.length() > 0){
-						server.setplayerShipSunk(gegner, sunkenShip);
-						player[gegner].setShipIsSunk("");
-					}
-				}
-
-				if(player[index].isPlayerBot() == false){
+				String sunkenShip = player[gegner].getLastSunkenShip();
+				if(sunkenShip.length() > 0){
+					server.setplayerShipSunk(gegner, sunkenShip);
+					player[gegner].setShipIsSunk(sunkenShip);
 					server.setPlayerShipIsntReady(index, shipString, ship);
+
 				}
 
-				//Überprüft, ob der Gegner noch am Leben ist, wenn nicht wird isAlive auf false gesetzt.
-				if(player[gegner].getIsAlive() == false){
-					server.setPlayerIsDead(gegner);
-					alivePlayer--;
-					if(alivePlayer == 1){
-						server.playerWins(index);
+			}
+			player[index].setActive(false);
+
+			index = getNextPlayer();
+
+			boolean nextPlayer = false;
+
+			while(nextPlayer == false){
+				if(player[index].getIsAlive() == true){
+					if(player[index].checkIfAnyShipIsReady() == false){
+						server.PlayerHasNoLoadedShips(index);
+						index = getNextPlayer();
+						player[index].reloadTimeCountdown();
+						server.reloadShips(index);
+					}
+					else{
+						nextPlayer = true;
 					}
 				}
+				else{
+					index = getNextPlayer();
 
-				player[index].setActive(false);
-				playerOnTurn++;	
-				index = playerOnTurn % player.length;
-				boolean nextPlayer = false;
+				}
+			}
 
-				while(nextPlayer == false){
-					if(player[index].getIsAlive() == true){
-						if(player[index].checkIfAnyShipIsReady() == false){
-							server.PlayerHasNoLoadedShips(index);
-							playerOnTurn++;
-							index = playerOnTurn % player.length;
+			player[index].setActive(true);
 
-							if(index == 0){
-								for(int j = 0; j < player.length; j++){
-									player[j].reloadTimeCountdown();
-									server.reloadShips();
-								}
-							}
-						}
-						else{
-							nextPlayer = true;
-						}
+			if(player[index].isPlayerBot() == false){
+				server.setActive(index);
+				player[index].reloadTimeCountdown();
+				server.reloadShips(index);
+			}
+			else{
+				while(player[index].isPlayerBot()){
+					if(player[index].getIsAlive() == false){
+						index = getNextPlayer();
+
+					}	
+					else if(player[index].checkIfAnyShipIsReady() == false){
+						index = getNextPlayer();
 					}
-				}
+					else{
+						ai.roundForAI(player, index, this.fieldSize);
 
-				player[index].setActive(true);
-				
-				if(player[index].isPlayerBot() == false){
-					server.setActive(index);
-				}
-				
-				if(player[index].isPlayerBot()){
-					ai.roundForAI(player, index, this.fieldSize);
-					setKiShoot(ai.getShipAsString(), ai.getGegnerAsString(), ai.getPos(), ai.getOrientationAsString());
-				
-					boolean playerShipsReady = false;
-					while(playerShipsReady == false){
-						if(player[index].getIsAlive() == true){
-							if(player[index].checkIfAnyShipIsReady() == false){
-								server.PlayerHasNoLoadedShips(index);
-								playerOnTurn++;
-								index = playerOnTurn % player.length;
+						String aiShip = ai.getShipAsString();
+						int aiGegner = ai.getGegnerAsInt();
 
-								if(index == 0){
-									for(int j = 0; j < player.length; j++){
-										player[j].reloadTimeCountdown();
-										server.reloadShips();
-									}
-								}
-							}
-							else{
-								playerShipsReady = true;
-							}
-						}
+						String aiPos = ai.getPos();
+						char aiOrientation = ai.getOrientationAsString();
+						String attackString = aiShip + ";" + aiGegner + ";" + aiPos + ";" + aiOrientation;
+
+						int[] aiCoords = checkPos(aiPos);
+
+						String botReply = player[aiGegner].getPrivateField().setAttack(aiShip, aiCoords , aiOrientation, player[aiGegner]);
+						player[index].setShipIsntReady(shipString, ship);
+						server.replyAttack(aiGegner, botReply, aiPos, aiOrientation);
+
+						index = getNextPlayer();
+
+						player[index].reloadTimeCountdown();
+						server.reloadShips(index);
 					}
 				}
 			}
 		}
-		//Bei allen Schiffen die laden, wird die reloadTime um einen verringert. Ist diese = 0 sind sie wieder verfügbar.
-		if(index == 0){
-			for(int j = 0; j < player.length; j++){
-				player[j].reloadTimeCountdown();
-				server.reloadShips();
-			}
-		}
+	}
+
+	public int getNextPlayer(){
+		this.playerOnTurn++;
+		int index = playerOnTurn % player.length;
+		return index;
 	}
 
 

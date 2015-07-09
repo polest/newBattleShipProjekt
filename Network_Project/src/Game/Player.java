@@ -302,25 +302,25 @@ public class Player implements Serializable{
 	 */
 
 	public void setShipIsntReady(String ship, int count){
-		if(ship == "destroyer"){
+		if(ship.equals("destroyer") ){
 			if(this.destroyer[count].isReady() == true){
 				this.destroyer[count].setReady(false);
 				this.destroyer[count].setReloadTimeLeft(Destroyer.loadTime);
 			}
 		}
-		else if(ship == "frigate"){
+		else if(ship.equals("frigate") ){
 			if(this.frigate[count].isReady() == true){
 				this.frigate[count].setReady(false);
 				this.frigate[count].setReloadTimeLeft(Frigate.loadTime);
 			}
 		}
-		else if(ship == "corvette"){
+		else if( ship.equals("corvette") ){
 			if(this.corvette[count].isReady() == true){
 				this.corvette[count].setReady(false);
 				this.corvette[count].setReloadTimeLeft(Corvette.loadTime);
 			}
 		}
-		else if(ship == "submarine"){
+		else if( ship.equals("submarine") ){
 			if(this.submarine[count].isReady() == true){
 				this.submarine[count].setReady(false);
 				this.submarine[count].setReloadTimeLeft(Submarine.loadTime);

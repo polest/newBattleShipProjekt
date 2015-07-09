@@ -216,6 +216,7 @@ public class Round_Client implements Serializable{
 
 	public void setPlayerShipIsntReady(String shipName, int shipId){
 		this.player.setShipIsntReady(shipName, shipId);
+		setShipReadyOrNot();
 	}
 
 	public void setShipReadyOrNot(){
@@ -334,9 +335,9 @@ public class Round_Client implements Serializable{
 							roundView.setFrigateSelected(false);
 							roundView.setCorvetteSelected(false);
 							roundView.setSubmarineSelected(false);
-							if(ship != -1){
-								player.setShipIsntReady(shipString, ship);
-							}
+//							if(ship != -1){
+//								player.setShipIsntReady(shipString, ship);
+//							}
 						}
 
 						schiff = 0;

@@ -349,6 +349,7 @@ public class MatrixTools implements Serializable{
 							publicField[y][z] = 1;
 						}
 						results = results.concat("false;");
+						
 						hitWater++;
 					}
 					/*Ansonsten setze eine 2 für ein getroffenes Schiff
@@ -368,9 +369,9 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getDestroyer().length; i++){
 							checkShipIsSunk(player,  player.getDestroyer()[i], z, y);
 						}
-						if(player.checkIfSunk("D") == true ){
-							sunk = sunk.concat("D");
-						}
+//						if(player.checkIfSunk("D") == true ){
+//							sunk = sunk.concat("D");
+//						}
 						results = results.concat("true;");
 						hitShip++;
 
@@ -381,9 +382,9 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getFrigate().length; i++){
 							checkShipIsSunk(player,  player.getFrigate()[i], z, y);
 						}
-						if(player.checkIfSunk("F") == true ){
-							sunk = sunk.concat("D");
-						}
+//						if(player.checkIfSunk("F") == true ){
+//							sunk = sunk.concat("D");
+//						}
 						results = results.concat("true;");
 						hitShip++;
 					}
@@ -393,9 +394,9 @@ public class MatrixTools implements Serializable{
 						for(int i = 0; i < player.getCorvette().length; i++){
 							checkShipIsSunk(player,  player.getCorvette()[i], z, y);
 						}
-						if(player.checkIfSunk("C") == true ){
-							sunk = sunk.concat("C");
-						}
+//						if(player.checkIfSunk("C") == true ){
+//							sunk = sunk.concat("C");
+//						}
 
 						results = results.concat("true;");
 						hitShip++;
@@ -405,7 +406,7 @@ public class MatrixTools implements Serializable{
 
 						for(int i = 0; i < player.getSubmarine().length; i++){
 							checkShipIsSunk(player,  player.getSubmarine()[i], z, y);
-							sunk = sunk.concat("S");
+//							sunk = sunk.concat("S");
 						}
 						player.checkIfSunk("S");
 						results = results.concat("true;");
@@ -454,6 +455,7 @@ public class MatrixTools implements Serializable{
 
 						 hitShip++;
 					 }
+					
 					 else if(privateField[y][x] == 2){
 						 publicField[q][x] = 2;
 

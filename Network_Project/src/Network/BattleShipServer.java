@@ -117,7 +117,6 @@ public class BattleShipServer implements Runnable{
 				// Auf Verbindungsw�nsche warten...
 				Socket clientSocket = serverSocket.accept();
 				crp[loggedPlayer] =  new ClientRequestProcessor(clientSocket, player, destroyer, frigate, corvette, submarine, fieldSize);
-				System.out.println(loggedPlayer + ": " + crp[loggedPlayer].toString());
 				Thread s = new Thread(crp[loggedPlayer]);
 				s.start();
 				loggedPlayer++;
@@ -251,9 +250,9 @@ public class BattleShipServer implements Runnable{
 	}
 
 	public void setActive(int index) {
-			for(int i = 0; i < this.clientZahl; i++){
-				this.crp[i].setActive(index);
-			}
+		for(int i = 0; i < this.clientZahl; i++){
+			this.crp[i].setActive(index);
+		}
 	}
 
 	public void replyAttack(int gegner, String reply, String coords, char orientation) {
@@ -262,10 +261,8 @@ public class BattleShipServer implements Runnable{
 		}
 	}
 
-	public void reloadShips() {
-		for(int i = 0; i < this.clientZahl; i++){
-			this.crp[i].reloadShips();
-		}
+	public void reloadShips(int index) {
+		this.crp[index].reloadShips();
 	}
 
 	public void setPlayerShipIsntReady(int playerId, String shipString, int ship) {
@@ -274,5 +271,13 @@ public class BattleShipServer implements Runnable{
 
 	public void setplayerShipSunk(int gegner, String sunkenShip) {
 		this.crp[gegner].setSunkenShip(sunkenShip);
+	}
+
+	public void addToChat(String txt, ClientRequestProcessor sender) {
+		for(int i = 0; i < this.crp.length; i++){
+			if(crp[i] != sender){
+				crp[i].addMessageToChat(txt);
+			}
+		}
 	}
 }

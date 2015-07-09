@@ -42,6 +42,11 @@ public class ArtificialIntelligence {
 		return ""+this.gegnerNumber;
 	}
 
+	public int getGegnerAsInt(){
+		return this.gegnerNumber;
+	}
+
+	
 	public int getShip() {
 		return ship;
 	}
@@ -104,8 +109,8 @@ public class ArtificialIntelligence {
 		return botOrientation;
 	}
 
-	public String getOrientationAsString() {
-		return ""+botOrientation;
+	public char getOrientationAsString() {
+		return botOrientation;
 	}
 
 	
