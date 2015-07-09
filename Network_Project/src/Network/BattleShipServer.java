@@ -272,12 +272,11 @@ public class BattleShipServer implements Runnable{
 	public void setplayerShipSunk(int gegner, String sunkenShip) {
 		this.crp[gegner].setSunkenShip(sunkenShip);
 	}
-
-	public void addToChat(String txt, ClientRequestProcessor sender) {
+	
+	
+	public void addToChat(String txt) {
 		for(int i = 0; i < this.crp.length; i++){
-			if(crp[i] != sender){
-				crp[i].addMessageToChat(txt);
-			}
+			this.crp[i].addMessageToChat(txt);
 		}
 	}
 }

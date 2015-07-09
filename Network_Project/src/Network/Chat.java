@@ -8,19 +8,26 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+
+import Tools.StyleConstant;
 
 public class Chat extends JScrollPane{
 
+	private static final String StyleContant = null;
 	private JTextArea status = new JTextArea();
 	private JScrollPane scroller =  new JScrollPane(status);
 	private JFrame connection = new JFrame();
-	private JTextField input = new JTextField();
+	private JTextPane input = new JTextPane();
 	private String name = "";
 	private Client client;
 
 	public Chat(Client client){
 		this.client = client;
-		
+
 		this.connection.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.connection.setLayout(null);
 		this.connection.setSize(300, 300);
@@ -28,6 +35,7 @@ public class Chat extends JScrollPane{
 		this.connection.add(scroller);
 		this.connection.add(input);
 		this.scroller.setBounds(10,30, 280, 200);
+		this.scroller.setAutoscrolls(true);
 
 		this.status.setLineWrap(true);
 		this.status.setWrapStyleWord(true);
@@ -40,16 +48,22 @@ public class Chat extends JScrollPane{
 		this.input.setBounds(10, 235, 280, 30);
 		this.input.setEditable(true);
 		this.input.addKeyListener(new EnterText());
-		this.addText("angemeldet... warten auf weitere Spieler");
+		this.addText("angemeldet... warten auf weitere Spieler", StyleConstant.MAGENTA);
 
 	}
 
-	public void addText(String text){
+	public void addText(String text, SimpleAttributeSet set){
 		//TODO TEXT AUF UMBRUCH PRÜFEN
-		this.status.append("\n>>>"+text);
+		//this.status.append("\n>>>"+text);
 
+		try {
+			this.status.getDocument().insertString(this.status.getDocument().getLength(), "\n>>>"+text,  (AttributeSet) set);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void setName(String name){
 		this.name = name;
 	}
@@ -66,9 +80,19 @@ public class Chat extends JScrollPane{
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER){
 				String text = input.getText();
-				addText(text);
-				client.addTextToChat(text);
-				input.setText("");
+				if(text.length() > 0){
+					String sending;
+					if(name.length() == 0){
+						String id = client.toString();
+						sending = id.substring(8, id.length()) + "> " + text;
+					}
+					else{
+						sending = name + "@ " + text;	
+					}
+
+					client.addTextToChat(sending);
+					input.setText("");
+				}
 			}
 		}
 

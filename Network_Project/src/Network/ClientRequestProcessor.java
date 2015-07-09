@@ -157,7 +157,7 @@ public class ClientRequestProcessor implements Runnable{
 			else if(input.equals("chatMessage")){
 				try {
 					String txt = in.readLine();
-					server.addToChat(txt, this);
+					server.addToChat(txt);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
